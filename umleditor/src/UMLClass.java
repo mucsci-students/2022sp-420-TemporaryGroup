@@ -9,18 +9,34 @@ public class UMLClass {
     String className;
     ArrayList<String> attributes = new ArrayList<String>();
 
+    /**
+     * Constructor for a class in the uml diagram.
+     * @param className
+     */
     public UMLClass(String className){
         this.className = className;
     }
 
+    /**
+     * Returns a String of the class name. 
+     * @return className
+     */
     public String getClassName(){
         return className;
     }
 
+    /**
+     * Renames a class.
+     * @param newClassName
+     */
     public void renameClass(String newClassName){
         this.className = newClassName;
     }
 
+    /**
+     * Adds a new attribute to the class if it doesn't already exist.
+     * @param newAttribute
+     */
     public void addAttribute(String newAttribute){
         for(int i = 0; i < attributes.size(); i++){
             if(attributes.get(i) != newAttribute){
@@ -31,6 +47,10 @@ public class UMLClass {
         }
     }
 
+    /**
+     * Removes an attribute from the class if it exists. 
+     * @param deleteAttribute
+     */
     public void removeAttribute(String deleteAttribute){
         for(int i = 0; i < attributes.size(); i++){
             if(attributes.get(i) == deleteAttribute){
@@ -41,6 +61,11 @@ public class UMLClass {
         }
     }
 
+    /**
+     * Renames an attribute in the class if it exists and new name doesn't exist yet. 
+     * @param oldAttribute
+     * @param renameAttribute
+     */
     public void renameAttribute(String oldAttribute, String renameAttribute){
         for(int i = 0; i < attributes.size(); i++){
             if(attributes.get(i) == oldAttribute){
@@ -51,6 +76,11 @@ public class UMLClass {
         }
     }
 
+    /**
+     * Returns an attribute by name. 
+     * @param attributeName
+     * @return attribute name
+     */
     public String getAttribute(String attributeName){
         for(int i = 0; i < attributes.size(); i++){
             if(attributes.get(i) == attributeName){
@@ -60,6 +90,11 @@ public class UMLClass {
         return null;
     }
 
+    /**
+     * Checks to see if the attribute in the class exists. 
+     * @param attributeName
+     * @return boolean
+     */
     public boolean attributeExists(String attributeName){
         return (getAttribute(attributeName) != null);
     }

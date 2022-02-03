@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class UMLDiagram {
     
     HashMap<String, UMLClass> umlDiagram = new HashMap<String, UMLClass>();
+    ArrayList<String> relationships = new ArrayList<String>();
 
     public void addClass(String className){
         if(!(classExists(className))){
@@ -17,6 +17,9 @@ public class UMLDiagram {
 
     public void removeClass(String className){
         if(classExists(className)){
+            for(int i = 0 ; i < relationships.size(); i++){
+                // finish implementation once relationship class is done
+            }
             umlDiagram.remove(className);
         }else{
             System.out.println("The class " + className + " does not exist in the diagram.");
