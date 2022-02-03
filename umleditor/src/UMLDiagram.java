@@ -60,4 +60,32 @@ public class UMLDiagram {
         }
     }
 
+    public void removeAttribute(String className, String removeAttribute){
+        if(classExists(className)){
+            if(getClass(className).attributeExists(removeAttribute)){
+                getClass(className).removeAttribute(removeAttribute);
+            }else{
+                System.out.println("The attribute " + removeAttribute + " does not exist in the class.");
+            }
+        }else{
+            System.out.println("The class " + className + " does not exist in the diagram.");
+        }
+    }
+
+    public void renameAttribute(String className, String oldAttributeName, String newAttributeName){
+        if(classExists(className)){
+            if(getClass(className).attributeExists(oldAttributeName)){
+                if(!(getClass(className).attributeExists(newAttributeName))){
+                    getClass(className).renameAttribute(oldAttributeName, newAttributeName);
+                }else{
+                    System.out.println("The attribute " + newAttributeName + " already exists in the class.");
+                }
+            }else{
+                System.out.println("The attribute " + oldAttributeName + " does not exist in the class.");
+            }
+        }else{
+            System.out.println("The class " + className + " does not exist in the diagram.");
+        }
+    }
+
 }
