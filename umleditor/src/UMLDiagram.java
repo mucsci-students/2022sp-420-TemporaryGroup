@@ -15,6 +15,7 @@ public class UMLDiagram {
 
     /**
      * Adds a class to the uml class diagram if it does not already exist
+     * @param className
      */
     public void addClass(String className){
         if(!(classExists(className))){
@@ -27,6 +28,7 @@ public class UMLDiagram {
 
     /**
      * Removes a class from the uml class diagram if it exists
+     * @param className
      */
     public void removeClass(String className){
         if(classExists(className)){
@@ -41,6 +43,8 @@ public class UMLDiagram {
 
     /**
      * Renames a class in the uml class diagram if the class exists
+     * @param oldClassName
+     * @param newClassName
      */
     public void renameClass(String oldClassName, String newClassName){
         if(classExists(oldClassName)){
@@ -58,6 +62,8 @@ public class UMLDiagram {
 
     /**
      * Checks to see whether the class exists in the uml class diagram
+     * @param className
+     * @return
      */
     public boolean classExists(String className){
         return umlDiagram.containsKey(className);
@@ -65,6 +71,8 @@ public class UMLDiagram {
 
     /**
      * Returns the class requested by name if it exists in the uml class diagram
+     * @param className
+     * @return
      */
     public UMLClass getClass(String className){
         if(umlDiagram.containsKey(className)){
@@ -75,6 +83,8 @@ public class UMLDiagram {
 
     /**
      * Adds an attribute to the class in the uml class diagram if the class exists
+     * @param className
+     * @param newAttribute
      */
     public void addAttribute(String className, String newAttribute){
         if(classExists(className)){
@@ -90,6 +100,8 @@ public class UMLDiagram {
 
     /**
      * Removes an attribute from the class if the attribute and class exist
+     * @param className
+     * @param removeAttribute
      */
     public void removeAttribute(String className, String removeAttribute){
         if(classExists(className)){
