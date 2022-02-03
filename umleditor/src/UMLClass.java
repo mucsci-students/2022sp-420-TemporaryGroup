@@ -51,4 +51,17 @@ public class UMLClass {
         }
     }
 
+    public String getAttribute(String attributeName){
+        for(int i = 0; i < attributes.size(); i++){
+            if(attributes.get(i) == attributeName){
+                return attributes.get(i);
+            }
+        }
+        return null;
+    }
+
+    public boolean attributeExists(String attributeName){
+        return (getAttribute(attributeName) != null);
+    }
+
 }
