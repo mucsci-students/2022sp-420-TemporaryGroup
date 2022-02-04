@@ -1,27 +1,34 @@
 import java.util.*;
-import UMLClass.java;
-import UMLDiagram.java;
 import java.io.Console;
 
 public class umlcli {
 	
 	//commands available in the editor 
-	public static String[] commands = new String [] {"add", "rename", "delete", "help", "exit", 
-			"List Classes", "List class", "class", "attributes", "relationships"};
+	// Top level commands. Other commands can be prompted by the specific command functions.
+	// ie, user types:
+	// > add
+	// If command equals "add", then runCommand prompts
+	// "What would you like to add?""
+	// > class
+	// Then prompt for names and call the associated method on our UMLDiagram object
+	public static String[] commands = new String [] {"add", "rename", "delete", "help", "list", "exit"};
 	public static Console input = System.console();
 	
 	
 	//Driver for the cli class
 	public static void main (String[] args) {
+		UMLDiagram umld = new UMLDiagram();
 		prompt();
 		while (true) {
+			System.out.print("> ");
 			String command = input.readLine();
 			//if command not valid keep prompting for new one 
 			while (!isCommand(command)) {
-				System.out.println("command not valid, try again");
+				System.out.println("Command not recognized.");
+				System.out.print("> ");
 				command = input.readLine();
 			}
-			runCommand(command);
+			runCommand(command, umld);
 		}	
 		
 	}
@@ -31,15 +38,17 @@ public class umlcli {
 	
 	//Initial prompt 
 	public static void prompt () {
-		System.out.println("Welcome to UML Editor");
-		System.out.println("press h for help");
+		System.out.println("Welcome to the UML editor.");
+		System.out.println("Please enter a command.");
+		System.out.println("Type 'help' for list of valid commands.");
+		System.out.println("Type 'exit' to quit the editor.");
 	}
 	
 	//verify if word entered is a command
 		public static boolean isCommand (String command) {
 			for (String ele: commands)
 			{
-				if (command == ele) {
+				if (command.equals(ele)) {
 					return true;
 				}
 			}
@@ -49,29 +58,38 @@ public class umlcli {
 	//exit the program if user intended to 
 	public static void exitCommand ()
 	{
-		System.out.println("Are you sure you want to exit?");
+		// if user hasn't saved since last change, inform them and give them a chance to not exit
+		// need to implement a way to track status of last save (hasUnsavedWork)
+		if(hasUnsavedWork()) {
+			System.out.print("There is currently unsaved work. ");
+		}
+		System.out.println("Are you sure you want to exit? (y/n)");
+		System.out.print("> ");
 		String answer = input.readLine();
-		if (answer == "Yes") {
-			//if not saved save file
-			//need to implement isSaved()
-			if (!isSaved()) {
-				runCommand("save");
-			}
+		// if "y", exit program
+		if(answer.equals("y")) {
 			System.exit(0);
 		}
-		//no need to do anything else 
+		// if neither "y" nor "n", invalid command (resume program)
+		else if(!answer.equals("y") && !answer.equals("n")) {
+			System.out.println("Command not recognized.");
+		}
+		// if "n", do nothing (resume program)
 	}
 	
 	//help command 
 	public static void helpCommand () {
-		System.out.println("With this UML Editor you can create an UML diagram");
-		System.out.println("to see all available commands enter commands");
-		System.out.println("have fun with your uml project!");
+		System.out.println("With this UML editor, you can create a UML diagram.");
+		System.out.println("You can create classes with attributes and define relationships between those classes.");
+		System.out.println("Have fun with your UML project!");
+		listCommands();
+
+		
 	}
 	
 	//list commands 
 	public static void listCommands () {
-		System.out.print("commands: ");
+		System.out.print("List of commands: ");
 		for (String ele : commands) {
 			System.out.print(" " + ele + " ,");
 		}
@@ -80,28 +98,43 @@ public class umlcli {
 	
 	
 	//run given command 
-	public static void runCommand (String command) {
-		if (command == "exit") {
+	public static void runCommand (String command, UMLDiagram umld) {
+		if (command.equals("exit")) {
 			exitCommand();
 		}
-		else if (command == "add") {
+		else if (command.equals("help")) {
+			helpCommand();
+		}
+		else if (command.equals("add")) {
 			System.out.println("What do you want to add?");
 			//ned to finish
 			
 		}
-		else if (command == "commands") {
-			listCommands();
+		else if(command.equals("delete")) {
+			// needs implementation
 		}
+		else if(command.equals("rename")) {
+			// needs implementation
+		}
+		else if(command.equals("list")) {
+			// needs implementation
+		}
+		else {
+			System.out.println("Command not recognized.");
+			// might be redundant
+		}
+		
 	}
 	
 	//list all classes in the diagram 
-	public void listClasses () {
-		System.out.println ("This are all the classes in the diagram");
-		if (umlDiagram.isEmpty())
-		{
-			System.out.println("Nevermind there are no classes for now"); 
-		} else {
-			Iterator hmIter = umlDiagram.entrySet.iterator();
+	public void listClasses (UMLDiagram umld) {
+		System.out.println ("Classes: ");
+		if (umld.umlDiagram.isEmpty()) {
+			System.out.println("No classes in the diagram."); 
+			System.out.println();
+		} 
+		else {
+			Iterator hmIter = umld.umlDiagram.entrySet().iterator();
 			while (hmIter .hasNext()) {
 				Map.Entry mapElem = (Map.Entry) hmIter.next();
 				System.out.println(mapElem.getKey());
@@ -110,8 +143,8 @@ public class umlcli {
 	}
 		
 	//need to implement (not finished)
-	public void listClass (String classname) {
-		Iterator hmIter = umlDiagram.entrySet.iterator();
+	public void listClass (UMLDiagram umld, String classname) {
+		Iterator hmIter = umld.umlDiagram.entrySet().iterator();
 		while (hmIter .hasNext()) {
 			Map.Entry mapElem = (Map.Entry) hmIter.next();
 			if (mapElem.getKey() == classname)
@@ -120,7 +153,7 @@ public class umlcli {
 				System.out.print(mapElem.getValue());
 			}			
 		}
-		System.out.println("Class does not exists");
+		System.out.println("Class '" + classname + "' does not exist.");
 	}
 	
 }
