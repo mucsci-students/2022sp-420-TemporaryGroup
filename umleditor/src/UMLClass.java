@@ -38,13 +38,7 @@ public class UMLClass {
      * @param newAttribute
      */
     public void addAttribute(String newAttribute){
-        for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i) != newAttribute){
-              attributes.add(newAttribute);  
-            }else{
-                System.out.println("The attribute " + newAttribute + " already exists in this class.");
-            }
-        }
+        attributes.add(newAttribute);
     }
 
     /**
@@ -97,6 +91,10 @@ public class UMLClass {
      */
     public boolean attributeExists(String attributeName){
         return (getAttribute(attributeName) != null);
+    }
+
+    public ArrayList<String> getAllAttributes(){
+        return attributes;
     }
 
 }

@@ -13,6 +13,10 @@ public class UMLDiagram {
      */
     ArrayList<String> relationships = new ArrayList<String>();
 
+    public UMLDiagram(){
+
+    }
+
     /**
      * Adds a class to the uml class diagram if it does not already exist
      * @param className
@@ -81,15 +85,20 @@ public class UMLDiagram {
         return null;
     }
 
+    public HashMap<String, UMLClass> getAllClasses(){
+        return umlDiagram;
+    }
+
     /**
      * Adds an attribute to the class in the uml class diagram if the class exists
      * @param className
      * @param newAttribute
      */
     public void addAttribute(String className, String newAttribute){
+        UMLClass parentClass = getClass(className);
         if(classExists(className)){
             if(newAttribute != getClass(className).getAttribute(newAttribute)){
-                getClass(className).addAttribute(newAttribute);
+                parentClass.addAttribute(newAttribute);
             }else{
                 System.out.println("The attribute " + newAttribute + " already exists in the class.");
             }

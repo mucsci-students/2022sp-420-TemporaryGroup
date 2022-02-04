@@ -1,0 +1,8 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/Users/alexbalagurak/Downloads/jcommander-1.81.jar",
+        "/Users/alexbalagurak/Downloads/testng-7.5.jar",
+        "/Users/alexbalagurak/Downloads/junit-platform-console-standalone-1.7.0-M1.jar"
+    ]
+}
