@@ -13,11 +13,13 @@ public class umlcli {
 	// Then prompt for names and call the associated method on our UMLDiagram object
 	public static String[] commands = new String [] {"add", "rename", "delete", "help", "list", "exit"};
 	public static Console input = System.console();
+	public static UMLDiagram umld = new UMLDiagram();
+	public static boolean hasUnsavedWork = false;
 	
 	
 	//Driver for the cli class
 	public static void main (String[] args) {
-		UMLDiagram umld = new UMLDiagram();
+		
 		prompt();
 		while (true) {
 			System.out.print("> ");
@@ -28,7 +30,7 @@ public class umlcli {
 				System.out.print("> ");
 				command = input.readLine();
 			}
-			runCommand(command, umld);
+			runCommand(command);
 		}	
 		
 	}
@@ -59,8 +61,7 @@ public class umlcli {
 	public static void exitCommand ()
 	{
 		// if user hasn't saved since last change, inform them and give them a chance to not exit
-		// need to implement a way to track status of last save (hasUnsavedWork)
-		if(hasUnsavedWork()) {
+		if(hasUnsavedWork) {
 			System.out.print("There is currently unsaved work. ");
 		}
 		System.out.println("Are you sure you want to exit? (y/n)");
@@ -98,7 +99,7 @@ public class umlcli {
 	
 	
 	//run given command 
-	public static void runCommand (String command, UMLDiagram umld) {
+	public static void runCommand (String command) {
 		if (command.equals("exit")) {
 			exitCommand();
 		}
@@ -127,7 +128,7 @@ public class umlcli {
 	}
 	
 	//list all classes in the diagram 
-	public void listClasses (UMLDiagram umld) {
+	public void listClasses () {
 		System.out.println ("Classes: ");
 		if (umld.umlDiagram.isEmpty()) {
 			System.out.println("No classes in the diagram."); 
@@ -143,7 +144,7 @@ public class umlcli {
 	}
 		
 	//need to implement (not finished)
-	public void listClass (UMLDiagram umld, String classname) {
+	public void listClass (String classname) {
 		Iterator hmIter = umld.umlDiagram.entrySet().iterator();
 		while (hmIter .hasNext()) {
 			Map.Entry mapElem = (Map.Entry) hmIter.next();
