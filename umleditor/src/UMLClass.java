@@ -29,7 +29,6 @@ public class UMLClass {
         return this.attributes;
     }
 
-
     /**
      * Renames a class.
      * @param newClassName
@@ -39,17 +38,11 @@ public class UMLClass {
     }
 
     /**
-     * Adds a new attribute to the class if it doesn't already exist.
+     * Adds a new attribute to the class.
      * @param newAttribute
      */
-    public void addAttribute(String newAttribute){
-        for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i) != newAttribute){
-              attributes.add(newAttribute);  
-            }else{
-                System.out.println("The attribute '" + newAttribute + "' already exists in this class.");
-            }
-        }
+    public void addAttribute(String newAttribute) {
+       attributes.add(newAttribute);  
     }
 
     /**
@@ -58,10 +51,8 @@ public class UMLClass {
      */
     public void removeAttribute(String deleteAttribute){
         for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i) == deleteAttribute){
+            if(attributes.get(i).equals(deleteAttribute)){
                 attributes.remove(i);
-            }else{
-                System.out.println("The attribute '" + deleteAttribute + "' does not exist in this class.");
             }
         }
     }
@@ -73,10 +64,8 @@ public class UMLClass {
      */
     public void renameAttribute(String oldAttribute, String renameAttribute){
         for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i) == oldAttribute){
+            if(attributes.get(i).equals(oldAttribute)){
                 attributes.set(i, renameAttribute);
-            }else{
-                System.out.println("The attribute '" + oldAttribute + "' does not exist in this class.");
             }
         }
     }
@@ -101,7 +90,12 @@ public class UMLClass {
      * @return boolean
      */
     public boolean attributeExists(String attributeName){
-        return (getAttribute(attributeName) != null);
+        for(int i = 0; i < attributes.size(); i++) {
+            if(attributes.get(i).equals(attributeName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

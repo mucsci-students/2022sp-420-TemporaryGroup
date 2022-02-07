@@ -147,6 +147,9 @@ public class umlcli {
 				System.out.println("Class " + whichClass + " does not exist.");
 			}
 		}
+		else if(toAdd.equals("relationship")) {
+			// to be implemented
+		}
 	}
 	
 	public static void listCommand () {
@@ -155,7 +158,7 @@ public class umlcli {
 		if (toList.equals("classes")) {
 			listClasses();
 		} else if (toList.equals("relationships")) {
-			System.out.print("need to finish this");
+			// to be implemented
 		} else if (toList.equals("class")) {
 			listClass();
 		}
@@ -166,31 +169,88 @@ public class umlcli {
 
 	public static void renameCommand() {
 		System.out.println("What do you want to rename? [class/relationship/attribute]");
-		// needs implementation
+		String toRename = getInput();
+		if(toRename.equals("class")) {
+			System.out.println("Rename which class?");
+			String oldName = getInput();
+			if(umld.classExists(oldName)) {
+				System.out.println("Enter new class name:");
+				String newName = getInput();
+				umld.renameClass(oldName, newName);
+			}
+			else {
+				System.out.println("Class '" + oldName + "' does not exist.");
+			}
+		}
+		else if(toRename.equals("attribute")) {
+			System.out.println("Rename an attribute in which class?");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				System.out.println("Rename which attribute in class '" + whichClass + "'?");
+				String oldName = getInput();
+				if(umld.getClass(whichClass).attributeExists(oldName)) {
+					System.out.println("Enter new attribute name:");
+					String newName = getInput();
+					umld.renameAttribute(whichClass, oldName, newName);
+				}
+				else {
+					System.out.println("Attribute '" + oldName + "' does not exist in class '" + whichClass + "'.");
+				}
+			}
+			else {
+				System.out.println("Class '" + whichClass + "' does not exist.");
+			}
+		}
+		else if(toRename.equals("relationship")) {
+			// to be implemented
+		}
 	}
 
 	public static void deleteCommand() {
 		System.out.println("What do you want to delete? [class/relationship/attribute]");
-		// needs implementation
+		String toRemove = getInput();
+		if(toRemove.equals("class")) {
+			System.out.println("Enter class to delete:");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				umld.removeClass(whichClass);
+			}
+			else {
+				System.out.println("Class '" + whichClass + "' does not exist.");
+			}
+		}
+		else if(toRemove.equals("attribute")) {
+			System.out.println("Delete attribute from which class?");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				System.out.println("Enter attribute to delete:");
+				String whichAttribute = getInput();
+				umld.removeAttribute(whichClass, whichAttribute);
+			}
+			else {
+				System.out.println("Class '" + whichClass + "' does not exist.");
+			}
+		}
+		else if(toRemove.equals("relationship")) {
+			// to be implemented
+		}
 	}
 	
 	//list all classes in the diagram 
 	public static void listClasses () {
 		if (umld.umlDiagram.isEmpty()) {
 			System.out.println("No classes in the diagram."); 
-
 		} 
 		else {
 			System.out.println ("Classes: ");
 			Iterator hmIter = umld.umlDiagram.entrySet().iterator();
-			while (hmIter .hasNext()) {
+			while (hmIter.hasNext()) {
 				Map.Entry mapElem = (Map.Entry) hmIter.next();
 				System.out.println(mapElem.getKey());
 			}
 		}	
 	}
 		
-	//need to implement (not finished)
 
 	public static void listClass () {
 		System.out.println("Enter class name: ");
@@ -198,11 +258,10 @@ public class umlcli {
 		if(umld.classExists(className)) {
 			System.out.println("Class: " + className);
 			System.out.print("Attributes: ");
-			// this doesn't work right now
-			ArrayList<String> attributes = umld.getClass(className).getAttributes();
-			for(int i = 0; i < attributes.size(); i++) {
-				System.out.println(attributes.get(i));
+			for(int i = 0; i < umld.getClass(className).attributes.size(); i++) {
+				System.out.print(umld.getClass(className).attributes.get(i) + ", ");
 			}
+			System.out.println();
 		}
 		else {
 			System.out.println("Class '" + className + "' does not exist.");
