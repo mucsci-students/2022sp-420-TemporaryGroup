@@ -18,6 +18,7 @@ public class umlcli {
 	
 	//Driver for the cli class
 	public static void main (String[] args) {
+		
 		prompt();
 
 		while (true) {
@@ -42,8 +43,8 @@ public class umlcli {
 		System.out.println("Please enter a command.");
 		System.out.println("Type 'help' for list of valid commands.");
 		System.out.println("Type 'exit' to quit the editor.");
-	}
-	
+  }
+  
 	public static String getInput () {
 		System.out.print("> ");
 		return input.nextLine();
@@ -51,7 +52,7 @@ public class umlcli {
 	
 	//verify if word entered is a command
 		public static boolean isCommand (String command) {
-			for (String ele: commands)
+			for (String ele : commands)
 			{
 				if (command.equals(ele)) {
 					return true;
@@ -68,6 +69,7 @@ public class umlcli {
 			System.out.print("There is currently unsaved work. ");
 		}
 		System.out.println("Are you sure you want to exit? (y/n)");
+    System.out.print("> ");
 		String answer = getInput();
 		// if "y", exit program
 		if(answer.equals("y")) {
@@ -86,7 +88,6 @@ public class umlcli {
 		System.out.println("You can create classes with attributes and define relationships between those classes.");
 		System.out.println("Have fun with your UML project!");
 		listCommands();
-	
 	}
 	
 	//list commands 
@@ -121,8 +122,7 @@ public class umlcli {
 		else {
 			System.out.println("Command not recognized.");
 			// might be redundant
-		}
-		
+		}	
 	}	
 	
 	public static void addCommand () {
@@ -145,6 +145,11 @@ public class umlcli {
 		} else if (toList.equals("class")) {
 			listClass();
 		}
+		else {
+			System.out.println("Command not recognized.");
+			// might be redundant
+		}
+		
 	}
 	
 	//list all classes in the diagram 
@@ -152,6 +157,7 @@ public class umlcli {
 		System.out.println ("Classes: ");
 		if (umld.umlDiagram.isEmpty()) {
 			System.out.println("No classes in the diagram."); 
+
 		} 
 		else {
 			Iterator hmIter = umld.umlDiagram.entrySet().iterator();
@@ -159,10 +165,11 @@ public class umlcli {
 				Map.Entry mapElem = (Map.Entry) hmIter.next();
 				System.out.println(mapElem.getKey());
 			}
-		  }	
+		}	
 	}
 		
 	//need to implement (not finished)
+
 	public static void listClass () {
 		System.out.println("Enter class name");
 		String className = getInput();
