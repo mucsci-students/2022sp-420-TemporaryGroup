@@ -22,8 +22,13 @@ public class UMLClass {
      * @return className
      */
     public String getClassName(){
-        return className;
+        return this.className;
     }
+
+    public ArrayList<String> getAttributes() {
+        return this.attributes;
+    }
+
 
     /**
      * Renames a class.
@@ -42,7 +47,7 @@ public class UMLClass {
             if(attributes.get(i) != newAttribute){
               attributes.add(newAttribute);  
             }else{
-                System.out.println("The attribute " + newAttribute + " already exists in this class.");
+                System.out.println("The attribute '" + newAttribute + "' already exists in this class.");
             }
         }
     }
@@ -56,7 +61,7 @@ public class UMLClass {
             if(attributes.get(i) == deleteAttribute){
                 attributes.remove(i);
             }else{
-                System.out.println("The attribute " + deleteAttribute + " does not exist in this class.");
+                System.out.println("The attribute '" + deleteAttribute + "' does not exist in this class.");
             }
         }
     }
@@ -71,7 +76,7 @@ public class UMLClass {
             if(attributes.get(i) == oldAttribute){
                 attributes.set(i, renameAttribute);
             }else{
-                System.out.println("The attribute " + oldAttribute + " does not exist in this class.");
+                System.out.println("The attribute '" + oldAttribute + "' does not exist in this class.");
             }
         }
     }

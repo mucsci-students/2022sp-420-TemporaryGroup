@@ -10,7 +10,7 @@ public class umlcli {
 	// "What would you like to add?""
 	// > class
 	// Then prompt for names and call the associated method on our UMLDiagram object
-	public static String[] commands = new String [] {"add", "rename", "delete", "help", "save", "load", "list", "exit"};
+	public static String[] commands = new String [] {"add", "rename", "delete", "help", "save", "load", "list", "exit", ""};
 	public static Scanner input = new Scanner (System.in);
 	public static UMLDiagram umld = new UMLDiagram();
 	public static boolean hasUnsavedWork = false;
@@ -20,12 +20,10 @@ public class umlcli {
 	public static void main (String[] args) {
 		prompt();
 		while (true) {
-			System.out.println("Please enter a command:");
 			String command = getInput();
 			//if command not valid keep prompting for new one 
 			while (!isCommand(command)) {
 				System.out.println("Command not recognized. Type 'help' for list of valid commands.");
-				System.out.println("Please enter a command:");
 				command = getInput();
 			}
 			runCommand(command);
@@ -77,9 +75,11 @@ public class umlcli {
 	
 	//help command 
 	public static void helpCommand () {
+		System.out.println();
 		System.out.println("With this UML editor, you can create a UML diagram.");
 		System.out.println("You can create classes with attributes and define relationships between those classes.");
 		System.out.println("Have fun with your UML project!");
+		System.out.println();
 		System.out.println("List of commands: ");
 		System.out.println("\tadd: Add a new class or relationship to the diagram, or add an attribute to an existing class.");
 		System.out.println("\trename: Rename an existing class, relationship, or attribute.");
@@ -89,6 +89,7 @@ public class umlcli {
 		System.out.println("\tload: Load an existing UML diagram from a JSON or YAML file.");
 		System.out.println("\thelp: View all editor commands.");
 		System.out.println("\texit: Quit the editor.");
+		System.out.println();
 	}
 	
 	//run given command 
@@ -117,6 +118,9 @@ public class umlcli {
 		else if(command.equals("load")) {
 			loadDiagram();
 		}
+		else if(command.equals("")) {
+			return;
+		}
 		else {
 			System.out.println("Command not recognized. Type 'help' for list of valid commands.");
 			// might be redundant
@@ -130,6 +134,18 @@ public class umlcli {
 			System.out.println("Enter class name: ");
 			String className = getInput();
 			umld.addClass(className);
+		}
+		else if(toAdd.equals("attribute")) {
+			System.out.println("Add attribute to which class?");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				System.out.println("Enter attribute name: ");
+				String attributeName = getInput();
+				umld.addAttribute(whichClass, attributeName);
+			}
+			else {
+				System.out.println("Class " + whichClass + " does not exist.");
+			}
 		}
 	}
 	
@@ -160,12 +176,12 @@ public class umlcli {
 	
 	//list all classes in the diagram 
 	public static void listClasses () {
-		System.out.println ("Classes: ");
 		if (umld.umlDiagram.isEmpty()) {
 			System.out.println("No classes in the diagram."); 
 
 		} 
 		else {
+			System.out.println ("Classes: ");
 			Iterator hmIter = umld.umlDiagram.entrySet().iterator();
 			while (hmIter .hasNext()) {
 				Map.Entry mapElem = (Map.Entry) hmIter.next();
@@ -179,17 +195,18 @@ public class umlcli {
 	public static void listClass () {
 		System.out.println("Enter class name: ");
 		String className = getInput();
-		Iterator hmIter = umld.umlDiagram.entrySet().iterator();
-		while (hmIter.hasNext()) {
-			Map.Entry mapElem = (Map.Entry) hmIter.next();
-			if (mapElem.getKey().equals(className))
-			{
-				//print attributes for the class 
-				System.out.print(mapElem.getValue());
-				return;
-			}			
+		if(umld.classExists(className)) {
+			System.out.println("Class: " + className);
+			System.out.print("Attributes: ");
+			// this doesn't work right now
+			ArrayList<String> attributes = umld.getClass(className).getAttributes();
+			for(int i = 0; i < attributes.size(); i++) {
+				System.out.println(attributes.get(i));
+			}
 		}
-		System.out.println("Class '" + className + "' does not exist.");
+		else {
+			System.out.println("Class '" + className + "' does not exist.");
+		}
 	}
 
 	public static void saveDiagram() {
