@@ -81,5 +81,14 @@ public class UMLDiagram {
             System.out.println("An attribute named '" + newAttributeName + "' already exists in class '" + className + "'.");
         }
     }
+    
+    public void setUMLDiagram(HashMap<String, UMLClass> c) {
+    	
+    	umlDiagram = c; 
+    }
+    
+    public HashMap<String, UMLClass> getUMLDiagram() {
+    	return umlDiagram; 
+    }
 
 }
