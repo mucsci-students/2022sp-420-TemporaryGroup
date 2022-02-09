@@ -1,15 +1,19 @@
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-
+import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Load {
 	
 	public static UMLDiagram loadDiagram = new UMLDiagram();
 	
-	public static void main(String[] args) {
+
+	public static void main(String[] args) throws Exception {
 		
 		HashMap<String,UMLClass> diagramLoadFile;
 		
@@ -31,12 +35,25 @@ public class Load {
 				
 		String fileLocation = filePath + nameOfFile;
 		System.out.println(fileLocation);
-				
+		String json = readFileAsString(fileLocation);
+		
 		Gson gson = new Gson();
 		
-		Type typeOfHashMap = new TypeToken<HashMap<String, UMLClass>>() { }.getType();
+		Type typeOfHashMap = new TypeToken<Map<String, UMLClass>>() { }.getType();
+		Map<String, UMLClass> savedDiagram = gson.fromJson(json, typeOfHashMap);
 		
-		diagramLoadFile = gson.fromJson(fileLocation, HashMap.class);
-		System.out.println(diagramLoadFile);
+		
+		System.out.println("Successfully loaded!");
+		System.out.println(savedDiagram);
+		
+		//TODO: Convert savedDiagram (Map<String, UMLClass> to HashMap<String,UMLClass>)
 	}
+	
+	public static String readFileAsString(String file) throws Exception
+    {
+        return new String(Files.readAllBytes(Paths.get(file)));
+    }
+	
+	
+	
 }
