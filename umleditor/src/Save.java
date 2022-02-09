@@ -1,5 +1,6 @@
 import java.io.File;
 
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +25,6 @@ public class Save {
 	public static void main(String[] args) throws IOException {
 		atTest.addAttribute("24");
 		atTest.addAttribute("25");
-		System.out.print(atTest.getAllAttributes());
 		
 		//TEST TO BE DELETED
 		saveDiagram.addClass("test1");
