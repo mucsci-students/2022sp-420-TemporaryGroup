@@ -147,8 +147,19 @@ public class umlcli {
 				System.out.println("Class " + whichClass + " does not exist.");
 			}
 		}
+		// Add a relationship
 		else if(toAdd.equals("relationship")) {
-			// to be implemented
+			System.out.println("Enter source class name: ");
+			String srcClass = getInput();
+			System.out.println("Enter destination class name: ");
+			String destClass = getInput();
+			// System.out.println("What type of relationship is this? [Nondirectional]");
+			// String type = getInput();
+			String type = "Nondirectional"; // Delete this in a future version
+			System.out.println("Enter a name for this relationship: ");
+			String name = getInput();
+
+			umld.addRelationship(srcClass, destClass, type, name);
 		}
 	}
 	
@@ -201,8 +212,18 @@ public class umlcli {
 				System.out.println("Class '" + whichClass + "' does not exist.");
 			}
 		}
+		// Rename a relationship
 		else if(toRename.equals("relationship")) {
-			// to be implemented
+			System.out.println("Enter source class name: ");
+			String srcClass = getInput();
+			System.out.println("Enter destination class name: ");
+			String destClass = getInput();
+			System.out.println("Enter the name of this relationship: ");
+			String oldName = getInput();
+			System.out.println("Enter a new name for this relationship: ");
+			String newName = getInput();
+
+			umld.renameRelationship(srcClass, destClass, oldName, newName);
 		}
 	}
 
@@ -231,8 +252,16 @@ public class umlcli {
 				System.out.println("Class '" + whichClass + "' does not exist.");
 			}
 		}
+		// Remove a relationship
 		else if(toRemove.equals("relationship")) {
-			// to be implemented
+			System.out.println("Enter source class name: ");
+			String srcClass = getInput();
+			System.out.println("Enter destination class name: ");
+			String destClass = getInput();
+			System.out.println("Enter the name of the relationship to delete: ");
+			String name = getInput();
+
+			umld.deleteRelationship(srcClass, destClass, name);
 		}
 	}
 	
