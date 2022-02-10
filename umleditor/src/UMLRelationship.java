@@ -88,8 +88,10 @@ public class UMLRelationship {
      */
     /*private boolean isValidType(String relType) {
         // Iterate through array containing valid types
-        for(String elem : UMLRelationship.validTypes) {
-            if(relType == elem) {
+        for(String elem : UMLRelationship.validTypes)
+        {
+            if(relType.equals(elem))
+            {
                 // Type matches a valid type in the array
                 return true;
             }

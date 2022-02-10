@@ -19,7 +19,10 @@ public class UMLDiagram {
     public void removeClass(String className){
         if(classExists(className)){
             for(int i = 0 ; i < relationships.size(); i++){
-                // finish implementation once relationship class is done
+                UMLRelationship tempRel = relationships.get(i);
+                if((tempRel.getSource().equals(className)) || (tempRel.getDestination().equals(className))){
+                    relationships.remove(i);
+                }
             }
             umlDiagram.remove(className);
             System.out.println("Removed class '" + className + "' from the diagram.");

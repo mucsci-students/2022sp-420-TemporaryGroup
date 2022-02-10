@@ -23,7 +23,7 @@ public class umlcli {
 			String command = getInput();
 			//if command not valid keep prompting for new one 
 			while (!isCommand(command)) {
-				System.out.println("Command not recognized. Type 'help' for list of valid commands.");
+				commandNotRecognized();
 				command = getInput();
 			}
 			runCommand(command);
@@ -68,7 +68,7 @@ public class umlcli {
 		}
 		// if neither "y" nor "n", invalid command (resume program)
 		else if(!answer.equals("y") && !answer.equals("n")) {
-			System.out.println("Command not recognized.");
+			commandNotRecognized();
 		}
 		// if "n", do nothing (resume program)
 	}
@@ -81,10 +81,10 @@ public class umlcli {
 		System.out.println("Have fun with your UML project!");
 		System.out.println();
 		System.out.println("List of commands: ");
-		System.out.println("\tadd: Add a new class or relationship to the diagram, or add an attribute to an existing class.");
-		System.out.println("\trename: Rename an existing class, relationship, or attribute.");
-		System.out.println("\tdelete: Delete an existing class, relationship, or attribute.");
-		System.out.println("\tlist: List all classes in the diagram, all relationships, or one specific class.");
+		System.out.println("\tadd: Add a new [class] or [relationship] to the diagram, or add an [attribute] to an existing class.");
+		System.out.println("\trename: Rename an existing [class], [relationship], or [attribute].");
+		System.out.println("\tdelete: Delete an existing [class], [relationship], or [attribute].");
+		System.out.println("\tlist: List all [classes] in the diagram, all [relationships], or one specific [class].");
 		System.out.println("\tsave: Save the current UML diagram to a JSON or YAML file.");
 		System.out.println("\tload: Load an existing UML diagram from a JSON or YAML file.");
 		System.out.println("\thelp: View all editor commands.");
@@ -122,7 +122,7 @@ public class umlcli {
 			return;
 		}
 		else {
-			System.out.println("Command not recognized. Type 'help' for list of valid commands.");
+			classNotRecognized();
 			// might be redundant
 		}	
 	}	
@@ -144,22 +144,33 @@ public class umlcli {
 				umld.addAttribute(whichClass, attributeName);
 			}
 			else {
-				System.out.println("Class " + whichClass + " does not exist.");
+				classDoesNotExist(whichClass);
 			}
 		}
 		// Add a relationship
 		else if(toAdd.equals("relationship")) {
-			System.out.println("Enter source class name: ");
-			String srcClass = getInput();
-			System.out.println("Enter destination class name: ");
-			String destClass = getInput();
-			// System.out.println("What type of relationship is this? [Nondirectional]");
-			// String type = getInput();
-			String type = "Nondirectional"; // Delete this in a future version
-			System.out.println("Enter a name for this relationship: ");
+			System.out.println("Enter relationship name: ");
 			String name = getInput();
+			System.out.println("Enter source class:")
+			String source = getInput();
+			if(!umld.classExists(source)) {
+				classDoesNotExist(source);
+				return;
+			}
+			System.out.println("Enter destination class:");
+			String dest = getInput();
+			if(!umld.classExists(dest)) {
+				classDoesNotExist(dest);
+				return;
+			}
+			// fixed type for now, can be changed when more relationship types are needed
+			String relType = "Nondirectional";
+			// finish when implemented
+      umld.addRelationship(srcClass, destClass, type, name);
 
-			umld.addRelationship(srcClass, destClass, type, name);
+		}
+		else {
+			System.out.println("Command not recognized.");
 		}
 	}
 	
@@ -174,7 +185,7 @@ public class umlcli {
 			listClass();
 		}
 		else {
-			System.out.println("Command not recognized. Type 'help' for list of valid commands.");
+			commandNotRecognized();
 		}
 	}
 
@@ -190,7 +201,7 @@ public class umlcli {
 				umld.renameClass(oldName, newName);
 			}
 			else {
-				System.out.println("Class '" + oldName + "' does not exist.");
+				classDoesNotExist(whichClass);
 			}
 		}
 		else if(toRename.equals("attribute")) {
@@ -209,7 +220,7 @@ public class umlcli {
 				}
 			}
 			else {
-				System.out.println("Class '" + whichClass + "' does not exist.");
+				classDoesNotExist(whichClass);
 			}
 		}
 		// Rename a relationship
@@ -225,6 +236,9 @@ public class umlcli {
 
 			umld.renameRelationship(srcClass, destClass, oldName, newName);
 		}
+		else {
+			commandNotRecognized();
+		}
 	}
 
 	public static void deleteCommand() {
@@ -237,7 +251,7 @@ public class umlcli {
 				umld.removeClass(whichClass);
 			}
 			else {
-				System.out.println("Class '" + whichClass + "' does not exist.");
+				classDoesNotExist(whichClass);
 			}
 		}
 		else if(toRemove.equals("attribute")) {
@@ -249,7 +263,7 @@ public class umlcli {
 				umld.removeAttribute(whichClass, whichAttribute);
 			}
 			else {
-				System.out.println("Class '" + whichClass + "' does not exist.");
+				classDoesNotExist(whichClass);
 			}
 		}
 		// Remove a relationship
@@ -262,6 +276,9 @@ public class umlcli {
 			String name = getInput();
 
 			umld.deleteRelationship(srcClass, destClass, name);
+		}
+		else {
+			commandNotRecognized();
 		}
 	}
 	
@@ -293,7 +310,7 @@ public class umlcli {
 			System.out.println();
 		}
 		else {
-			System.out.println("Class '" + className + "' does not exist.");
+			classDoesNotExist(className);
 		}
 	}
 
@@ -303,6 +320,14 @@ public class umlcli {
 
 	public static void loadDiagram() {
 		// needs implementation
+	}
+
+	public static void classDoesNotExist(String className) {
+		System.out.println("Class '" + className + "' does not exist.");
+	}
+
+	public static void commandNotRecognized() {
+		System.out.println("Command not recognized. Type 'help' for list of valid commands.");
 	}
 	
 }
