@@ -122,7 +122,7 @@ public class umlcli {
 			return;
 		}
 		else {
-			classNotRecognized();
+			commandNotRecognized();
 			// might be redundant
 		}	
 	}	
@@ -133,7 +133,10 @@ public class umlcli {
 		if (toAdd.equals("class")) {
 			System.out.println("Enter class name: ");
 			String className = getInput();
-			umld.addClass(className);
+			if(isValidName(className)) {
+				umld.addClass(className);
+			}
+			
 		}
 		else if(toAdd.equals("attribute")) {
 			System.out.println("Add attribute to which class?");
@@ -141,7 +144,9 @@ public class umlcli {
 			if(umld.classExists(whichClass)) {
 				System.out.println("Enter attribute name: ");
 				String attributeName = getInput();
-				umld.addAttribute(whichClass, attributeName);
+				if(isValidName(attributeName)) {
+					umld.addAttribute(whichClass, attributeName);
+				}
 			}
 			else {
 				classDoesNotExist(whichClass);
@@ -199,7 +204,7 @@ public class umlcli {
 				umld.renameClass(oldName, newName);
 			}
 			else {
-				classDoesNotExist(whichClass);
+				classDoesNotExist(oldName);
 			}
 		}
 		else if(toRename.equals("attribute")) {
@@ -308,6 +313,16 @@ public class umlcli {
 
 	public static void commandNotRecognized() {
 		System.out.println("Command not recognized. Type 'help' for list of valid commands.");
+	}
+
+	public static Boolean isValidName(String name) {
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			return true;
+		}
+		else {
+			System.out.println("Error: Invalid name. Names can only contain A-Z, a-z, 0-9, and underscore.");
+			return false;
+		}
 	}
 	
 }
