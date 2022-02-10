@@ -18,11 +18,13 @@ public class Save {
 	public static UMLDiagram saveDiagram = new UMLDiagram();
 	public static UMLClass atTest = new UMLClass("create!");
 
-	
+	public static void main(String[] args) throws IOException {
+		saveFile();
+	}
 	
 	
 
-	public static void main(String[] args) throws IOException {
+	public static void saveFile() throws IOException {
 		atTest.addAttribute("24");
 		atTest.addAttribute("25");
 		
@@ -31,10 +33,6 @@ public class Save {
 		saveDiagram.addAttribute("test1", "this is a test");
 		saveDiagram.addClass("test2");
 		saveDiagram.addAttribute("test2", "1");
-		
-		
-		
-		
 		
 		//Import diagram to save to JSON
 		HashMap<String,UMLClass> diagramSaveFile = saveDiagram.getUMLDiagram();

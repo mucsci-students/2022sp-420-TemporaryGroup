@@ -2,6 +2,7 @@
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -12,8 +13,11 @@ public class Load {
 	
 	public static UMLDiagram loadDiagram = new UMLDiagram();
 	
-
 	public static void main(String[] args) throws Exception {
+		loadFile();
+	}
+
+	public static void loadFile() throws Exception {
 		
 		HashMap<String,UMLClass> diagramLoadFile;
 		
@@ -39,12 +43,13 @@ public class Load {
 		
 		Gson gson = new Gson();
 		
-		Type typeOfHashMap = new TypeToken<Map<String, UMLClass>>() { }.getType();
-		Map<String, UMLClass> savedDiagram = gson.fromJson(json, typeOfHashMap);
+		Type typeOfHashMap = new TypeToken<HashMap<String, UMLClass>>() { }.getType();
+		HashMap<String, UMLClass> savedDiagram = gson.fromJson(json, typeOfHashMap);
 		
+		loadDiagram.setUMLDiagram(savedDiagram); 
 		
 		System.out.println("Successfully loaded!");
-		System.out.println(savedDiagram);
+		System.out.println(loadDiagram);
 		
 		//TODO: Convert savedDiagram (Map<String, UMLClass> to HashMap<String,UMLClass>)
 	}
