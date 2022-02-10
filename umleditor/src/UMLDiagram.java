@@ -20,7 +20,7 @@ public class UMLDiagram {
         if(classExists(className)){
             for(int i = 0 ; i < relationships.size(); i++){
                 UMLRelationship tempRel = relationships.get(i);
-                if((tempRel.getSource() == className) || (tempRel.getDestination() == className)){
+                if((tempRel.getSource().equals(className)) || (tempRel.getDestination().equals(className))){
                     relationships.remove(i);
                 }
             }
