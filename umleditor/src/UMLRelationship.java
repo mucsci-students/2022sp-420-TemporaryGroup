@@ -100,7 +100,7 @@ public class UMLRelationship
         // Iterate through array containing valid types
         for(String elem : UMLRelationship.validTypes)
         {
-            if(relType == elem)
+            if(relType.equals(elem))
             {
                 // Type matches a valid type in the array
                 return true;
