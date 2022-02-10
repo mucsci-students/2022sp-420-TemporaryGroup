@@ -150,7 +150,7 @@ public class umlcli {
 		else if(toAdd.equals("relationship")) {
 			System.out.println("Enter relationship name: ");
 			String name = getInput();
-			System.out.println("Enter source class:")
+			System.out.println("Enter source class:");
 			String source = getInput();
 			if(!umld.classExists(source)) {
 				classDoesNotExist(source);
