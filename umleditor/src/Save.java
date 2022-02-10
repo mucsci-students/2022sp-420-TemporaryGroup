@@ -1,17 +1,11 @@
 import java.io.File;
 
-
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
-
-import org.json.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -23,14 +17,12 @@ public class Save {
 	public static UMLClass atTest = new UMLClass("create!");
 
 	public static void main(String[] args) throws IOException {
-		atTest.addAttribute("24");
-		atTest.addAttribute("25");
 		
 		//TEST TO BE DELETED
 		saveDiagram.addClass("test1");
 		saveDiagram.addAttribute("test1", "this is a test");
 		saveDiagram.addClass("test2");
-		saveDiagram.addAttribute("test2", "1");
+		saveDiagram.addAttribute("test2", "23");
 		
 		saveFile();
 	}
@@ -48,6 +40,7 @@ public class Save {
 		
 		//GSON for JSON file to be converted (Test TO BE DELETED)
 		String Json = new Gson().toJson(diagramSaveFile);
+		System.out.println(Json);
 		//Assigned location for save file
 		String fileLocation = saveFileLocation();
 		
