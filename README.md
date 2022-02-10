@@ -1,4 +1,4 @@
-Welcome to Temporary's group UML Editor.
+Welcome to the TemporaryGroup UML Editor.
 
 To be able to run the program, please follow these steps. 
 
