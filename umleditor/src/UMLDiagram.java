@@ -5,18 +5,21 @@ public class UMLDiagram {
     
     HashMap<String, UMLClass> umlDiagram = new HashMap<String, UMLClass>();
     ArrayList<UMLRelationship> relationships = new ArrayList<UMLRelationship>();
+    String[] validTypes = {"Nondirectional"};
 
-    public void addClass(String className){
+    public Boolean addClass(String className){
         if(!(classExists(className))){
             UMLClass myClass = new UMLClass(className);
             umlDiagram.put(className, myClass);
             System.out.println("Added class '" + className + "' to the diagram.");
+            return true;
         }else{
             System.out.println("The class '" + className + "' already exists in the diagram.");
+            return false;
         }
     }
 
-    public void removeClass(String className){
+    public Boolean removeClass(String className){
         if(classExists(className)){
             for(int i = 0 ; i < relationships.size(); i++){
                 UMLRelationship tempRel = relationships.get(i);
@@ -26,21 +29,25 @@ public class UMLDiagram {
             }
             umlDiagram.remove(className);
             System.out.println("Removed class '" + className + "' from the diagram.");
+            return true;
         }else{
             System.out.println("The class '" + className + "' does not exist in the diagram.");
+            return false;
         }
     }
 
-    public void renameClass(String oldClassName, String newClassName){
+    public Boolean renameClass(String oldClassName, String newClassName){
         if(!classExists(newClassName)){
             UMLClass classCopy = umlDiagram.get(oldClassName);
             classCopy.renameClass(newClassName);
             umlDiagram.remove(oldClassName);
             umlDiagram.put(newClassName, classCopy);
             System.out.println("Renamed class '" + oldClassName + "' to '" + newClassName + "'.");
+            return true;
         }
         else{
             System.out.println("A class named '" + newClassName + "' already exists in the diagram.");
+            return false;
         }
     }
 
@@ -55,33 +62,39 @@ public class UMLDiagram {
         return null;
     }
 
-    public void addAttribute(String className, String newAttribute){
+    public Boolean addAttribute(String className, String newAttribute){
         if(!getClass(className).attributeExists(newAttribute)){
             getClass(className).addAttribute(newAttribute);
             System.out.println("Added attribute '" + newAttribute + "' to class '" + className + "'.");
+            return true;
         }
         else{
             System.out.println("The attribute '" + newAttribute + "' already exists in the class '" + className + "'.");
+            return false;
         }
     }
 
-    public void removeAttribute(String className, String removeAttribute){
+    public Boolean removeAttribute(String className, String removeAttribute){
         if(getClass(className).attributeExists(removeAttribute)){
             getClass(className).removeAttribute(removeAttribute);
             System.out.println("Removed attribute '" + removeAttribute + "' from class '" + className + "'.");
+            return true;
         }
         else{
             System.out.println("The attribute '" + removeAttribute + "' does not exist in the class.");
+            return false;
         }
     }
 
-    public void renameAttribute(String className, String oldAttributeName, String newAttributeName){
+    public Boolean renameAttribute(String className, String oldAttributeName, String newAttributeName){
         if(!(getClass(className).attributeExists(newAttributeName))){
             getClass(className).renameAttribute(oldAttributeName, newAttributeName);
             System.out.println("Renamed attribute '" + oldAttributeName + "' to '" + newAttributeName + "' in class '" + className + "'.");
+            return true;
         }
         else {
             System.out.println("An attribute named '" + newAttributeName + "' already exists in class '" + className + "'.");
+            return false;
         }
     }
 
@@ -93,7 +106,6 @@ public class UMLDiagram {
     private boolean isValidType(String relType)
     {
         // Array of valid types
-        private String[] validTypes = ["Nondirectional"];
         // Iterate through array containing valid types
         for(String elem : validTypes)
         {
@@ -115,33 +127,32 @@ public class UMLDiagram {
      * @param type The type of this relationship
      * @param name The name of this relationship
      */
-    public void addRelationship(String source, String dest, String type, String name) {
-        bool addRel = true;
+    public Boolean addRelationship(String source, String dest, String type, String name) {
         // Check that the relationship is valid
         if(!classExists(source)) {
-            System.out.println("The class " + source + " does not exist.");
-            addRel = false;
+            System.out.println("The class '" + source + "' does not exist.");
+            return false;
         }
         if(!classExists(dest)) {
-            System.out.println("The class " + source + " does not exist.");
-            addRel = false;
+            System.out.println("The class '" + source + "' does not exist.");
+            return false;
         }
         if(!isValidType(type)) {
-            System.out.println(type " is not a valid relationship type.");
-            addRel = false;
+            System.out.println("'" + type + "' is not a valid relationship type.");
+            return false;
         }
         // Check that the relationship doesn't already exist
-        for(rel : relationships) {
-            if(rel.getSource() == source && rel.getDest() == dest && rel.getName() == name) {
-                System.out.println("A relationship between " + source + " and " + dest + " named " + name + " already exists.");
-                addRel = false;
+        for(UMLRelationship rel : relationships) {
+            if(rel.getSource().equals(source) && rel.getDestination().equals(dest) && rel.getName().equals(name)) {
+                System.out.println("A relationship between '" + source + "' and '" + dest + "' named '" + name + "' already exists.");
+                return false;
             }
         }
         // Add the relationship
-        if(addRel) {
-            UMLRelationship newRel = new UMLRelationship(source, dest, type, name);
-            relationships.add(newRel);
-        }
+        UMLRelationship newRel = new UMLRelationship(source, dest, type, name);
+        relationships.add(newRel);
+        System.out.println("Added new relationship '" + newRel.getName() + "' between class '" + source + "' and class '" + dest + "'.");
+        return true;
     }
 
     /**
@@ -150,17 +161,16 @@ public class UMLDiagram {
      * @param dest The destination class for the relationship to delete
      * @param name The name of the relationship to delete
      */
-    public void deleteRelationship(String source, String dest, String name) {
-        bool removed = false;
-        for(rel : relationships) {
-            if(rel.getSource() == source && rel.getDest() == dest && rel.getName() == name) {
+    public Boolean deleteRelationship(String source, String dest, String name) {
+        for(UMLRelationship rel : relationships) {
+            if(rel.getSource().equals(source) && rel.getDestination().equals(dest) && rel.getName().equals(name)) {
                 relationships.remove(rel);
-                removed = false;
+                System.out.println("Removed relationship '" + name + "' between class '" + source + "' and class '" + dest + "'.");
+                return true;
             }
         }
-        if(!removed) {
-            System.out.println("A relationship between " + source + " and " + dest + " named " + name + " does not exist.");
-        }
+        System.out.println("A relationship between '" + source + "' and '" + dest + "' named '" + name + "' does not exist.");
+        return false;
     }
 
     /**
@@ -171,42 +181,36 @@ public class UMLDiagram {
      * @param oldName The current name of this relationship
      * @param newName The new name for this relationship
      */
-    public void renameRelationship(String source, String dest, String oldName, String newName) {
-        bool renameRel = true;
+    public Boolean renameRelationship(String source, String dest, String oldName, String newName) {
         // Check that the relationship is valid
         if(!classExists(source)) {
             System.out.println("The class " + source + " does not exist.");
-            renameRel = false;
+            return false;
         }
         if(!classExists(dest)) {
             System.out.println("The class " + source + " does not exist.");
-            renameRel = false;
+            return false;
         }
         // Check that the relationship won't become a duplicate
-        for(rel : relationships) {
-            if(rel.getSource() == source && rel.getDest() == dest && rel.getName() == oldName) {
+        for(UMLRelationship rel : relationships) {
+            if(rel.getSource().equals(source) && rel.getDestination().equals(dest) && rel.getName().equals(oldName)) {
                 System.out.println("A relationship between " + source + " and " + dest + " named " + oldName + " already exists.");
-                renameRel = false;
+                return false;
             }
         }
         // Find and rename relationship
-        if(renameRel) {
-            bool renamed = false;
-            for(rel : relationships) {
-                if(rel.getSource() == source && rel.getDest() == dest && rel.getName() == oldName) {
-                    rel.setName(newName);
-                    renamed = true;
-                }
-            }
-            if(!renamed)
-            {
-                System.out.println("A relationship between " + source + " and " + dest + " named " + oldName + " does not exist.");
+        for(UMLRelationship rel : relationships) {
+            if(rel.getSource().equals(source) && rel.getDestination().equals(dest) && rel.getName().equals(oldName)) {
+                rel.setName(newName);
+                System.out.println("Renamed relationship '" + oldName + "' to '" + newName + "'.");
+                return true;
             }
         }
+        System.out.println("A relationship between " + source + " and " + dest + " named " + oldName + " does not exist.");
+        return false;
     }
     
     public void setUMLDiagram(HashMap<String, UMLClass> c) {
-    	
     	umlDiagram = c; 
     }
     
