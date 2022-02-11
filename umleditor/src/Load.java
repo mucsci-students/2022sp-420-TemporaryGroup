@@ -1,7 +1,7 @@
 
-import java.util.HashMap;
+// import java.util.HashMap;
 
-import javax.swing.JFileChooser;
+//import javax.swing.JFileChooser;
 
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
@@ -11,19 +11,31 @@ import com.google.gson.reflect.TypeToken;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 public class Load {
 	
-	public static UMLDiagram loadDiagram = new UMLDiagram();
+	UMLDiagram loadDiagram = new UMLDiagram();
 	
-	public static void main(String[] args) throws Exception {
-		loadFile();
-	}
 
-	public static Boolean loadFile() throws Exception {
+	public Boolean loadFile() throws Exception {
+		
+		
 		
 		//file location picked from JSwing
-		String fileLocation = loadFileLocation().toString();
+		//String fileLocation = loadFileLocation().toString();
+		
+		Scanner filepath = new Scanner (System.in);
+		Scanner filename = new Scanner (System.in);
+		
+		
+		System.out.print("Please enter a name for your file (do not add extension): ");
+		String FileName = filename.next();
+		
+		System.out.println("Please enter the filepath (excluding file name):  ");
+		String FilePath = filepath.next();
+		
+		String fileLocation = FilePath + FileName + ".json";
 		
 		//User pressed cancel or 'X' button on load prompt
 		if (fileLocation.equals("failed")) {
@@ -61,13 +73,16 @@ public class Load {
 	
 	
 	
-	public static String readFileAsString(String file) throws Exception
+	public String readFileAsString(String file) throws Exception
     {
         return new String(Files.readAllBytes(Paths.get(file)));
     }
+}
 	
 	
-	public static String loadFileLocation() {
+	/*
+	public String loadFileLocation() {
+		  System.out.println("lolv1");
 	      JFileChooser file = new JFileChooser();
 	      file.setMultiSelectionEnabled(true);
 	      file.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -77,8 +92,10 @@ public class Load {
 	         System.err.println(f.getPath());
 	         return f.getPath();
 	      }
+	      System.out.println("lol");
 	      return "failed";
+	      
 	   }
+	   */
 	
 	
-}
