@@ -1,11 +1,12 @@
 import java.io.File;
 
+
 import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.Scanner;
 
-import javax.swing.JFileChooser;
+//import javax.swing.JFileChooser;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -26,18 +27,29 @@ public class Save {
 		//User will input name of file first that they want to create (AT THIS MOMENT MUST TYPE .json AT THE END)
 		
 		//GSON for JSON file to be converted (Test TO BE DELETED)
+		Scanner filepath = new Scanner(System.in);
+		Scanner filename = new Scanner(System.in);
+		
+		System.out.print("Please enter a name for your file: ");
+		String FileName = filename.next();
+		
+		System.out.println("Please enter a path for the file: ");
+		String FilePath = filepath.next();
+		
 
 		String Json = new Gson().toJson(saveDiagram);
 
 		//Assigned location for save file
-		String fileLocation = saveFileLocation();
+		//String fileLocation = saveFileLocation();
+		String fileLocation = FilePath + FileName + ".json";
 		
 		//cancel or 'X' button pressed on save prompt
+		/*
 		if (fileLocation.equals("failed")) {
 			System.out.println("Save cancelled: Exiting save...");
 			return false;
 		}
-		
+		*/
 		
 		//File creation, if file already exists prompt overwrite method will run
 		try {
@@ -100,6 +112,9 @@ public class Save {
 	 * UI to show where the user can save their file. Must enter '.json' at the end of user's save file name.
 	 * If '.json' is not entered, system will error out and user will have to re-enter save location.
 	 */
+
+	/*
+
 	public String saveFileLocation() {
 	      JFileChooser file = new JFileChooser();
 	      file.setMultiSelectionEnabled(true);
@@ -112,5 +127,5 @@ public class Save {
 	      }
 	      return "failed";
 	   }
-
+	*/
 }
