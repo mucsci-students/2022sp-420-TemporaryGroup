@@ -3,15 +3,9 @@ import java.io.File;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
-
-import org.json.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -41,13 +35,10 @@ public class Save {
 	 */
 	public static Boolean saveFile() throws IOException {
 		
-		
-		//Import diagram to save to JSON
-		HashMap<String,UMLClass> diagramSaveFile = saveDiagram.getUMLDiagram();
 		//User will input name of file first that they want to create (AT THIS MOMENT MUST TYPE .json AT THE END)
 		
 		//GSON for JSON file to be converted (Test TO BE DELETED)
-		String Json = new Gson().toJson(diagramSaveFile);
+		String Json = new Gson().toJson(saveDiagram);
 		//Assigned location for save file
 		String fileLocation = saveFileLocation();
 		

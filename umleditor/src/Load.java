@@ -1,12 +1,10 @@
 
 import java.util.HashMap;
 
-import java.util.Map;
-import java.util.Scanner;
+
 
 import javax.swing.JFileChooser;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -40,13 +38,18 @@ public class Load {
 			String json = readFileAsString(fileLocation);
 			Gson gson = new Gson();
 			
-			Type typeOfHashMap = new TypeToken<HashMap<String, UMLClass>>() { }.getType();
-			HashMap<String, UMLClass> savedDiagram = gson.fromJson(json, typeOfHashMap);
+			Type typeOfUMLDiagram = new TypeToken<UMLDiagram>() { }.getType();
+			UMLDiagram savedDiagram = gson.fromJson(json, typeOfUMLDiagram);
 			
-			loadDiagram.setUMLDiagram(savedDiagram); 
-			
+			loadDiagram = savedDiagram; 
+
+			//Print out for proof of it working TO BE DELETED
+			String Json = new Gson().toJson(loadDiagram);
+
 			System.out.println("Successfully loaded!");
-			System.out.println(loadDiagram);
+
+			//TO BE DELETED 
+			System.out.println(Json);
 			return true;
 		} catch (AccessDeniedException|IllegalStateException|JsonSyntaxException e){
 			System.out.println("Error: The file you entered was invalid or cannot be read. Please try again.");
