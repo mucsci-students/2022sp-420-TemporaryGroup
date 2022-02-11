@@ -116,10 +116,10 @@ public class umlcli {
 			listCommand();
 		}
 		else if(command.equals("save")) {
-			//saveDiagram();
+			saveDiagram();
 		}
 		else if(command.equals("load")) {
-			//loadDiagram();
+			loadDiagram();
 		}
 		else if(command.equals("")) {
 			return;
@@ -380,7 +380,7 @@ public class umlcli {
 			}
 		} 
 	}
-	/*
+	
 	public static void saveDiagram() throws Exception {
 		saver.saveDiagram = umld;
 		if(saver.saveFile()) {
@@ -403,7 +403,7 @@ public class umlcli {
 		umld = loader.loadDiagram;
 	
 	}
-	*/
+	
 	public static void classDoesNotExist(String className) {
 		System.out.println("Class '" + className + "' does not exist.");
 	}
