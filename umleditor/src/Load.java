@@ -19,9 +19,6 @@ public class Load {
 	
 
 	public Boolean loadFile() throws Exception {
-		
-		
-		
 		//file location picked from JSwing
 		//String fileLocation = loadFileLocation().toString();
 		
@@ -80,9 +77,12 @@ public class Load {
 }
 	
 	
-	/*
+/*
 	public String loadFileLocation() {
 		  System.out.println("lolv1");
+
+	public String loadFileLocation() {
+
 	      JFileChooser file = new JFileChooser();
 	      file.setMultiSelectionEnabled(true);
 	      file.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

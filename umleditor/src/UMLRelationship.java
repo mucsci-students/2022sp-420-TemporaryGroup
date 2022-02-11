@@ -10,7 +10,7 @@ public class UMLRelationship {
     private String src, dest, type, name;
 
     // Valid relationship types
-    private static final String[] validTypes = ["Nondirectional"];
+    // private static final String[] validTypes = {"Nondirectional"};
 
     /**
      * Constructor for a relationship in a UML diagram
