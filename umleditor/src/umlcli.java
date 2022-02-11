@@ -1,5 +1,6 @@
 import java.util.*;
 
+
 public class umlcli {
 	
 	//commands available in the editor 
@@ -381,11 +382,27 @@ public class umlcli {
 	}
 	
 	public static void saveDiagram() throws Exception {
-		// to implement
+		saver.saveDiagram = umld;
+		if(saver.saveFile()) {
+			hasUnsavedWork = false;
+		}
 	}
 
 	public static void loadDiagram() throws Exception {
-		// to implement
+		if(hasUnsavedWork) {
+			System.out.println("There is unsaved work. Are you sure you want to load a file? [y/n]");
+			String answer = getInput();
+			if(answer.equals("n")) {
+				return;
+			}
+			else if(!answer.equals("y") && !answer.equals("n")) {
+				commandNotRecognized();
+			}
+		}
+		loader.loadFile();
+		System.out.println("I got to this point!");
+		umld = loader.loadDiagram;
+	
 	}
 	
 	public static void classDoesNotExist(String className) {
