@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="umleditor/src"/>
-	<classpathentry kind="lib" path="C:/Users/nickc/Downloads/gson-2.8.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/nickc/Downloads/json-simple-1.1.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/irifa/Documents/GitHub/2022sp-420-TemporaryGroup/umleditor/src/gson-2.8.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/irifa/Documents/GitHub/2022sp-420-TemporaryGroup/umleditor/src/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

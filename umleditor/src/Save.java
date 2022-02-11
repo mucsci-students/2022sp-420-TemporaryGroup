@@ -1,12 +1,8 @@
 import java.io.File;
-
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.Scanner;
-
 import javax.swing.JFileChooser;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -15,7 +11,7 @@ public class Save {
 	
 	UMLDiagram saveDiagram = new UMLDiagram();
 	UMLClass atTest = new UMLClass("create!");
-
+	
 	
 	/*
 	 * To save the UMLDiagram, user will be prompted through Java Swing to create a save location or pick a file that they have already saved.

@@ -1,4 +1,10 @@
 import java.util.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import com.google.gson.*;
+import java.nio.file.*;
 
 public class umlcli {
 	
@@ -15,7 +21,7 @@ public class umlcli {
 	public static UMLDiagram umld = new UMLDiagram();
 	public static boolean hasUnsavedWork = false;
 	public static Save saver = new Save();
-	public static Load loader = new Load();
+	//public static Load loader = new Load();
 	
 	
 	//Driver for the cli class
@@ -380,8 +386,14 @@ public class umlcli {
 		} 
 	}
 	
-	public static void saveDiagram() throws Exception {
+	public static void saveDiagram() throws IOException {
 		// to implement
+		if (saveFile()) {
+			System.out.println("File saved sucessfully");
+		} else {
+			System.out.println("Could not saved file");
+		}
+		
 	}
 
 	public static void loadDiagram() throws Exception {
@@ -408,5 +420,117 @@ public class umlcli {
 			return false;
 		}
 	}
+	///////////////////////////////////////////////////////////////////////////
+	//save implementation added to cli class 
+	//is functional for now
+	//need to find nicer way to integrate it 
+	
+	/*
+	 * To save the UMLDiagram, user will be prompted through Java Swing to create a save location or pick a file that they have already saved.
+	 * If file picked, system will prompt user if they want to overwrite the save file. 
+	 */
+	public static Boolean saveFile() throws IOException {
+		
+		//User will input name of file first that they want to create (AT THIS MOMENT MUST TYPE .json AT THE END)
+		//GSON for JSON file to be converted (Test TO BE DELETED)
+
+		String Json = new Gson().toJson(umld);
+
+		//Assigned location for save file
+		System.out.println("enter path");
+		String fileLocation = getInput();
+				
+		//cancel or 'X' button pressed on save prompt
+		if (!validPath (fileLocation)) {
+			System.out.println("Can not find path for saving");
+			return false;
+		}
+		
+		//File creation, if file already exists prompt overwrite method will run
+		try {
+		      File name = new File(fileLocation);
+		      if (name.createNewFile()) {
+		        System.out.println("File created: " + name.getName());
+		        FileWriter file = new FileWriter(fileLocation);
+		        file.write(Json.toString());
+		        file.flush();
+				file.close();
+		        return true;
+		      } else {
+		        overwrite(fileLocation, Json);
+		        return true;
+		      }
+		    } catch (IOException|IllegalStateException e) {
+		      System.out.println("Error: Please ensure you have named your file and add '.json' at the end.");
+		      return false;
+		    }
+		
+	}
+	
+	/*
+	 * If file name exists in particular directory, a question will show asking if the user wants to overwrite file.
+	 * Returns a boolean to proceed or exit the overwrite.
+	 */
+	public static Boolean overwrite(String fileLocation, String Json) throws IOException{
+		System.out.println("File already exists. Would you like to overwrite save file?");
+        System.out.print("Please enter y/n: ");
+        
+		Scanner a = new Scanner(System.in);
+		String answer = a.nextLine();
+		answer.toLowerCase();
+		
+		//Depending on user's answer, it will overwrite, cancel, or ask user to re-enter answer if it cannot read answer.
+		if (answer.equals("y") || answer.equals("yes")) {
+			FileWriter file = new FileWriter(fileLocation);
+			file.write(Json.toString());
+			file.flush();
+			System.out.println("Successfully saved!");
+			file.close();
+			a.close();
+			return true;
+		}
+		else if (answer.equals("n") || answer.equals("no")) {
+			System.out.println("Save interrupted, cancelling save");
+			a.close();
+			return false;
+		}
+		else {
+			System.out.println("ERROR: Please input y or n");
+			overwrite(fileLocation, Json);
+			a.close();
+			return false;
+		}
+			
+	}
+	/*
+	 * UI to show where the user can save their file. Must enter '.json' at the end of user's save file name.
+	 * If '.json' is not entered, system will error out and user will have to re-enter save location.
+	 
+	public static String saveFileLocation() {
+	      JFileChooser file = new JFileChooser();
+	      file.setMultiSelectionEnabled(true);
+	      file.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	      file.setFileHidingEnabled(false);
+	      file.sho
+	      if (file.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+	    	 java.io.File f = file.getSelectedFile();
+	         System.err.println(f.getPath());
+	         return f.getPath();
+	      } 
+	      return "failed"; 
+	 } 
+	 maybe we can fix this by Sunday
+	 */
+	
+	//check if path is valid 
+	public static boolean validPath (String path) {
+		try {
+            Paths.get(path);
+        } catch (InvalidPathException ex) {
+            return false;
+        }
+        return true;
+	}
+	
 	
 }
