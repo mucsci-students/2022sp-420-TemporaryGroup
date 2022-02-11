@@ -134,9 +134,8 @@ public class umlcli {
 			System.out.println("Enter class name: ");
 			String className = getInput();
 			if(isValidName(className)) {
-				umld.addClass(className);
+				hasUnsavedWork = umld.addClass(className);
 			}
-			
 		}
 		else if(toAdd.equals("attribute")) {
 			System.out.println("Add attribute to which class?");
@@ -145,7 +144,7 @@ public class umlcli {
 				System.out.println("Enter attribute name: ");
 				String attributeName = getInput();
 				if(isValidName(attributeName)) {
-					umld.addAttribute(whichClass, attributeName);
+					hasUnsavedWork = umld.addAttribute(whichClass, attributeName);
 				}
 			}
 			else {
@@ -156,6 +155,9 @@ public class umlcli {
 		else if(toAdd.equals("relationship")) {
 			System.out.println("Enter relationship name: ");
 			String name = getInput();
+			if(!isValidName(name)) {
+				return;
+			}
 			System.out.println("Enter source class:");
 			String source = getInput();
 			if(!umld.classExists(source)) {
@@ -170,23 +172,29 @@ public class umlcli {
 			}
 			// fixed type for now, can be changed when more relationship types are needed
 			String relType = "Nondirectional";
-			// finish when implemented
-      umld.addRelationship(srcClass, destClass, type, name);
+			hasUnsavedWork = umld.addRelationship(source, dest, relType, name);
+      		
 
 		}
 		else {
-			System.out.println("Command not recognized.");
+			commandNotRecognized();
 		}
 	}
 	
 	public static void listCommand () {
+		if(umld.umlDiagram.isEmpty()) {
+			System.out.println("The diagram is empty!");
+			return;
+		}
 		System.out.println("What do you want to list? [class/classes/relationships]");
 		String toList = getInput();
 		if (toList.equals("classes")) {
 			listClasses();
-		} else if (toList.equals("relationships")) {
-			// to be implemented
-		} else if (toList.equals("class")) {
+		} 
+		else if (toList.equals("relationships")) {
+			listRelationships();
+		} 
+		else if (toList.equals("class")) {
 			listClass();
 		}
 		else {
@@ -195,6 +203,10 @@ public class umlcli {
 	}
 
 	public static void renameCommand() {
+		if(umld.umlDiagram.isEmpty()) {
+			System.out.println("The diagram is empty!");
+			return;
+		}
 		System.out.println("What do you want to rename? [class/relationship/attribute]");
 		String toRename = getInput();
 		if(toRename.equals("class")) {
@@ -203,7 +215,9 @@ public class umlcli {
 			if(umld.classExists(oldName)) {
 				System.out.println("Enter new class name:");
 				String newName = getInput();
-				umld.renameClass(oldName, newName);
+				if(isValidName(newName)) {
+					hasUnsavedWork = umld.renameClass(oldName, newName);
+				}
 			}
 			else {
 				classDoesNotExist(oldName);
@@ -218,7 +232,7 @@ public class umlcli {
 				if(umld.getClass(whichClass).attributeExists(oldName)) {
 					System.out.println("Enter new attribute name:");
 					String newName = getInput();
-					umld.renameAttribute(whichClass, oldName, newName);
+					hasUnsavedWork = umld.renameAttribute(whichClass, oldName, newName);
 				}
 				else {
 					System.out.println("Attribute '" + oldName + "' does not exist in class '" + whichClass + "'.");
@@ -232,14 +246,26 @@ public class umlcli {
 		else if(toRename.equals("relationship")) {
 			System.out.println("Enter source class name: ");
 			String srcClass = getInput();
+			if(!umld.classExists(srcClass)) {
+				classDoesNotExist(srcClass);
+				return;
+			}
 			System.out.println("Enter destination class name: ");
 			String destClass = getInput();
-			System.out.println("Enter the name of this relationship: ");
+			if(!umld.classExists(destClass)) {
+				classDoesNotExist(destClass);
+				return;
+			}
+			System.out.println("Rename which relationship?");
 			String oldName = getInput();
-			System.out.println("Enter a new name for this relationship: ");
+			if(!isValidName(oldName)) {
+				return;
+			}
+			System.out.println("Enter new relationship name: ");
 			String newName = getInput();
-
-			umld.renameRelationship(srcClass, destClass, oldName, newName);
+			if(isValidName(newName)) {
+				hasUnsavedWork = umld.renameRelationship(srcClass, destClass, oldName, newName);
+			}
 		}
 		else {
 			commandNotRecognized();
@@ -247,13 +273,17 @@ public class umlcli {
 	}
 
 	public static void deleteCommand() {
+		if(umld.umlDiagram.isEmpty()) {
+			System.out.println("The diagram is empty!");
+			return;
+		}
 		System.out.println("What do you want to delete? [class/relationship/attribute]");
 		String toRemove = getInput();
 		if(toRemove.equals("class")) {
 			System.out.println("Enter class to delete:");
 			String whichClass = getInput();
 			if(umld.classExists(whichClass)) {
-				umld.removeClass(whichClass);
+				hasUnsavedWork = umld.removeClass(whichClass);
 			}
 			else {
 				classDoesNotExist(whichClass);
@@ -265,7 +295,7 @@ public class umlcli {
 			if(umld.classExists(whichClass)) {
 				System.out.println("Enter attribute to delete:");
 				String whichAttribute = getInput();
-				umld.removeAttribute(whichClass, whichAttribute);
+				hasUnsavedWork = umld.removeAttribute(whichClass, whichAttribute);
 			}
 			else {
 				classDoesNotExist(whichClass);
@@ -275,12 +305,19 @@ public class umlcli {
 		else if(toRemove.equals("relationship")) {
 			System.out.println("Enter source class name: ");
 			String srcClass = getInput();
+			if(!umld.classExists(srcClass)) {
+				classDoesNotExist(srcClass);
+				return;
+			}
 			System.out.println("Enter destination class name: ");
 			String destClass = getInput();
-			System.out.println("Enter the name of the relationship to delete: ");
+			if(!umld.classExists(destClass)) {
+				classDoesNotExist(destClass);
+				return;
+			}
+			System.out.println("Enter relationship to delete: ");
 			String name = getInput();
-
-			umld.deleteRelationship(srcClass, destClass, name);
+			hasUnsavedWork = umld.deleteRelationship(srcClass, destClass, name);
 		}
 		else {
 			commandNotRecognized();
@@ -290,33 +327,55 @@ public class umlcli {
 	//list all classes in the diagram 
 	public static void listClasses () {
 		if (umld.umlDiagram.isEmpty()) {
-			System.out.println("No classes in the diagram."); 
+			System.out.println("The diagram is empty!"); 
 		} 
 		else {
 			System.out.println ("Classes: ");
-			Iterator hmIter = umld.umlDiagram.entrySet().iterator();
+			System.out.println();
+			Iterator<HashMap.Entry<String, UMLClass>> hmIter = umld.umlDiagram.entrySet().iterator();
 			while (hmIter.hasNext()) {
-				Map.Entry mapElem = (Map.Entry) hmIter.next();
+				Map.Entry<String, UMLClass> mapElem = (Map.Entry<String, UMLClass>) hmIter.next();
 				System.out.println(mapElem.getKey());
 			}
 		}	
 	}
-		
 
 	public static void listClass () {
 		System.out.println("Enter class name: ");
 		String className = getInput();
 		if(umld.classExists(className)) {
 			System.out.println("Class: " + className);
-			System.out.print("Attributes: ");
+			System.out.print("[Attributes: ");
+			StringJoiner joiner = new StringJoiner(", ");
 			for(int i = 0; i < umld.getClass(className).attributes.size(); i++) {
-				System.out.print(umld.getClass(className).attributes.get(i) + ", ");
+				joiner.add(umld.getClass(className).attributes.get(i));
 			}
+			String attList = joiner.toString();
+			System.out.print(attList + "]");
 			System.out.println();
 		}
 		else {
 			classDoesNotExist(className);
 		}
+	}
+
+	public static void listRelationships() {
+		if(umld.umlDiagram.isEmpty()) {
+			System.out.println("No classes in the diagram.");
+		}
+		else if(umld.relationships.isEmpty()) {
+			System.out.println("No relationships in the diagram.");
+		}
+		else {
+			System.out.println("Relationships: ");
+			System.out.println();
+			for(int i = 0; i < umld.relationships.size(); i++) {
+				System.out.println(umld.relationships.get(i).getName() + " [Type: " + umld.relationships.get(i).getType() + "]");
+				System.out.println("[Source: " + umld.relationships.get(i).getSource() + "]");
+				System.out.println("[Destination: " + umld.relationships.get(i).getSource() + "]");
+				System.out.println();
+			}
+		} 
 	}
 
 	public static void saveDiagram() {
@@ -336,6 +395,9 @@ public class umlcli {
 	}
 
 	public static Boolean isValidName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
 		if(name.matches("^[-_A-Za-z0-9]+$")) {
 			return true;
 		}

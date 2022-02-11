@@ -57,6 +57,7 @@ public class Save {
 		        FileWriter file = new FileWriter(fileLocation);
 		        file.write(Json.toString());
 		        file.flush();
+				file.close();
 		        return true;
 		      } else {
 		        overwrite(fileLocation, Json);
@@ -88,15 +89,19 @@ public class Save {
 			file.write(Json.toString());
 			file.flush();
 			System.out.println("Successfully saved!");
+			file.close();
+			a.close();
 			return true;
 		}
 		else if (answer.equals("n") || answer.equals("no")) {
 			System.out.println("Save interrupted, cancelling save");
+			a.close();
 			return false;
 		}
 		else {
 			System.out.println("ERROR: Please input y or n");
 			overwrite(fileLocation, Json);
+			a.close();
 			return false;
 		}
 			
