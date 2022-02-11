@@ -91,19 +91,15 @@ public class Save {
 			file.write(Json.toString());
 			file.flush();
 			System.out.println("Successfully saved!");
-			file.close();
-			a.close();
 			return true;
 		}
 		else if (answer.equals("n") || answer.equals("no")) {
 			System.out.println("Save interrupted, cancelling save");
-			a.close();
 			return false;
 		}
 		else {
 			System.out.println("ERROR: Please input y or n");
 			overwrite(fileLocation, Json);
-			a.close();
 			return false;
 		}
 			
@@ -112,9 +108,7 @@ public class Save {
 	 * UI to show where the user can save their file. Must enter '.json' at the end of user's save file name.
 	 * If '.json' is not entered, system will error out and user will have to re-enter save location.
 	 */
-
 	/*
-
 	public String saveFileLocation() {
 	      JFileChooser file = new JFileChooser();
 	      file.setMultiSelectionEnabled(true);
