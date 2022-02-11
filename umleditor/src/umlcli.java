@@ -1,5 +1,6 @@
 import java.util.*;
 
+
 public class umlcli {
 	
 	//commands available in the editor 
@@ -14,10 +15,12 @@ public class umlcli {
 	public static Scanner input = new Scanner (System.in);
 	public static UMLDiagram umld = new UMLDiagram();
 	public static boolean hasUnsavedWork = false;
+	public static Save saver = new Save();
+	public static Load loader = new Load();
 	
 	
 	//Driver for the cli class
-	public static void main (String[] args) {
+	public static void main (String[] args) throws Exception {
 		prompt();
 		while (true) {
 			String command = getInput();
@@ -93,7 +96,7 @@ public class umlcli {
 	}
 	
 	//run given command 
-	public static void runCommand (String command) {
+	public static void runCommand (String command) throws Exception {
 		if (command.equals("exit")) {
 			exitCommand();
 		}
@@ -113,10 +116,10 @@ public class umlcli {
 			listCommand();
 		}
 		else if(command.equals("save")) {
-			saveDiagram();
+			//saveDiagram();
 		}
 		else if(command.equals("load")) {
-			loadDiagram();
+			//loadDiagram();
 		}
 		else if(command.equals("")) {
 			return;
@@ -377,15 +380,30 @@ public class umlcli {
 			}
 		} 
 	}
-
-	public static void saveDiagram() {
-		// needs implementation
+	/*
+	public static void saveDiagram() throws Exception {
+		saver.saveDiagram = umld;
+		if(saver.saveFile()) {
+			hasUnsavedWork = false;
+		}
 	}
 
-	public static void loadDiagram() {
-		// needs implementation
+	public static void loadDiagram() throws Exception {
+		if(hasUnsavedWork) {
+			System.out.println("There is unsaved work. Are you sure you want to load a file? [y/n]");
+			String answer = getInput();
+			if(answer.equals("n")) {
+				return;
+			}
+			else if(!answer.equals("y") && !answer.equals("n")) {
+				commandNotRecognized();
+			}
+		}
+		loader.loadFile();
+		umld = loader.loadDiagram;
+	
 	}
-
+	*/
 	public static void classDoesNotExist(String className) {
 		System.out.println("Class '" + className + "' does not exist.");
 	}

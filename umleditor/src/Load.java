@@ -14,13 +14,10 @@ import java.nio.file.Paths;
 
 public class Load {
 	
-	public static UMLDiagram loadDiagram = new UMLDiagram();
+	UMLDiagram loadDiagram = new UMLDiagram();
 	
-	public static void main(String[] args) throws Exception {
-		loadFile();
-	}
 
-	public static Boolean loadFile() throws Exception {
+	public Boolean loadFile() throws Exception {
 		
 		//file location picked from JSwing
 		String fileLocation = loadFileLocation().toString();
@@ -61,13 +58,13 @@ public class Load {
 	
 	
 	
-	public static String readFileAsString(String file) throws Exception
+	public String readFileAsString(String file) throws Exception
     {
         return new String(Files.readAllBytes(Paths.get(file)));
     }
 	
 	
-	public static String loadFileLocation() {
+	public String loadFileLocation() {
 	      JFileChooser file = new JFileChooser();
 	      file.setMultiSelectionEnabled(true);
 	      file.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
