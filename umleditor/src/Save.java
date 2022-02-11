@@ -1,8 +1,8 @@
 import java.io.File;
 
-
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
@@ -17,14 +17,12 @@ public class Save {
 	public static UMLClass atTest = new UMLClass("create!");
 
 	public static void main(String[] args) throws IOException {
-		atTest.addAttribute("24");
-		atTest.addAttribute("25");
 		
 		//TEST TO BE DELETED
 		saveDiagram.addClass("test1");
 		saveDiagram.addAttribute("test1", "this is a test");
 		saveDiagram.addClass("test2");
-		saveDiagram.addAttribute("test2", "1");
+		saveDiagram.addAttribute("test2", "23");
 		
 		saveFile();
 	}
@@ -38,7 +36,9 @@ public class Save {
 		//User will input name of file first that they want to create (AT THIS MOMENT MUST TYPE .json AT THE END)
 		
 		//GSON for JSON file to be converted (Test TO BE DELETED)
+
 		String Json = new Gson().toJson(saveDiagram);
+
 		//Assigned location for save file
 		String fileLocation = saveFileLocation();
 		

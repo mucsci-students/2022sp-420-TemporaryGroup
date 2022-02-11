@@ -1,8 +1,6 @@
 
 import java.util.HashMap;
 
-
-
 import javax.swing.JFileChooser;
 
 import java.lang.reflect.Type;
@@ -40,7 +38,7 @@ public class Load {
 			
 			Type typeOfUMLDiagram = new TypeToken<UMLDiagram>() { }.getType();
 			UMLDiagram savedDiagram = gson.fromJson(json, typeOfUMLDiagram);
-			
+
 			loadDiagram = savedDiagram; 
 
 			//Print out for proof of it working TO BE DELETED
@@ -49,6 +47,7 @@ public class Load {
 			System.out.println("Successfully loaded!");
 
 			//TO BE DELETED 
+
 			System.out.println(Json);
 			return true;
 		} catch (AccessDeniedException|IllegalStateException|JsonSyntaxException e){
