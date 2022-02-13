@@ -52,12 +52,9 @@ public class Load {
 
 			//Print out for proof of it working TO BE DELETED
 			String Json = new Gson().toJson(loadDiagram);
-
 			System.out.println("Successfully loaded!");
 
 			//TO BE DELETED 
-
-			System.out.println(Json);
 			return true;
 		} catch (AccessDeniedException|IllegalStateException|JsonSyntaxException e){
 			System.out.println("Error: The file you entered was invalid or cannot be read. Please try again.");

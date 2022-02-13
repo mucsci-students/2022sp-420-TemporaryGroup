@@ -156,11 +156,6 @@ public class umlcli {
 		}
 		// Add a relationship
 		else if(toAdd.equals("relationship")) {
-			System.out.println("Enter relationship name: ");
-			String name = getInput();
-			if(!isValidName(name)) {
-				return;
-			}
 			System.out.println("Enter source class:");
 			String source = getInput();
 			if(!umld.classExists(source)) {
@@ -174,8 +169,7 @@ public class umlcli {
 				return;
 			}
 			// fixed type for now, can be changed when more relationship types are needed
-			String relType = "Nondirectional";
-			hasUnsavedWork = umld.addRelationship(source, dest, relType);
+			hasUnsavedWork = umld.addRelationship(source, dest, "Nondirectional");
       		
 
 		}
@@ -198,7 +192,7 @@ public class umlcli {
 			listRelationships();
 		} 
 		else if (toList.equals("class")) {
-			listClass();
+			listClassCommand();
 		}
 		else {
 			commandNotRecognized();
@@ -293,8 +287,6 @@ public class umlcli {
 				classDoesNotExist(destClass);
 				return;
 			}
-			System.out.println("Enter relationship to delete: ");
-			String name = getInput();
 			hasUnsavedWork = umld.deleteRelationship(srcClass, destClass);
 		}
 		else {
@@ -309,28 +301,32 @@ public class umlcli {
 		} 
 		else {
 			System.out.println ("Classes: ");
-			System.out.println();
 			Iterator<HashMap.Entry<String, UMLClass>> hmIter = umld.umlDiagram.entrySet().iterator();
 			while (hmIter.hasNext()) {
 				Map.Entry<String, UMLClass> mapElem = (Map.Entry<String, UMLClass>) hmIter.next();
-				System.out.println(mapElem.getKey());
+				listClass(mapElem.getKey());
 			}
 		}	
 	}
 
-	public static void listClass () {
+	public static void listClass (String name) {
+		System.out.println();
+		System.out.println("Class: " + name);
+		System.out.print("[Attributes: ");
+		StringJoiner joiner = new StringJoiner(", ");
+		for(int i = 0; i < umld.getClass(name).attributes.size(); i++) {
+			joiner.add(umld.getClass(name).attributes.get(i));
+		}
+		String attList = joiner.toString();
+		System.out.print(attList + "]");
+		System.out.println();
+	}
+	
+	public static void listClassCommand () {
 		System.out.println("Enter class name: ");
 		String className = getInput();
 		if(umld.classExists(className)) {
-			System.out.println("Class: " + className);
-			System.out.print("[Attributes: ");
-			StringJoiner joiner = new StringJoiner(", ");
-			for(int i = 0; i < umld.getClass(className).attributes.size(); i++) {
-				joiner.add(umld.getClass(className).attributes.get(i));
-			}
-			String attList = joiner.toString();
-			System.out.print(attList + "]");
-			System.out.println();
+			listClass(className);
 		}
 		else {
 			classDoesNotExist(className);
@@ -346,11 +342,10 @@ public class umlcli {
 		}
 		else {
 			System.out.println("Relationships: ");
-			System.out.println();
 			for(int i = 0; i < umld.relationships.size(); i++) {
+				System.out.println();
 				System.out.println("[Source: " + umld.relationships.get(i).getSource() + "]");
 				System.out.println("[Destination: " + umld.relationships.get(i).getSource() + "]");
-				System.out.println();
 			}
 		} 
 	}
@@ -374,7 +369,6 @@ public class umlcli {
 			}
 		}
 		loader.loadFile();
-		System.out.println("I got to this point!");
 		umld = loader.loadDiagram;
 	
 	}

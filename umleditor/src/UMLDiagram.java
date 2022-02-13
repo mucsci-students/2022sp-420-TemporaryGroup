@@ -103,6 +103,7 @@ public class UMLDiagram {
      * @param relType The relationship type being checked
      * @return True if the relationship type is valid, false if it's not
      */
+    /* no need to have a type for now
     private boolean isValidType(String relType)
     {
         // Array of valid types
@@ -117,7 +118,7 @@ public class UMLDiagram {
         }
         // Reached end of array
         return false;
-    }
+    } */
 
     /**
      * Add a relationship to the diagram
@@ -137,10 +138,12 @@ public class UMLDiagram {
             System.out.println("The class '" + source + "' does not exist.");
             return false;
         }
+        /*
+        no need to check for now
         if(!isValidType(type)) {
             System.out.println("'" + type + "' is not a valid relationship type.");
             return false;
-        }
+        } */
         // Check that the relationship doesn't already exist
         for(UMLRelationship rel : relationships) {
             if(rel.getSource().equals(source) && rel.getDestination().equals(dest)) {
