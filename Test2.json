@@ -1,0 +1,1 @@
+{"umlDiagram":{"bank":{"className":"bank","attributes":[]},"car":{"className":"car","attributes":[]},"church":{"className":"church","attributes":[]},"house":{"className":"house","attributes":[]}},"relationships":[{"src":"car","dest":"house","type":"Nondirectional"}],"validTypes":["Nondirectional"]}

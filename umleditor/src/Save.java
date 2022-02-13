@@ -1,6 +1,7 @@
 import java.io.File;
 
 
+
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -36,13 +37,13 @@ public class Save {
 		System.out.println("Please enter a path for the file: ");
 		String FilePath = filepath.next();
 		
-
 		String Json = new Gson().toJson(saveDiagram);
 
 		//Assigned location for save file
 		//String fileLocation = saveFileLocation();
 		String fileLocation = FilePath + FileName + ".json";
 		
+
 		//cancel or 'X' button pressed on save prompt
 		/*
 		if (fileLocation.equals("failed")) {
@@ -91,6 +92,7 @@ public class Save {
 			file.write(Json.toString());
 			file.flush();
 			System.out.println("Successfully saved!");
+			file.close();
 			return true;
 		}
 		else if (answer.equals("n") || answer.equals("no")) {
