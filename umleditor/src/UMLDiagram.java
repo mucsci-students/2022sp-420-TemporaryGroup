@@ -103,6 +103,7 @@ public class UMLDiagram {
      * @param relType The relationship type being checked
      * @return True if the relationship type is valid, false if it's not
      */
+    /* no need to have a type for now
     private boolean isValidType(String relType)
     {
         // Array of valid types
@@ -117,7 +118,7 @@ public class UMLDiagram {
         }
         // Reached end of array
         return false;
-    }
+    } */
 
     /**
      * Add a relationship to the diagram
@@ -127,7 +128,7 @@ public class UMLDiagram {
      * @param type The type of this relationship
      * @param name The name of this relationship
      */
-    public Boolean addRelationship(String source, String dest, String type, String name) {
+    public Boolean addRelationship(String source, String dest, String type) {
         // Check that the relationship is valid
         if(!classExists(source)) {
             System.out.println("The class '" + source + "' does not exist.");
@@ -137,21 +138,23 @@ public class UMLDiagram {
             System.out.println("The class '" + source + "' does not exist.");
             return false;
         }
+        /*
+        no need to check for now
         if(!isValidType(type)) {
             System.out.println("'" + type + "' is not a valid relationship type.");
             return false;
-        }
+        } */
         // Check that the relationship doesn't already exist
         for(UMLRelationship rel : relationships) {
-            if(rel.getSource().equals(source) && rel.getDestination().equals(dest) && rel.getName().equals(name)) {
-                System.out.println("A relationship between '" + source + "' and '" + dest + "' named '" + name + "' already exists.");
+            if(rel.getSource().equals(source) && rel.getDestination().equals(dest)) {
+                System.out.println("A relationship between '" + source + "' and '" + dest + "' already exists.");
                 return false;
             }
         }
         // Add the relationship
-        UMLRelationship newRel = new UMLRelationship(source, dest, type, name);
+        UMLRelationship newRel = new UMLRelationship(source, dest, type);
         relationships.add(newRel);
-        System.out.println("Added new relationship '" + newRel.getName() + "' between class '" + source + "' and class '" + dest + "'.");
+        System.out.println("Added new relationship between class '" + source + "' and class '" + dest + "'.");
         return true;
     }
 
@@ -161,15 +164,15 @@ public class UMLDiagram {
      * @param dest The destination class for the relationship to delete
      * @param name The name of the relationship to delete
      */
-    public Boolean deleteRelationship(String source, String dest, String name) {
+    public Boolean deleteRelationship(String source, String dest) {
         for(UMLRelationship rel : relationships) {
-            if(rel.getSource().equals(source) && rel.getDestination().equals(dest) && rel.getName().equals(name)) {
+            if(rel.getSource().equals(source) && rel.getDestination().equals(dest)) {
                 relationships.remove(rel);
-                System.out.println("Removed relationship '" + name + "' between class '" + source + "' and class '" + dest + "'.");
+                System.out.println("Removed relationship between class '" + source + "' and class '" + dest + "'.");
                 return true;
             }
         }
-        System.out.println("A relationship between '" + source + "' and '" + dest + "' named '" + name + "' does not exist.");
+        System.out.println("A relationship between '" + source + "' and '" + dest + "' does not exist.");
         return false;
     }
 
@@ -181,34 +184,6 @@ public class UMLDiagram {
      * @param oldName The current name of this relationship
      * @param newName The new name for this relationship
      */
-    public Boolean renameRelationship(String source, String dest, String oldName, String newName) {
-        // Check that the relationship is valid
-        if(!classExists(source)) {
-            System.out.println("The class " + source + " does not exist.");
-            return false;
-        }
-        if(!classExists(dest)) {
-            System.out.println("The class " + source + " does not exist.");
-            return false;
-        }
-        // Check that the relationship won't become a duplicate
-        for(UMLRelationship rel : relationships) {
-            if(rel.getSource().equals(source) && rel.getDestination().equals(dest) && rel.getName().equals(oldName)) {
-                System.out.println("A relationship between " + source + " and " + dest + " named " + oldName + " already exists.");
-                return false;
-            }
-        }
-        // Find and rename relationship
-        for(UMLRelationship rel : relationships) {
-            if(rel.getSource().equals(source) && rel.getDestination().equals(dest) && rel.getName().equals(oldName)) {
-                rel.setName(newName);
-                System.out.println("Renamed relationship '" + oldName + "' to '" + newName + "'.");
-                return true;
-            }
-        }
-        System.out.println("A relationship between " + source + " and " + dest + " named " + oldName + " does not exist.");
-        return false;
-    }
     
     public void setUMLDiagram(HashMap<String, UMLClass> c) {
     	umlDiagram = c; 

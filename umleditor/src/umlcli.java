@@ -85,7 +85,7 @@ public class umlcli {
 		System.out.println();
 		System.out.println("List of commands: ");
 		System.out.println("\tadd: Add a new [class] or [relationship] to the diagram, or add an [attribute] to an existing class.");
-		System.out.println("\trename: Rename an existing [class], [relationship], or [attribute].");
+		System.out.println("\trename: Rename an existing [class], or [attribute].");
 		System.out.println("\tdelete: Delete an existing [class], [relationship], or [attribute].");
 		System.out.println("\tlist: List all [classes] in the diagram, all [relationships], or one specific [class].");
 		System.out.println("\tsave: Save the current UML diagram to a JSON or YAML file.");
@@ -146,7 +146,7 @@ public class umlcli {
 			if(umld.classExists(whichClass)) {
 				System.out.println("Enter attribute name: ");
 				String attributeName = getInput();
-				if(isValidName(attributeName)) {
+				if(isValidAttributeName(attributeName)) {
 					hasUnsavedWork = umld.addAttribute(whichClass, attributeName);
 				}
 			}
@@ -156,11 +156,6 @@ public class umlcli {
 		}
 		// Add a relationship
 		else if(toAdd.equals("relationship")) {
-			System.out.println("Enter relationship name: ");
-			String name = getInput();
-			if(!isValidName(name)) {
-				return;
-			}
 			System.out.println("Enter source class:");
 			String source = getInput();
 			if(!umld.classExists(source)) {
@@ -174,8 +169,7 @@ public class umlcli {
 				return;
 			}
 			// fixed type for now, can be changed when more relationship types are needed
-			String relType = "Nondirectional";
-			hasUnsavedWork = umld.addRelationship(source, dest, relType, name);
+			hasUnsavedWork = umld.addRelationship(source, dest, "Nondirectional");
       		
 
 		}
@@ -198,7 +192,7 @@ public class umlcli {
 			listRelationships();
 		} 
 		else if (toList.equals("class")) {
-			listClass();
+			listClassCommand();
 		}
 		else {
 			commandNotRecognized();
@@ -210,7 +204,7 @@ public class umlcli {
 			System.out.println("The diagram is empty!");
 			return;
 		}
-		System.out.println("What do you want to rename? [class/relationship/attribute]");
+		System.out.println("What do you want to rename? [class/attribute]");
 		String toRename = getInput();
 		if(toRename.equals("class")) {
 			System.out.println("Rename which class?");
@@ -235,7 +229,9 @@ public class umlcli {
 				if(umld.getClass(whichClass).attributeExists(oldName)) {
 					System.out.println("Enter new attribute name:");
 					String newName = getInput();
-					hasUnsavedWork = umld.renameAttribute(whichClass, oldName, newName);
+					if(isValidAttributeName(newName)) {
+						hasUnsavedWork = umld.renameAttribute(whichClass, oldName, newName);
+					}
 				}
 				else {
 					System.out.println("Attribute '" + oldName + "' does not exist in class '" + whichClass + "'.");
@@ -243,31 +239,6 @@ public class umlcli {
 			}
 			else {
 				classDoesNotExist(whichClass);
-			}
-		}
-		// Rename a relationship
-		else if(toRename.equals("relationship")) {
-			System.out.println("Enter source class name: ");
-			String srcClass = getInput();
-			if(!umld.classExists(srcClass)) {
-				classDoesNotExist(srcClass);
-				return;
-			}
-			System.out.println("Enter destination class name: ");
-			String destClass = getInput();
-			if(!umld.classExists(destClass)) {
-				classDoesNotExist(destClass);
-				return;
-			}
-			System.out.println("Rename which relationship?");
-			String oldName = getInput();
-			if(!isValidName(oldName)) {
-				return;
-			}
-			System.out.println("Enter new relationship name: ");
-			String newName = getInput();
-			if(isValidName(newName)) {
-				hasUnsavedWork = umld.renameRelationship(srcClass, destClass, oldName, newName);
 			}
 		}
 		else {
@@ -318,9 +289,7 @@ public class umlcli {
 				classDoesNotExist(destClass);
 				return;
 			}
-			System.out.println("Enter relationship to delete: ");
-			String name = getInput();
-			hasUnsavedWork = umld.deleteRelationship(srcClass, destClass, name);
+			hasUnsavedWork = umld.deleteRelationship(srcClass, destClass);
 		}
 		else {
 			commandNotRecognized();
@@ -333,29 +302,30 @@ public class umlcli {
 			System.out.println("The diagram is empty!"); 
 		} 
 		else {
-			System.out.println ("Classes: ");
-			System.out.println();
 			Iterator<HashMap.Entry<String, UMLClass>> hmIter = umld.umlDiagram.entrySet().iterator();
 			while (hmIter.hasNext()) {
 				Map.Entry<String, UMLClass> mapElem = (Map.Entry<String, UMLClass>) hmIter.next();
-				System.out.println(mapElem.getKey());
+				listClass(mapElem.getKey());
 			}
 		}	
 	}
 
-	public static void listClass () {
+	public static void listClass (String name) {
+		System.out.println();
+		System.out.println("Class: ");
+		System.out.println("- " + name);
+		System.out.println("Attributes:");
+		for(int i = 0; i < umld.getClass(name).attributes.size(); i++) {
+			System.out.println("- " + umld.getClass(name).attributes.get(i));
+		}
+		System.out.println();
+	}
+	
+	public static void listClassCommand () {
 		System.out.println("Enter class name: ");
 		String className = getInput();
 		if(umld.classExists(className)) {
-			System.out.println("Class: " + className);
-			System.out.print("[Attributes: ");
-			StringJoiner joiner = new StringJoiner(", ");
-			for(int i = 0; i < umld.getClass(className).attributes.size(); i++) {
-				joiner.add(umld.getClass(className).attributes.get(i));
-			}
-			String attList = joiner.toString();
-			System.out.print(attList + "]");
-			System.out.println();
+			listClass(className);
 		}
 		else {
 			classDoesNotExist(className);
@@ -371,12 +341,10 @@ public class umlcli {
 		}
 		else {
 			System.out.println("Relationships: ");
-			System.out.println();
 			for(int i = 0; i < umld.relationships.size(); i++) {
-				System.out.println(umld.relationships.get(i).getName() + " [Type: " + umld.relationships.get(i).getType() + "]");
+				System.out.println();
 				System.out.println("[Source: " + umld.relationships.get(i).getSource() + "]");
 				System.out.println("[Destination: " + umld.relationships.get(i).getSource() + "]");
-				System.out.println();
 			}
 		} 
 	}
@@ -400,7 +368,6 @@ public class umlcli {
 			}
 		}
 		loader.loadFile();
-		System.out.println("I got to this point!");
 		umld = loader.loadDiagram;
 	
 	}
@@ -422,6 +389,32 @@ public class umlcli {
 		}
 		else {
 			System.out.println("Error: Invalid name. Names can only contain A-Z, a-z, 0-9, and underscore.");
+			return false;
+		}
+	}
+
+	public static Boolean isValidAttributeName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			if(name.charAt(0) >= '0' && name.charAt(0) <= '9') {
+				System.out.println("Error: Invalid attribute name. Attribute names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Attribute names must follow standard Java naming conventions.");
+				return false;
+			}
+			else if(name.charAt(0) == ('_')) {
+				System.out.println("Error: Invalid attribute name. Attribute names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Attribute names must follow standard Java naming conventions.");
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			System.out.println("Error: Invalid attribute name. Attribute names can only contain A-Z, a-z, 0-9, and underscore.");
+			System.out.println("Attribute names must follow standard Java naming conventions.");
 			return false;
 		}
 	}
