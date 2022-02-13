@@ -7,7 +7,7 @@ public class UMLRelationship {
     /**
      * Class data. This is accessed using getter and setter methods below.
      */
-    private String src, dest, type, name;
+    private String src, dest, type;
 
     // Valid relationship types
     // private static final String[] validTypes = {"Nondirectional"};
@@ -19,11 +19,10 @@ public class UMLRelationship {
      * @param relType The type of this relationship. Must be: Nondirectional
      * @param relName The name of this relationship.
      */
-    public UMLRelationship(String relSrc, String relDest, String relType, String relName) {
+    public UMLRelationship(String relSrc, String relDest, String relType) {
         src = relSrc;
         dest = relDest;
         type = relType;
-        name = relName;
     }
 
     /////////////////////////////////////////////////////////////
@@ -79,6 +78,7 @@ public class UMLRelationship {
     public void setType(String newType) {
         type = newType;
     }
+}
 
     /**
      * Helper method to determine if a relationship type is valid.
@@ -99,22 +99,3 @@ public class UMLRelationship {
         // Reached end of array
         return false;
     }*/
-
-    /////////////////////////////////////////////////////////////
-
-    /**
-     * Returns the name of this relationship
-     * @return This relationship's name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the name of this relationship
-     * @param newName New name for this relationship
-     */
-    public void setName(String newName) {
-        name = newName;
-    }
-}

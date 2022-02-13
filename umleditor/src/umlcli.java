@@ -85,7 +85,7 @@ public class umlcli {
 		System.out.println();
 		System.out.println("List of commands: ");
 		System.out.println("\tadd: Add a new [class] or [relationship] to the diagram, or add an [attribute] to an existing class.");
-		System.out.println("\trename: Rename an existing [class], [relationship], or [attribute].");
+		System.out.println("\trename: Rename an existing [class], or [attribute].");
 		System.out.println("\tdelete: Delete an existing [class], [relationship], or [attribute].");
 		System.out.println("\tlist: List all [classes] in the diagram, all [relationships], or one specific [class].");
 		System.out.println("\tsave: Save the current UML diagram to a JSON or YAML file.");
@@ -175,7 +175,7 @@ public class umlcli {
 			}
 			// fixed type for now, can be changed when more relationship types are needed
 			String relType = "Nondirectional";
-			hasUnsavedWork = umld.addRelationship(source, dest, relType, name);
+			hasUnsavedWork = umld.addRelationship(source, dest, relType);
       		
 
 		}
@@ -210,7 +210,7 @@ public class umlcli {
 			System.out.println("The diagram is empty!");
 			return;
 		}
-		System.out.println("What do you want to rename? [class/relationship/attribute]");
+		System.out.println("What do you want to rename? [class/attribute]");
 		String toRename = getInput();
 		if(toRename.equals("class")) {
 			System.out.println("Rename which class?");
@@ -243,31 +243,6 @@ public class umlcli {
 			}
 			else {
 				classDoesNotExist(whichClass);
-			}
-		}
-		// Rename a relationship
-		else if(toRename.equals("relationship")) {
-			System.out.println("Enter source class name: ");
-			String srcClass = getInput();
-			if(!umld.classExists(srcClass)) {
-				classDoesNotExist(srcClass);
-				return;
-			}
-			System.out.println("Enter destination class name: ");
-			String destClass = getInput();
-			if(!umld.classExists(destClass)) {
-				classDoesNotExist(destClass);
-				return;
-			}
-			System.out.println("Rename which relationship?");
-			String oldName = getInput();
-			if(!isValidName(oldName)) {
-				return;
-			}
-			System.out.println("Enter new relationship name: ");
-			String newName = getInput();
-			if(isValidName(newName)) {
-				hasUnsavedWork = umld.renameRelationship(srcClass, destClass, oldName, newName);
 			}
 		}
 		else {
@@ -320,7 +295,7 @@ public class umlcli {
 			}
 			System.out.println("Enter relationship to delete: ");
 			String name = getInput();
-			hasUnsavedWork = umld.deleteRelationship(srcClass, destClass, name);
+			hasUnsavedWork = umld.deleteRelationship(srcClass, destClass);
 		}
 		else {
 			commandNotRecognized();
@@ -373,7 +348,6 @@ public class umlcli {
 			System.out.println("Relationships: ");
 			System.out.println();
 			for(int i = 0; i < umld.relationships.size(); i++) {
-				System.out.println(umld.relationships.get(i).getName() + " [Type: " + umld.relationships.get(i).getType() + "]");
 				System.out.println("[Source: " + umld.relationships.get(i).getSource() + "]");
 				System.out.println("[Destination: " + umld.relationships.get(i).getSource() + "]");
 				System.out.println();
