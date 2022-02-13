@@ -49,12 +49,10 @@ public class Load {
 			UMLDiagram savedDiagram = gson.fromJson(json, typeOfUMLDiagram);
 
 			loadDiagram = savedDiagram; 
-
+			System.out.println("Successfully loaded!");
 			//Print out for proof of it working TO BE DELETED
 			String Json = new Gson().toJson(loadDiagram);
 			System.out.println("Successfully loaded!");
-
-			//TO BE DELETED 
 			return true;
 		} catch (AccessDeniedException|IllegalStateException|JsonSyntaxException e){
 			System.out.println("Error: The file you entered was invalid or cannot be read. Please try again.");
