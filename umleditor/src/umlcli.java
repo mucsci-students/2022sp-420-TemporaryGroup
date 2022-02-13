@@ -146,7 +146,7 @@ public class umlcli {
 			if(umld.classExists(whichClass)) {
 				System.out.println("Enter attribute name: ");
 				String attributeName = getInput();
-				if(isValidName(attributeName)) {
+				if(isValidAttributeName(attributeName)) {
 					hasUnsavedWork = umld.addAttribute(whichClass, attributeName);
 				}
 			}
@@ -229,7 +229,9 @@ public class umlcli {
 				if(umld.getClass(whichClass).attributeExists(oldName)) {
 					System.out.println("Enter new attribute name:");
 					String newName = getInput();
-					hasUnsavedWork = umld.renameAttribute(whichClass, oldName, newName);
+					if(isValidAttributeName(newName)) {
+						hasUnsavedWork = umld.renameAttribute(whichClass, oldName, newName);
+					}
 				}
 				else {
 					System.out.println("Attribute '" + oldName + "' does not exist in class '" + whichClass + "'.");
@@ -300,7 +302,6 @@ public class umlcli {
 			System.out.println("The diagram is empty!"); 
 		} 
 		else {
-			System.out.println ("Classes: ");
 			Iterator<HashMap.Entry<String, UMLClass>> hmIter = umld.umlDiagram.entrySet().iterator();
 			while (hmIter.hasNext()) {
 				Map.Entry<String, UMLClass> mapElem = (Map.Entry<String, UMLClass>) hmIter.next();
@@ -311,14 +312,12 @@ public class umlcli {
 
 	public static void listClass (String name) {
 		System.out.println();
-		System.out.println("Class: " + name);
-		System.out.print("[Attributes: ");
-		StringJoiner joiner = new StringJoiner(", ");
+		System.out.println("Class: ");
+		System.out.println("- " + name);
+		System.out.println("Attributes:");
 		for(int i = 0; i < umld.getClass(name).attributes.size(); i++) {
-			joiner.add(umld.getClass(name).attributes.get(i));
+			System.out.println("- " + umld.getClass(name).attributes.get(i));
 		}
-		String attList = joiner.toString();
-		System.out.print(attList + "]");
 		System.out.println();
 	}
 	
@@ -390,6 +389,32 @@ public class umlcli {
 		}
 		else {
 			System.out.println("Error: Invalid name. Names can only contain A-Z, a-z, 0-9, and underscore.");
+			return false;
+		}
+	}
+
+	public static Boolean isValidAttributeName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			if(name.charAt(0) >= '0' && name.charAt(0) <= '9') {
+				System.out.println("Error: Invalid attribute name. Attribute names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Attribute names must follow standard Java naming conventions.");
+				return false;
+			}
+			else if(name.charAt(0) == ('_')) {
+				System.out.println("Error: Invalid attribute name. Attribute names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Attribute names must follow standard Java naming conventions.");
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			System.out.println("Error: Invalid attribute name. Attribute names can only contain A-Z, a-z, 0-9, and underscore.");
+			System.out.println("Attribute names must follow standard Java naming conventions.");
 			return false;
 		}
 	}
