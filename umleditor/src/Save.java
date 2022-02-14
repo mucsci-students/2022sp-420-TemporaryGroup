@@ -31,10 +31,14 @@ public class Save {
 		Scanner filepath = new Scanner(System.in);
 		Scanner filename = new Scanner(System.in);
 		
-		System.out.print("Please enter a name for your file: ");
+		System.out.println("Please enter a name for your file (do not add extension) or q for quitting");
+		System.out.print("> ");
 		String FileName = filename.next();
-		
-		System.out.println("Please enter a path for the file: ");
+		if (FileName.equals("q") || FileName.equals("q ") || FileName.equals(" q")) {
+			return false;
+		}
+		System.out.println("Please enter a path for the file");
+		System.out.print("> ");
 		String FilePath = filepath.next();
 		
 		String Json = new Gson().toJson(saveDiagram);
