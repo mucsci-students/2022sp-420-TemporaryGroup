@@ -7,7 +7,7 @@ public class UMLRelationship {
     /**
      * Class data. This is accessed using getter and setter methods below.
      */
-    private String src, dest, type;
+    private String source, destination, type;
 
     // Valid relationship types
     // private static final String[] validTypes = {"Nondirectional"};
@@ -20,8 +20,8 @@ public class UMLRelationship {
      * @param relName The name of this relationship.
      */
     public UMLRelationship(String relSrc, String relDest, String relType) {
-        src = relSrc;
-        dest = relDest;
+        source = relSrc;
+        destination = relDest;
         type = relType;
     }
 
@@ -32,7 +32,7 @@ public class UMLRelationship {
      * @return This relationship's source class
      */
     public String getSource() {
-        return src;
+        return source;
     }
 
     /**
@@ -40,7 +40,7 @@ public class UMLRelationship {
      * @param newSrc New source class for this relationship
      */
     public void setSource(String newSrc) {
-        src = newSrc;
+        source = newSrc;
     }
 
     /////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ public class UMLRelationship {
      * @return This relationship's destination class
      */
     public String getDestination() {
-        return dest;
+        return destination;
     }
 
     /**
@@ -58,7 +58,7 @@ public class UMLRelationship {
      * @param newDest New destination class for this relationship
      */
     public void setDestination(String newDest) {
-        dest = newDest;
+        destination = newDest;
     }
 
     /////////////////////////////////////////////////////////////

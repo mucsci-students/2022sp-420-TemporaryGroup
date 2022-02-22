@@ -11,6 +11,9 @@ import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.annotation.*;
 
 public class Save {
 	
@@ -37,7 +40,14 @@ public class Save {
 		System.out.println("Please enter a path for the file: ");
 		String FilePath = filepath.next();
 		
-		String Json = new Gson().toJson(saveDiagram);
+		String Json = new Gson().toJson(saveDiagram);	
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Object jsonObject = mapper.readValue(Json, Object.class);
+		String prettyJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
+		
+			
 
 		//Assigned location for save file
 		//String fileLocation = saveFileLocation();
@@ -58,7 +68,7 @@ public class Save {
 		      if (name.createNewFile()) {
 		        System.out.println("File created: " + name.getName());
 		        FileWriter file = new FileWriter(fileLocation);
-		        file.write(Json.toString());
+		        file.write(prettyJson.toString());
 		        file.flush();
 				file.close();
 		        return true;
