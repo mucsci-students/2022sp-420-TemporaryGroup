@@ -7,7 +7,8 @@ import java.util.ArrayList;
 public class UMLClass {
     
     String className;
-    ArrayList<String> attributes = new ArrayList<String>();
+    ArrayList<String> methods = new ArrayList<String>();
+    ArrayList<String> fields = new ArrayList<String>();
 
     /**
      * Constructor for a class in the uml diagram.

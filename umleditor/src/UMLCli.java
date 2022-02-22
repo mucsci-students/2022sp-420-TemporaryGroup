@@ -1,7 +1,7 @@
 import java.util.*;
 
 
-public class umlcli {
+public class UMLCli {
 	
 	//commands available in the editor 
 	// Top level commands. Other commands can be prompted by the specific command functions.
@@ -11,7 +11,7 @@ public class umlcli {
 	// "What would you like to add?""
 	// > class
 	// Then prompt for names and call the associated method on our UMLDiagram object
-	public static String[] commands = new String [] {"add", "rename", "delete", "help", "save", "load", "list", "exit", ""};
+	public static String[] commands = new String [] {"add", "rename", "delete", "change", "help", "save", "load", "list", "exit", ""};
 	public static Scanner input = new Scanner (System.in);
 	public static UMLDiagram umld = new UMLDiagram();
 	public static boolean hasUnsavedWork = false;
@@ -45,6 +45,11 @@ public class umlcli {
 	public static String getInput () {
 		System.out.print("> ");
 		return input.nextLine();
+	}
+	
+	public static int getInt() {
+		System.out.print(">");
+		return input.nextInt();
 	}
 	
 	//verify if word entered is a command
@@ -112,6 +117,9 @@ public class umlcli {
 		else if(command.equals("rename")) {
 			renameCommand();
 		}
+		else if(command.equals("change")) {
+			changeCommand();
+		}
 		else if(command.equals("list")) {
 			listCommand();
 		}
@@ -131,7 +139,7 @@ public class umlcli {
 	}	
 	
 	public static void addCommand () {
-		System.out.println("What do you want to add? [class/relationship/attribute]");
+		System.out.println("What do you want to add? [class/relationship/method/field/parameter]");
 		String toAdd = getInput();
 		if (toAdd.equals("class")) {
 			System.out.println("Enter class name: ");
@@ -140,21 +148,21 @@ public class umlcli {
 				hasUnsavedWork = umld.addClass(className);
 			}
 		}
-		else if(toAdd.equals("attribute")) {
-			System.out.println("Add attribute to which class?");
+		else if(toAdd.equals("field")) {
+			System.out.println("Add field to which class?");
 			String whichClass = getInput();
 			if(umld.classExists(whichClass)) {
-				System.out.println("Enter attribute name: ");
-				String attributeName = getInput();
-				if(isValidAttributeName(attributeName)) {
-					hasUnsavedWork = umld.addAttribute(whichClass, attributeName);
+				System.out.println("Enter field name: ");
+				String fieldName = getInput();
+				//change method once uml diagram is updated
+				if(isValidAttributeName(fieldName)) {
+					hasUnsavedWork = umld.addAttribute(whichClass, fieldName);
 				}
 			}
 			else {
 				classDoesNotExist(whichClass);
 			}
 		}
-		// Add a relationship
 		else if(toAdd.equals("relationship")) {
 			System.out.println("Enter source class:");
 			String source = getInput();
@@ -173,6 +181,46 @@ public class umlcli {
       		
 
 		}
+		else if(toAdd.equals("method")) {
+			System.out.println("add method to which class?");
+			String className = getInput();
+			if(!umld.classExists(className)) {
+				classDoesNotExist(className);
+				return;
+			}
+			System.out.println("Enter method name:");
+			String methodName = getInput();
+			if (isValidAttributeName(methodName)) {
+				System.out.println("Enter number of parameters up to 10");//need limit ask client
+				int numParameters = getInt();
+				if (numParameters == 0) {
+					hasUnsavedWork = umld.addMethod (methodName , {} );
+				
+				} 
+				else if (numParameters >= 1 || numParameters <= 10 ) {
+					ArrayList<String []> parameter = new ArrayList <String []> ();
+					for (int i = 1; i <= numParameters; ++i)
+					{
+						System.out.println ("Enter name of parameter " + i);
+						String pName = getInput();
+						if (isValidAttributeName (pName)) {
+							
+						}
+						
+						
+					}
+				}
+				
+			
+			}
+			
+				`
+			// fixed type for now, can be changed when more relationship types are needed
+			
+      		
+
+		}
+		
 		else {
 			commandNotRecognized();
 		}
@@ -245,7 +293,12 @@ public class umlcli {
 			commandNotRecognized();
 		}
 	}
-
+	
+	//need to do
+	public static void changeCommand () {
+		
+	}
+	
 	public static void deleteCommand() {
 		if(umld.umlDiagram.isEmpty()) {
 			System.out.println("The diagram is empty!");
@@ -379,7 +432,7 @@ public class umlcli {
 	public static void commandNotRecognized() {
 		System.out.println("Command not recognized. Type 'help' for list of valid commands.");
 	}
-
+	//change name to className
 	public static Boolean isValidName(String name) {
 		if(name.equals("")) {
 			return false;
