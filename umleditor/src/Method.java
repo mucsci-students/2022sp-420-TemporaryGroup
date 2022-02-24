@@ -82,4 +82,12 @@ public class Method {
         return null;
     }
 
+    /**
+     * Returns the arraylist of parameters.
+     * @return
+     */
+    public ArrayList<Parameter> getParameterList(){
+        return parameters;
+    }
+
 }
