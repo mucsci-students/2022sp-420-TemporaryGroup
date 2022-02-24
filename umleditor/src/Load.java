@@ -11,6 +11,8 @@ import com.google.gson.reflect.TypeToken;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.NoSuchFileException;
+
 import java.util.Scanner;
 
 public class Load {
@@ -26,10 +28,14 @@ public class Load {
 		Scanner filename = new Scanner (System.in);
 		
 		
-		System.out.print("Please enter a name for your file (do not add extension): ");
+		System.out.println("Please enter name of the file (do not add extension) or q for quitting");
+		System.out.print("> ");
 		String FileName = filename.next();
-		
-		System.out.println("Please enter the filepath (excluding file name):  ");
+		if (FileName.equals("q") || FileName.equals("q ") || FileName.equals(" q")) {
+			return false;
+		}
+		System.out.println("Please enter a path for the file");
+		System.out.print("> ");
 		String FilePath = filepath.next();
 		
 		String fileLocation = FilePath + FileName + ".json";
@@ -54,7 +60,7 @@ public class Load {
 			String Json = new Gson().toJson(loadDiagram);
 			System.out.println("Successfully loaded!");
 			return true;
-		} catch (AccessDeniedException|IllegalStateException|JsonSyntaxException e){
+		} catch (AccessDeniedException|IllegalStateException|JsonSyntaxException | NoSuchFileException e){
 			System.out.println("Error: The file you entered was invalid or cannot be read. Please try again.");
 			loadFile();
 			return false;
