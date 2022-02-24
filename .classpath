@@ -6,8 +6,10 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/irifa/Documents/GitHub/2022sp-420-TemporaryGroup/bin/gson-2.8.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/irifa/Documents/GitHub/2022sp-420-TemporaryGroup/bin/json-simple-1.1.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="C:/Users/nickc/Documents/GitHub/2022sp-420-TemporaryGroup/bin/gson-2.8.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nickc/Documents/GitHub/2022sp-420-TemporaryGroup/bin/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nickc/Documents/GitHub/2022sp-420-TemporaryGroup/bin/jackson-core-2.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nickc/Documents/GitHub/2022sp-420-TemporaryGroup/bin/jackson-annotations-2.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nickc/Documents/GitHub/2022sp-420-TemporaryGroup/bin/jackson-databind-2.13.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
