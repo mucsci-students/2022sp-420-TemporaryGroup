@@ -192,5 +192,7 @@ public class UMLDiagram {
     public HashMap<String, UMLClass> getUMLDiagram() {
     	return umlDiagram; 
     }
+    
+    
 
 }
