@@ -19,7 +19,8 @@ class GUIView implements ActionListener
 	static final int WIDTH = 150;
 	static final int HEIGHT = 125;
 	//can have up to 6 classes across by up to 4 classes down
-	static Rectangle[] classRep = new Rectangle [25];
+	static ArrayList<Rectangle> classRep = new ArrayList<Rectangle> ();
+	static String[] classNames = new String [25];
 	static int index = 0;
 	//static Graphics2D g2 = new Graphics2D(Graphics g);
 
@@ -67,35 +68,44 @@ class GUIView implements ActionListener
     {    	
     	
     	if (e.getActionCommand().equals("Add")) {
-    		
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
     		if (!umld.classExists(className)) {
     		umld.addClass(className);
     		//draw class
-    		
     		fillClassRep(className, index / 4, index % 4, index);
     		++index;
+    		updateFirstRow();
         	} else {
     			text.setText("class already exists, try again");
     		}
     
     	} else if (e.getActionCommand().equals("Rename")) {
     		String oldName = JOptionPane.showInputDialog (main, "Enter class to rename");
-    		String newName = JOptionPane.showInputDialog (main, "Enter new class name");
-    		umld.renameClass(oldName, newName);
-    		
-    		update.drawRect(30, 75, 150, 150);
-    		update.drawString(newName, 50, 75);
+    		int localIndex = findIndex(oldName);
+    		if (localIndex != -1 ) {
+    			String newName = JOptionPane.showInputDialog (main, "Enter new class name");
+    			umld.renameClass(oldName, newName);
+    			classNames[localIndex] = newName;
+    			Graphics classAdded = main.getGraphics();
+    			classAdded.clearRect(classRep.get(localIndex).x, classRep.get(localIndex).y - 20, 50, 19);
+    			classAdded.drawString (classNames[localIndex], classRep.get(localIndex).x + 20 ,classRep.get(localIndex).y);
+    		} else {
+    			JOptionPane.showMessageDialog(main, "Class not found");
+    		}
+    		updateFirstRow();
     	} else if (e.getActionCommand().equals("Delete")) {
     		String className = JOptionPane.showInputDialog (main, "Enter class to delete");
     		umld.removeClass(className);
     		
     		update.clearRect(25, 70, 160, 160);
+    		updateFirstRow();
     	} else if (e.getActionCommand().equals("List class")) {
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
     		JOptionPane.showMessageDialog(main, listClass(className));
+    		updateFirstRow();
     	} else if (e.getActionCommand().equals("List all")) {
     		JOptionPane.showMessageDialog(main, listOfClasses());
+    		updateFirstRow();
     	} 
     	
     }
@@ -111,7 +121,7 @@ class GUIView implements ActionListener
 			ArrayList<String> classes = new ArrayList<String> ();
 			while (hmIter.hasNext()) {
 				Map.Entry<String, UMLClass> mapElem = (Map.Entry<String, UMLClass>) hmIter.next();
-				listClass(mapElem.getKey()); 
+				classes.add(mapElem.getKey()); 
 				//need to add fields and methods 
 			}
 			for (int i = 0; i < classes.size(); ++i ) {
@@ -130,10 +140,7 @@ class GUIView implements ActionListener
 			ArrayList<String> classToList = new ArrayList<String> ();
 				classToList.add(" Class:		" + className); 
 				//need to add fields and methods 
-				
-			
-				
-			for (int i = 0; i < classToList.size(); ++i ) {
+				for (int i = 0; i < classToList.size(); ++i ) {
 				toReturn += classToList.get(i) + '\n';
 			}
 			return toReturn;
@@ -142,16 +149,17 @@ class GUIView implements ActionListener
     
     public static void fillClassRep (String className, int x, int y, int index) {
     	int [] myComp = calculateXY (x, y);
-    	classRep [index] = new Rectangle (myComp[0], myComp[1], WIDTH, HEIGHT);
+    	classRep.add(index, new Rectangle (myComp[0], myComp[1], WIDTH, HEIGHT));    	
+    	classNames[index] = className;
     	Graphics classAdded = main.getGraphics();
-		classAdded.drawRect(classRep[index].x, classRep[index].y, WIDTH, HEIGHT);
+		classAdded.drawRect(classRep.get(index).x, classRep.get(index).y, WIDTH, HEIGHT);
 		classAdded.drawString(className, myComp[0] + 20, myComp[1]);
 		++ index;
     }
     
     public static int[] calculateXY (int x, int y) {
     	int startX = 50;
-    	int startY = 75;
+    	int startY = 100;
     	return new int[] {startX + x * 180, startY + y * 150};
     }
     
@@ -162,5 +170,27 @@ class GUIView implements ActionListener
 			++numberOfClasses; 
 		}
     	return numberOfClasses;
+    }
+    
+    public static void updateFirstRow () {
+    	for (int i = 0; i < classRep.size(); ++i)
+    	{
+    		if (i % 4 == 0) {
+    			Graphics classAdded = main.getGraphics();
+    			classAdded.drawRect(classRep.get(i).x, classRep.get(i).y, WIDTH, HEIGHT);
+    			classAdded.drawString (classNames[i], classRep.get(i).x + 20 ,classRep.get(i).y);
+    		}
+    	}
+    }
+    
+    //return index of class with the given name
+    //if no class is found return -1
+    public static int findIndex (String className) {
+    	for (int i = 0; i < index; ++i) {
+    		if (classNames[i].equals(className)) {
+    			return i;
+    		}
+    	}
+    	return -1;
     }
 }
