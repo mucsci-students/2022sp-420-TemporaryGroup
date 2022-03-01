@@ -154,4 +154,36 @@ public class UMLClass {
         return (getMethod(methodName) != null);
     }
 
+    /**
+     * Adds a new parameter to the method in the class.
+     * @param methodName
+     * @param paramName
+     */
+    public void addParameter(String methodName, String paramName){
+        if(methodExists(methodName)){
+            getMethod(methodName).addParameter(paramName);
+        }
+    }
+
+    /**
+     * Removes a parameter from the method in the class.
+     * @param methodName
+     * @param paramName
+     */
+    public void removeParameter(String methodName, String paramName){
+        if(methodExists(methodName)){
+            getMethod(methodName).removeParameter(paramName);
+        }
+    }
+
+    /**
+     * Removes ALL of the parameters from the method in the class.
+     * @param methodName
+     */
+    public void removeAllParameters(String methodName){
+        if(methodExists(methodName)){
+            getMethod(methodName).removeAllParameters();
+        }
+    }
+
 }
