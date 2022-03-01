@@ -62,38 +62,57 @@ public class UMLDiagram {
         return null;
     }
 
-    public Boolean addAttribute(String className, String newAttribute){
-        if(!getClass(className).attributeExists(newAttribute)){
-            getClass(className).addAttribute(newAttribute);
-            System.out.println("Added attribute '" + newAttribute + "' to class '" + className + "'.");
+    /**
+     * Adds a new field in the class if the class exists.
+     * @param className
+     * @param newField
+     * @return
+     */
+    public Boolean addField(String className, String newField){
+        if(!getClass(className).fieldExists(newField)){
+            getClass(className).addField(newField);
+            System.out.println("Added field '" + newField + "' to class '" + className + "'.");
             return true;
         }
         else{
-            System.out.println("The attribute '" + newAttribute + "' already exists in the class '" + className + "'.");
+            System.out.println("The field '" + newField + "' already exists in the class '" + className + "'.");
             return false;
         }
     }
 
-    public Boolean removeAttribute(String className, String removeAttribute){
-        if(getClass(className).attributeExists(removeAttribute)){
-            getClass(className).removeAttribute(removeAttribute);
-            System.out.println("Removed attribute '" + removeAttribute + "' from class '" + className + "'.");
+    /**
+     * Removes a field from the class if class and field exist.
+     * @param className
+     * @param removeField
+     * @return
+     */
+    public Boolean removeField(String className, String removeField){
+        if(getClass(className).fieldExists(removeField)){
+            getClass(className).removeField(removeField);
+            System.out.println("Removed field '" + removeField + "' from class '" + className + "'.");
             return true;
         }
         else{
-            System.out.println("The attribute '" + removeAttribute + "' does not exist in the class.");
+            System.out.println("The field '" + removeField + "' does not exist in the class.");
             return false;
         }
     }
 
-    public Boolean renameAttribute(String className, String oldAttributeName, String newAttributeName){
-        if(!(getClass(className).attributeExists(newAttributeName))){
-            getClass(className).renameAttribute(oldAttributeName, newAttributeName);
-            System.out.println("Renamed attribute '" + oldAttributeName + "' to '" + newAttributeName + "' in class '" + className + "'.");
+    /**
+     * Renames a field in the class if class and field exist.
+     * @param className
+     * @param oldFieldName
+     * @param newFieldName
+     * @return
+     */
+    public Boolean renameField(String className, String oldFieldName, String newFieldName){
+        if(!(getClass(className).fieldExists(oldFieldName))){
+            getClass(className).renameField(oldFieldName, newFieldName);
+            System.out.println("Renamed field '" + oldFieldName + "' to '" + newFieldName + "' in class '" + className + "'.");
             return true;
         }
         else {
-            System.out.println("An attribute named '" + newAttributeName + "' already exists in class '" + className + "'.");
+            System.out.println("An field named '" + newFieldName + "' already exists in class '" + className + "'.");
             return false;
         }
     }
