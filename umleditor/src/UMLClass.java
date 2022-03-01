@@ -98,4 +98,60 @@ public class UMLClass {
         return (getField(fieldName) != null);
     }
 
+    /**
+     * Adds a new method to the class.
+     * @param newMethod
+     */
+    public void addMethod(String newMethod) {
+        methods.add(new Method(newMethod));  
+     }
+
+     /**
+     * Removes a method from the class if it exists. 
+     * @param deleteMethod
+     */
+    public void removeMethod(String deleteMethod){
+        for(int i = 0; i < methods.size(); i++){
+            if(methods.get(i).getMethodName().equals(deleteMethod)){
+                methods.remove(i); 
+            }
+        }
+    }
+
+    /**
+     * Renames a method in the class if it exists and new name doesn't exist yet. 
+     * @param oldMethod
+     * @param renameMethod
+     */
+    public void renameMethod(String oldMethod, String renameMethod){
+        for(int i = 0; i < methods.size(); i++){
+            if(methods.get(i).getMethodName().equals(oldMethod)){
+                getMethod(oldMethod).renameMethod(renameMethod);
+            }
+        }
+    }
+
+    /**
+     * Returns a method by name. 
+     * @param methodName
+     * @return method
+     */
+    public Method getMethod(String methodName){
+        for(int i = 0; i < methods.size(); i++){
+            if(methods.get(i).getMethodName().equals(methodName)){
+                return methods.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks to see if the method in the class exists. 
+     * @param methodName
+     * @return boolean
+     */
+    public boolean methodExists(String methodName){
+        return (getMethod(methodName) != null);
+    }
+
 }
