@@ -19,7 +19,7 @@ class GUIView implements ActionListener
 	static final int WIDTH = 150;
 	static final int HEIGHT = 125;
 	//can have up to 6 classes across by up to 4 classes down
-	static ArrayList<Rectangle> classRep = new ArrayList<Rectangle> ();
+	static ArrayList<Rectangle> classRep = new ArrayList<> ();
 	static String[] classNames = new String [24];
 	//keep track of current index
 	static int index = 0;
@@ -28,7 +28,7 @@ class GUIView implements ActionListener
 
 	
     //Driver function
-    public static void main(String args[])
+    public static void main(String[] args)
     {
     	//Create a frame
     	main.setSize(1920,1080);
@@ -79,7 +79,7 @@ class GUIView implements ActionListener
     	//Create Menu Items for methods
     	JMenuItem[] itemM = new JMenuItem[5];
     	itemM [0] = new JMenuItem ("Add method");
-    	itemM [1] = new JMenuItem ("Rename method");
+    	itemM [1] = new JMenuItem ("Change method");
     	itemM [2] = new JMenuItem ("Delete method");
     	itemM [3] = new JMenuItem ("List method");
     	itemM [4] = new JMenuItem ("List all methods");
@@ -141,7 +141,7 @@ class GUIView implements ActionListener
     	//Create menu items for program menu
     	JMenuItem[] itemE = new JMenuItem[2];
     	itemE [0] = new JMenuItem ("Help");
-    	itemE [1] = new JMenuItem ("Run on cli mode");
+    	itemE [1] = new JMenuItem ("CLI mode");
     	for (int i = 0; i < itemE.length; ++i) {
     		itemE[i].addActionListener(obj);
     		editor.add(itemE[i]);
@@ -172,19 +172,19 @@ class GUIView implements ActionListener
     	
     	if (e.getActionCommand().equals("Add class")) {
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
-    		if (!umld.classExists(className)) {
-    		umld.addClass(className);
-    		//draw class
-    		fillClassRep(className, index / 4, index % 4, index);
-    		available [0] = 24;
-    		index = valIndex();
-    		updateFirstRow();
+    		if (className == null) {
+    			text.setText("Error when creating class, try again");
+    		} else if ( umld.addClass(className)) {
+    			//draw class
+    			fillClassRep(className, index / 4, index % 4, index);
+    			available [0] = 24;
+    			index = valIndex();
+    			updateFirstRow();
         	} else {
     			text.setText("class already exists, try again");
         		updateFirstRow();
-
-    		}
-    
+        	}
+    	
     	} else if (e.getActionCommand().equals("Rename class")) {
     		String oldName = JOptionPane.showInputDialog (main, "Enter class to rename");
     		int localIndex = findIndex(oldName);
@@ -197,11 +197,12 @@ class GUIView implements ActionListener
     			classAdded.drawString (classNames[localIndex], classRep.get(localIndex).x + 20 ,classRep.get(localIndex).y - 5);
     		} else {
     			JOptionPane.showMessageDialog(main, "Class not found");
+    			updateFirstRow();
     		}
     		updateFirstRow();
     	} else if (e.getActionCommand().equals("Delete class")) {
     		String className = JOptionPane.showInputDialog (main, "Enter class to delete");
-    		umld.removeClass(className);
+    		if ( umld.removeClass(className) ) { 
     		int localIndex = findIndex (className);
     		if (localIndex != -1) {
     			Graphics classAdded = main.getGraphics();
@@ -212,6 +213,10 @@ class GUIView implements ActionListener
     			index = valIndex();
     			updateFirstRow();
     		}
+    		} else {
+    			JOptionPane.showMessageDialog(main, "Class not found");
+    			updateFirstRow();
+    		}
     		
     	} else if (e.getActionCommand().equals("List class")) {
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
@@ -220,13 +225,112 @@ class GUIView implements ActionListener
     	} else if (e.getActionCommand().equals("List all classes")) {
     		JOptionPane.showMessageDialog(main, listOfClasses());
     		updateFirstRow();
-    	} else {
-    		text.setText("Still working on it");
-    	}
+    	} else if (e.getActionCommand().equals("Add field")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Rename field")) { 
+    		//TO DO
     	
+    		
+    	} else if (e.getActionCommand().equals("Delete field")) { 
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("List field")) {
+    		//TO DO
+    	
+    	
+    	} else if (e.getActionCommand().equals("List all fields")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Add method")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Change method")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Delete method")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("List method")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("List all methods")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Add parameter")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Add parameters")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Change parameter")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Change parameters")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Delete parameter")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Delete parameters")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Add relationship")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Change relationship")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Delete relationship")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("List relationship")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("List all relationships")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Save")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Load")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("Help")) {
+    		//TO DO
+    		
+    		
+    	} else if (e.getActionCommand().equals("CLI mode")) {
+    		//TO DO
+    		
+    		
+    	}
     }
     
     //helper functions 
+    
+    //return string with names of all classes
     public static String listOfClasses () {
     	if (umld.umlDiagram.isEmpty()) {
     		return "Diagram is empty"; 
@@ -247,6 +351,7 @@ class GUIView implements ActionListener
 		}
     }
     
+    //returns string listing characteristics of the given class
     public static String listClass (String className) {
     	if (umld.umlDiagram.isEmpty()) {
     		return "Diagram is empty";
@@ -263,6 +368,7 @@ class GUIView implements ActionListener
     	}
     }
     
+    //fill a class rectangle area  given an index for the position on the screen 
     public static void fillClassRep (String className, int x, int y, int index) {
     	int [] myComp = calculateXY (x, y);
     	classRep.add(index, new Rectangle (myComp[0], myComp[1], WIDTH, HEIGHT));    	
@@ -273,12 +379,16 @@ class GUIView implements ActionListener
 		++ index;
     }
     
+    //get the x and y position for the given indexes 
+    //x = 1 y = 4 would go position [1,4] on a matrix of 6x4
     public static int[] calculateXY (int x, int y) {
     	int startX = 50;
     	int startY = 100;
     	return new int[] {startX + x * 180, startY + y * 150};
     }
     
+    //gets the number of classes in the diagram
+    //might not need 
     public static int getNumberOfClasses () {
     	int numberOfClasses = 0;
 		Iterator<HashMap.Entry<String, UMLClass>> hmIter = umld.umlDiagram.entrySet().iterator();
@@ -288,6 +398,7 @@ class GUIView implements ActionListener
     	return numberOfClasses;
     }
     
+    //update the first row that was destroyed by menu item dropdowns
     public static void updateFirstRow () {
     	for (int i = 0; i < classRep.size(); ++i)
     	{
@@ -310,13 +421,16 @@ class GUIView implements ActionListener
     	return -1;
     }
     
+    //initialize the available array 
+    //all indexes are available when empty
     public static void fillAvailable () {
     	for (int i = 0; i < available.length; ++i) {
     		available[i] = i;
     	}
     }
     
-    //calculates the smaller available index;
+    //sort available index array
+    //first element is guaranteed to be smallest available index
     public static int valIndex () {
     	Arrays.sort(available);
     	return available[0];
