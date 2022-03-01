@@ -118,6 +118,61 @@ public class UMLDiagram {
     }
 
     /**
+     * Adds a new method in the class if the class exists.
+     * @param className
+     * @param newMethod
+     * @return
+     */
+    public Boolean addMethod(String className, String newMethod){
+        if(!getClass(className).methodExists(newMethod)){
+            getClass(className).addMethod(newMethod);
+            System.out.println("Added method '" + newMethod + "' to class '" + className + "'.");
+            return true;
+        }
+        else{
+            System.out.println("The method '" + newMethod + "' already exists in the class '" + className + "'.");
+            return false;
+        }
+    }
+
+    /**
+     * Removes a method from the class if class and method exist.
+     * @param className
+     * @param removeMethod
+     * @return
+     */
+    public Boolean removeMethod(String className, String removeMethod){
+        if(getClass(className).methodExists(removeMethod)){
+            getClass(className).removeMethod(removeMethod);
+            System.out.println("Removed method '" + removeMethod + "' from class '" + className + "'.");
+            return true;
+        }
+        else{
+            System.out.println("The method '" + removeMethod + "' does not exist in the class.");
+            return false;
+        }
+    }
+
+    /**
+     * Renames a method in the class if class and method exist.
+     * @param className
+     * @param oldMethodName
+     * @param newMethodName
+     * @return
+     */
+    public Boolean renameMethod(String className, String oldMethodName, String newMethodName){
+        if(!(getClass(className).methodExists(oldMethodName))){
+            getClass(className).renameMethod(oldMethodName, newMethodName);
+            System.out.println("Renamed method '" + oldMethodName + "' to '" + newMethodName + "' in class '" + className + "'.");
+            return true;
+        }
+        else {
+            System.out.println("An method named '" + oldMethodName + "' already exists in class '" + className + "'.");
+            return false;
+        }
+    }
+
+    /**
      * Helper method to determine if a relationship type is valid
      * @param relType The relationship type being checked
      * @return True if the relationship type is valid, false if it's not
