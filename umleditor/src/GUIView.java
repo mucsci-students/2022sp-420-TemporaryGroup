@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,10 +20,13 @@ class GUIView implements ActionListener
 	static final int HEIGHT = 125;
 	//can have up to 6 classes across by up to 4 classes down
 	static ArrayList<Rectangle> classRep = new ArrayList<Rectangle> ();
-	static String[] classNames = new String [25];
+	static String[] classNames = new String [24];
+	//keep track of current index
 	static int index = 0;
-	//static Graphics2D g2 = new Graphics2D(Graphics g);
+	//keep track of available indexes if any
+	static int [] available = new int [24];
 
+	
     //Driver function
     public static void main(String args[])
     {
@@ -33,6 +37,9 @@ class GUIView implements ActionListener
     	
     	//Create an object
     	GUIView obj = new GUIView();
+    	
+    	//fill available indexes array
+    	fillAvailable();
     	
     	//Create Classes Menu
     	JMenu classes = new JMenu("Classes");
@@ -169,10 +176,13 @@ class GUIView implements ActionListener
     		umld.addClass(className);
     		//draw class
     		fillClassRep(className, index / 4, index % 4, index);
-    		++index;
+    		available [0] = 24;
+    		index = valIndex();
     		updateFirstRow();
         	} else {
     			text.setText("class already exists, try again");
+        		updateFirstRow();
+
     		}
     
     	} else if (e.getActionCommand().equals("Rename class")) {
@@ -189,11 +199,19 @@ class GUIView implements ActionListener
     			JOptionPane.showMessageDialog(main, "Class not found");
     		}
     		updateFirstRow();
-    		//need to finish
     	} else if (e.getActionCommand().equals("Delete class")) {
     		String className = JOptionPane.showInputDialog (main, "Enter class to delete");
     		umld.removeClass(className);
-    		
+    		int localIndex = findIndex (className);
+    		if (localIndex != -1) {
+    			Graphics classAdded = main.getGraphics();
+    			classAdded.clearRect (classRep.get(localIndex).x - 10, classRep.get(localIndex).y - 20, WIDTH + 25, HEIGHT + 25);
+    			classRep.remove(localIndex);
+    			classNames[localIndex] = " ";
+    			available[23] = localIndex;
+    			index = valIndex();
+    			updateFirstRow();
+    		}
     		
     	} else if (e.getActionCommand().equals("List class")) {
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
@@ -290,5 +308,17 @@ class GUIView implements ActionListener
     		}
     	}
     	return -1;
+    }
+    
+    public static void fillAvailable () {
+    	for (int i = 0; i < available.length; ++i) {
+    		available[i] = i;
+    	}
+    }
+    
+    //calculates the smaller available index;
+    public static int valIndex () {
+    	Arrays.sort(available);
+    	return available[0];
     }
 }
