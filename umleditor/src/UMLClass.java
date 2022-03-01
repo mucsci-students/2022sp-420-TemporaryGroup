@@ -7,7 +7,8 @@ import java.util.ArrayList;
 public class UMLClass {
     
     String className;
-    ArrayList<String> attributes = new ArrayList<String>();
+    ArrayList<Field> fields = new ArrayList<Field>();
+    ArrayList<Method> methods = new ArrayList<Method>();
 
     /**
      * Constructor for a class in the uml diagram.
@@ -25,10 +26,6 @@ public class UMLClass {
         return this.className;
     }
 
-    public ArrayList<String> getAttributes() {
-        return this.attributes;
-    }
-
     /**
      * Renames a class.
      * @param newClassName
@@ -38,64 +35,67 @@ public class UMLClass {
     }
 
     /**
-     * Adds a new attribute to the class.
-     * @param newAttribute
+     * Returns the array list of fields that the class contains.
+     * @return ArrayList<Field>
      */
-    public void addAttribute(String newAttribute) {
-       attributes.add(newAttribute);  
+    public ArrayList<Field> getFields() {
+        return this.fields;
     }
 
     /**
-     * Removes an attribute from the class if it exists. 
-     * @param deleteAttribute
+     * Adds a new field to the class.
+     * @param newField
      */
-    public void removeAttribute(String deleteAttribute){
-        for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i).equals(deleteAttribute)){
-                attributes.remove(i);
+    public void addField(String newField) {
+       fields.add(new Field(newField));  
+    }
+
+    /**
+     * Removes a field from the class if it exists. 
+     * @param deleteField
+     */
+    public void removeField(String deleteField){
+        for(int i = 0; i < fields.size(); i++){
+            if(fields.get(i).getFieldName().equals(deleteField)){
+                fields.remove(i); 
             }
         }
     }
 
     /**
-     * Renames an attribute in the class if it exists and new name doesn't exist yet. 
-     * @param oldAttribute
-     * @param renameAttribute
+     * Renames a field in the class if it exists and new name doesn't exist yet. 
+     * @param oldField
+     * @param renameField
      */
-    public void renameAttribute(String oldAttribute, String renameAttribute){
-        for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i).equals(oldAttribute)){
-                attributes.set(i, renameAttribute);
+    public void renameField(String oldField, String renameField){
+        for(int i = 0; i < fields.size(); i++){
+            if(fields.get(i).getFieldName().equals(oldField)){
+                getField(oldField).renameField(renameField);
             }
         }
     }
 
     /**
-     * Returns an attribute by name. 
-     * @param attributeName
-     * @return attribute name
+     * Returns a field by name. 
+     * @param fieldName
+     * @return field
      */
-    public String getAttribute(String attributeName){
-        for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i) == attributeName){
-                return attributes.get(i);
+    public Field getField(String fieldName){
+        for(int i = 0; i < fields.size(); i++){
+            if(fields.get(i).getFieldName().equals(fieldName)){
+                return fields.get(i);
             }
         }
         return null;
     }
 
     /**
-     * Checks to see if the attribute in the class exists. 
-     * @param attributeName
+     * Checks to see if the field in the class exists. 
+     * @param fieldName
      * @return boolean
      */
-    public boolean attributeExists(String attributeName){
-        for(int i = 0; i < attributes.size(); i++) {
-            if(attributes.get(i).equals(attributeName)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean fieldExists(String fieldName){
+        return (getField(fieldName) != null);
     }
 
 }
