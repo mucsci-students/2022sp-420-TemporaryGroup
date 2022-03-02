@@ -156,7 +156,7 @@ public class UMLCli {
 				String fieldName = getInput();
 				//change method once uml diagram is updated
 				if(isValidAttributeName(fieldName)) {
-					hasUnsavedWork = umld.addAttribute(whichClass, fieldName);
+					hasUnsavedWork = umld.addField(whichClass, fieldName);
 				}
 			}
 			else {
@@ -194,7 +194,7 @@ public class UMLCli {
 				System.out.println("Enter number of parameters up to 10");//need limit ask client
 				int numParameters = getInt();
 				if (numParameters == 0) {
-					hasUnsavedWork = umld.addMethod (methodName , {} );
+					hasUnsavedWork = umld.addMethod(methodName , {} );
 				
 				} 
 				else if (numParameters >= 1 || numParameters <= 10 ) {
