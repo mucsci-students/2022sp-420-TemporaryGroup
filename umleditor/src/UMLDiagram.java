@@ -69,15 +69,18 @@ public class UMLDiagram {
      * @return
      */
     public Boolean addField(String className, String newField){
-        if(!getClass(className).fieldExists(newField)){
-            getClass(className).addField(newField);
-            System.out.println("Added field '" + newField + "' to class '" + className + "'.");
-            return true;
+        if(isValidFieldName(newField)){
+            if(!getClass(className).fieldExists(newField)){
+                getClass(className).addField(newField);
+                System.out.println("Added field '" + newField + "' to class '" + className + "'.");
+                return true;
+            }
+            else{
+                System.out.println("The field '" + newField + "' already exists in the class '" + className + "'.");
+                return false;
+            }
         }
-        else{
-            System.out.println("The field '" + newField + "' already exists in the class '" + className + "'.");
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -106,15 +109,18 @@ public class UMLDiagram {
      * @return
      */
     public Boolean renameField(String className, String oldFieldName, String newFieldName){
-        if(!(getClass(className).fieldExists(oldFieldName))){
-            getClass(className).renameField(oldFieldName, newFieldName);
-            System.out.println("Renamed field '" + oldFieldName + "' to '" + newFieldName + "' in class '" + className + "'.");
-            return true;
+        if(isValidFieldName(newFieldName)){
+            if(!(getClass(className).fieldExists(oldFieldName))){
+                getClass(className).renameField(oldFieldName, newFieldName);
+                System.out.println("Renamed field '" + oldFieldName + "' to '" + newFieldName + "' in class '" + className + "'.");
+                return true;
+            }
+            else {
+                System.out.println("An field named '" + newFieldName + "' already exists in class '" + className + "'.");
+                return false;
+            }
         }
-        else {
-            System.out.println("An field named '" + newFieldName + "' already exists in class '" + className + "'.");
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -124,15 +130,18 @@ public class UMLDiagram {
      * @return
      */
     public Boolean addMethod(String className, String newMethod){
-        if(!getClass(className).methodExists(newMethod)){
-            getClass(className).addMethod(newMethod);
-            System.out.println("Added method '" + newMethod + "' to class '" + className + "'.");
-            return true;
+        if(isValidMethodName(newMethod)){
+            if(!getClass(className).methodExists(newMethod)){
+                getClass(className).addMethod(newMethod);
+                System.out.println("Added method '" + newMethod + "' to class '" + className + "'.");
+                return true;
+            }
+            else{
+                System.out.println("The method '" + newMethod + "' already exists in the class '" + className + "'.");
+                return false;
+            }
         }
-        else{
-            System.out.println("The method '" + newMethod + "' already exists in the class '" + className + "'.");
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -161,15 +170,18 @@ public class UMLDiagram {
      * @return
      */
     public Boolean renameMethod(String className, String oldMethodName, String newMethodName){
-        if(!(getClass(className).methodExists(oldMethodName))){
-            getClass(className).renameMethod(oldMethodName, newMethodName);
-            System.out.println("Renamed method '" + oldMethodName + "' to '" + newMethodName + "' in class '" + className + "'.");
-            return true;
+        if(isValidMethodName(newMethodName)){
+            if(!(getClass(className).methodExists(oldMethodName))){
+                getClass(className).renameMethod(oldMethodName, newMethodName);
+                System.out.println("Renamed method '" + oldMethodName + "' to '" + newMethodName + "' in class '" + className + "'.");
+                return true;
+            }
+            else {
+                System.out.println("A method named '" + oldMethodName + "' already exists in class '" + className + "'.");
+                return false;
+            }
         }
-        else {
-            System.out.println("A method named '" + oldMethodName + "' already exists in class '" + className + "'.");
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -180,18 +192,21 @@ public class UMLDiagram {
      * @return
      */
     public Boolean addParameter(String className, String methodName, String paramName){
-        if(getClass(className).methodExists(methodName)){
-            if(!getClass(className).getMethod(methodName).paramExists(paramName)){
-                getClass(className).getMethod(methodName).addParameter(paramName);
-                System.out.println("Added parameter '" + paramName + "' to method '" + methodName + "'.");
-                return true;
+        if(isValidName(paramName)){
+            if(getClass(className).methodExists(methodName)){
+                if(!getClass(className).getMethod(methodName).paramExists(paramName)){
+                    getClass(className).getMethod(methodName).addParameter(paramName);
+                    System.out.println("Added parameter '" + paramName + "' to method '" + methodName + "'.");
+                    return true;
+                }
+                else{
+                    System.out.println("A parameter named '" + paramName + "' already exists in method '" + methodName + "'.");
+                    return false;
+                }
             }
-            else{
-                System.out.println("A parameter named '" + paramName + "' already exists in method '" + methodName + "'.");
-                return false;
-            }
+            System.out.println("The method '" + methodName + "' does not exist in the class.");
+            return false;
         }
-        System.out.println("The method '" + methodName + "' does not exist in the class.");
         return false;
     }
 
@@ -227,22 +242,25 @@ public class UMLDiagram {
      * @return
      */
     public Boolean renameParameter(String className, String methodName, String oldParamName, String newParamName){
-        if(getClass(className).methodExists(methodName)){
-            if(getClass(className).getMethod(methodName).paramExists(oldParamName)){
-                if(!getClass(className).getMethod(methodName).paramExists(newParamName)){
-                    getClass(className).getMethod(methodName).renameParameter(oldParamName, newParamName);
-                    System.out.println("Renamed parameter '" + oldParamName + "' to '" + newParamName + "' in method '" + methodName + "'.");
-                    return true;
+        if(isValidName(newParamName)){
+            if(getClass(className).methodExists(methodName)){
+                if(getClass(className).getMethod(methodName).paramExists(oldParamName)){
+                    if(!getClass(className).getMethod(methodName).paramExists(newParamName)){
+                        getClass(className).getMethod(methodName).renameParameter(oldParamName, newParamName);
+                        System.out.println("Renamed parameter '" + oldParamName + "' to '" + newParamName + "' in method '" + methodName + "'.");
+                        return true;
+                    }
+                    System.out.println("The parameter '" + newParamName + "' already exists in the method '" + methodName + "'.");
+                    return false;
                 }
-                System.out.println("The parameter '" + newParamName + "' already exists in the method '" + methodName + "'.");
-                return false;
+                else{
+                    System.out.println("The parameter named '" + oldParamName + "' does not exist in method '" + methodName + "'.");
+                    return false;
+                }
             }
-            else{
-                System.out.println("The parameter named '" + oldParamName + "' does not exist in method '" + methodName + "'.");
-                return false;
-            }
+            System.out.println("The method '" + methodName + "' does not exist in the class.");
+            return false;
         }
-        System.out.println("The method '" + methodName + "' does not exist in the class.");
         return false;
     }
 
@@ -358,5 +376,85 @@ public class UMLDiagram {
     public HashMap<String, UMLClass> getUMLDiagram() {
     	return umlDiagram; 
     }
+
+    /**
+     * Checks to see if input is valid for a name.
+     * @param name
+     * @return
+     */
+    public static Boolean isValidName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			return true;
+		}
+		else {
+			System.out.println("Error: Invalid name. Names can only contain A-Z, a-z, 0-9, and underscore.");
+			return false;
+		}
+    }
+    
+    /**
+     * Checks to see if field name is valid.
+     * @param name
+     * @return
+     */
+    public static Boolean isValidFieldName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			if(name.charAt(0) >= '0' && name.charAt(0) <= '9') {
+				System.out.println("Error: Invalid field name. Field names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Field names must follow standard Java naming conventions.");
+				return false;
+			}
+			else if(name.charAt(0) == ('_')) {
+				System.out.println("Error: Invalid field name. Field names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Field names must follow standard Java naming conventions.");
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			System.out.println("Error: Invalid field name. Field names can only contain A-Z, a-z, 0-9, and underscore.");
+			System.out.println("Field names must follow standard Java naming conventions.");
+			return false;
+		}
+    }
+    
+    /**
+     * Checks to see if method name is valid.
+     * @param name
+     * @return
+     */
+    public static Boolean isValidMethodName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			if(name.charAt(0) >= '0' && name.charAt(0) <= '9') {
+				System.out.println("Error: Invalid method name. Method names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Method names must follow standard Java naming conventions.");
+				return false;
+			}
+			else if(name.charAt(0) == ('_')) {
+				System.out.println("Error: Invalid method name. Method names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Method names must follow standard Java naming conventions.");
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			System.out.println("Error: Invalid method name. Method names can only contain A-Z, a-z, 0-9, and underscore.");
+			System.out.println("Method names must follow standard Java naming conventions.");
+			return false;
+		}
+	}
 
 }
