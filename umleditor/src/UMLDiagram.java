@@ -110,13 +110,19 @@ public class UMLDiagram {
      */
     public Boolean renameField(String className, String oldFieldName, String newFieldName){
         if(isValidFieldName(newFieldName)){
-            if(!(getClass(className).fieldExists(oldFieldName))){
-                getClass(className).renameField(oldFieldName, newFieldName);
-                System.out.println("Renamed field '" + oldFieldName + "' to '" + newFieldName + "' in class '" + className + "'.");
-                return true;
+            if((getClass(className).fieldExists(oldFieldName))){
+                if(!(getClass(className).fieldExists(newFieldName))){
+                    getClass(className).renameField(oldFieldName, newFieldName);
+                    System.out.println("Renamed field '" + oldFieldName + "' to '" + newFieldName + "' in class '" + className + "'.");
+                    return true;
+                }
+                else{
+                    System.out.println("An field named '" + newFieldName + "' already exists in class '" + className + "'.");
+                    return false;
+                }  
             }
             else {
-                System.out.println("An field named '" + newFieldName + "' already exists in class '" + className + "'.");
+                System.out.println("The field named '" + oldFieldName + "' does not exist in class '" + className + "'.");
                 return false;
             }
         }
@@ -161,7 +167,7 @@ public class UMLDiagram {
             return false;
         }
     }
-
+    
     /**
      * Renames a method in the class if class and method exist.
      * @param className
@@ -171,13 +177,19 @@ public class UMLDiagram {
      */
     public Boolean renameMethod(String className, String oldMethodName, String newMethodName){
         if(isValidMethodName(newMethodName)){
-            if(!(getClass(className).methodExists(oldMethodName))){
-                getClass(className).renameMethod(oldMethodName, newMethodName);
-                System.out.println("Renamed method '" + oldMethodName + "' to '" + newMethodName + "' in class '" + className + "'.");
-                return true;
+            if((getClass(className).methodExists(oldMethodName))){
+                if(!(getClass(className).methodExists(newMethodName))){
+                    getClass(className).renameMethod(oldMethodName, newMethodName);
+                    System.out.println("Renamed method '" + oldMethodName + "' to '" + newMethodName + "' in class '" + className + "'.");
+                    return true;
+                }
+                else{
+                    System.out.println("A method named '" + newMethodName + "' already exists in class '" + className + "'.");
+                    return false;
+                }
             }
             else {
-                System.out.println("A method named '" + oldMethodName + "' already exists in class '" + className + "'.");
+                System.out.println("The method named '" + oldMethodName + "' does not exist in class '" + className + "'.");
                 return false;
             }
         }

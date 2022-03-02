@@ -291,7 +291,7 @@ public class UMLCli {
 			System.out.println("The diagram is empty!");
 			return;
 		}
-		System.out.println("What do you want to rename? [class/field/method/attribute]");
+		System.out.println("What do you want to rename? [class/field/method/parameter]");
 		String toRename = getInput();
 		if(toRename.equals("class")) {
 			System.out.println("Rename which class?");
