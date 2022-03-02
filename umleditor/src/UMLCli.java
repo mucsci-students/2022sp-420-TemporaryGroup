@@ -148,13 +148,13 @@ public class UMLCli {
 				hasUnsavedWork = umld.addClass(className);
 			}
 		}
+		// Adds field 
 		else if(toAdd.equals("field")) {
 			System.out.println("Add field to which class?");
 			String whichClass = getInput();
 			if(umld.classExists(whichClass)) {
 				System.out.println("Enter field name: ");
 				String fieldName = getInput();
-				//change method once uml diagram is updated
 				if(isValidAttributeName(fieldName)) {
 					hasUnsavedWork = umld.addField(whichClass, fieldName);
 				}
@@ -163,6 +163,7 @@ public class UMLCli {
 				classDoesNotExist(whichClass);
 			}
 		}
+		// Adds relationship 
 		else if(toAdd.equals("relationship")) {
 			System.out.println("Enter source class:");
 			String source = getInput();
@@ -181,6 +182,7 @@ public class UMLCli {
       		
 
 		}
+		// Adds method
 		else if(toAdd.equals("method")) {
 			System.out.println("Add method to which class?");
 			String whichClass = getInput();
@@ -190,6 +192,28 @@ public class UMLCli {
 				//change method once uml diagram is updated
 				if(isValidAttributeName(methodName)) {
 					hasUnsavedWork = umld.addMethod(whichClass, methodName);
+				}
+			}
+			else {
+				classDoesNotExist(whichClass);
+			}
+		}
+		// Adds parameter
+		else if(toAdd.equals("parameter")) {
+			System.out.println("Add parameter to which class?");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				System.out.println("Add parameter to which method?");
+				String methodName = getInput();
+				if(umld.getClass(whichClass).methodExists(methodName)){
+					System.out.println("Enter parameter name: ");
+					String parameterName = getInput();
+					if(isValidAttributeName(parameterName)){
+						hasUnsavedWork = umld.addParameter(whichClass, methodName, parameterName);
+					}
+				}
+				else{
+					System.out.println("The method '" + methodName + "' does not exist in the class '" + whichClass + "'.");
 				}
 			}
 			else {
@@ -283,6 +307,7 @@ public class UMLCli {
 				classDoesNotExist(oldName);
 			}
 		}
+		// Renames a field
 		else if(toRename.equals("field")) {
 			System.out.println("Rename a field in which class?");
 			String whichClass = getInput();
@@ -304,6 +329,7 @@ public class UMLCli {
 				classDoesNotExist(whichClass);
 			}
 		}
+		// Renames a method
 		else if(toRename.equals("method")) {
 			System.out.println("Rename a method in which class?");
 			String whichClass = getInput();
@@ -311,7 +337,7 @@ public class UMLCli {
 				System.out.println("Rename which method in class '" + whichClass + "'?");
 				String oldName = getInput();
 				if(umld.getClass(whichClass).methodExists(oldName)) {
-					System.out.println("Enter new method name:");
+					System.out.println("Enter new method name: ");
 					String newName = getInput();
 					if(isValidAttributeName(newName)) {
 						hasUnsavedWork = umld.renameMethod(whichClass, oldName, newName);
@@ -325,9 +351,39 @@ public class UMLCli {
 				classDoesNotExist(whichClass);
 			}
 		}
+		// Renames a parameter
+		else if(toRename.equals("parameter")) {
+			System.out.println("Rename a parameter in which class?");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				System.out.println("Rename a parameter in which method?");
+				String methodName = getInput();
+				if(umld.getClass(whichClass).methodExists(methodName)){
+					System.out.println("Rename which parameter in method '" + methodName + "'?");
+					String oldParam = getInput();
+					if(umld.getClass(whichClass).getMethod(methodName).paramExists(oldParam)){
+						System.out.println("Enter new parameter name: ");
+						String newParam = getInput();
+						if(isValidAttributeName(newParam)){
+							hasUnsavedWork = umld.renameParameter(whichClass, methodName, oldParam, newParam);
+						}
+					}
+					else{
+						System.out.println("The parameter '" + oldParam + "' does not exist in the method '" + methodName + "'.");
+					}
+				}
+				else{
+					System.out.println("The method '" + methodName + "' does not exist in the class '" + whichClass + "'.");
+				}
+			}
+			else {
+				classDoesNotExist(whichClass);
+			}
+		}
 		else {
 			commandNotRecognized();
 		}
+		
 	}
 	
 	//need to do
@@ -340,7 +396,7 @@ public class UMLCli {
 			System.out.println("The diagram is empty!");
 			return;
 		}
-		System.out.println("What do you want to delete? [class/relationship/field/method]");
+		System.out.println("What do you want to delete? [class/relationship/field/method/parameter]");
 		String toRemove = getInput();
 		if(toRemove.equals("class")) {
 			System.out.println("Enter class to delete:");
@@ -373,6 +429,26 @@ public class UMLCli {
 				System.out.println("Enter method to delete:");
 				String whichMethod = getInput();
 				hasUnsavedWork = umld.removeMethod(whichClass, whichMethod);
+			}
+			else {
+				classDoesNotExist(whichClass);
+			}
+		}
+		// Removes a parameter
+		else if(toRemove.equals("parameter")) {
+			System.out.println("Delete parameter from which class?");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				System.out.println("Remove parameter from which method?");
+				String methodName = getInput();
+				if(umld.getClass(whichClass).methodExists(methodName)){
+					System.out.println("Enter parameter to delete:");
+					String parameterName = getInput();
+					hasUnsavedWork = umld.removeParameter(whichClass, methodName, parameterName);
+				}
+				else{
+					System.out.println("The method '" + methodName + "' does not exist in the class '" + whichClass + "'.");
+				}
 			}
 			else {
 				classDoesNotExist(whichClass);
@@ -424,7 +500,16 @@ public class UMLCli {
 		System.out.println();
 		System.out.println("Methods:");
 		for(int i = 0; i < umld.getClass(name).methods.size(); i++) {
-			System.out.println("- " + umld.getClass(name).methods.get(i).getMethodName());
+			System.out.print("- " + umld.getClass(name).methods.get(i).getMethodName() + " ");
+			System.out.print("(");
+			for(int j = 0; j < umld.getClass(name).methods.get(i).getParameterList().size(); j++){
+				if(j > 0){
+					System.out.print(", ");
+				}
+				System.out.print(umld.getClass(name).methods.get(i).getParameterList().get(j).getParamName());
+			}
+			System.out.print(")");
+			System.out.println();
 		}
 	}
 	
