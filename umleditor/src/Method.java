@@ -83,6 +83,15 @@ public class Method {
     }
 
     /**
+     * Returns true if parameter exists.
+     * @param paramName
+     * @return
+     */
+    public Boolean paramExists(String paramName){
+        return (getParameter(paramName) != null);
+    }
+
+    /**
      * Returns the arraylist of parameters.
      * @return
      */

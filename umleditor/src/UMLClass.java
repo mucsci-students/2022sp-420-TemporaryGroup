@@ -186,4 +186,16 @@ public class UMLClass {
         }
     }
 
+    /**
+     * Renames a parameter in a method.
+     * @param methodName
+     * @param oldParamName
+     * @param newParamName
+     */
+    public void renameParameter(String methodName, String oldParamName, String newParamName){
+        if(methodExists(methodName)){
+            getMethod(methodName).renameParameter(oldParamName, newParamName);
+        }
+    }
+
 }

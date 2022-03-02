@@ -167,7 +167,99 @@ public class UMLDiagram {
             return true;
         }
         else {
-            System.out.println("An method named '" + oldMethodName + "' already exists in class '" + className + "'.");
+            System.out.println("A method named '" + oldMethodName + "' already exists in class '" + className + "'.");
+            return false;
+        }
+    }
+
+    /**
+     * Adds a parameter to the method if method and class exist.
+     * @param className
+     * @param methodName
+     * @param paramName
+     * @return
+     */
+    public Boolean addParameter(String className, String methodName, String paramName){
+        if(getClass(className).methodExists(methodName)){
+            if(!getClass(className).getMethod(methodName).paramExists(paramName)){
+                getClass(className).getMethod(methodName).addParameter(paramName);
+                System.out.println("Added parameter '" + paramName + "' to method '" + methodName + "'.");
+                return true;
+            }
+            else{
+                System.out.println("A parameter named '" + paramName + "' already exists in method '" + methodName + "'.");
+                return false;
+            }
+        }
+        System.out.println("The method '" + methodName + "' does not exist in the class.");
+        return false;
+    }
+
+    /**
+     * Removes a parameter from the method if the method and class exist.
+     * @param className
+     * @param methodName
+     * @param paramName
+     * @return
+     */
+    public Boolean removeParameter(String className, String methodName, String paramName){
+        if(getClass(className).methodExists(methodName)){
+            if(getClass(className).getMethod(methodName).paramExists(paramName)){
+                getClass(className).getMethod(methodName).removeParameter(paramName);
+                System.out.println("Removed parameter '" + paramName + "' from the method '" + methodName + "'.");
+                return true;
+            }
+            else{
+                System.out.println("The parameter named '" + paramName + "' does not exist in method '" + methodName + "'.");
+                return false;
+            }
+        }
+        System.out.println("The method '" + methodName + "' does not exist in the class.");
+        return false;
+    }
+
+    /**
+     * Renames a parameter in the method if the method and class exist.
+     * @param className
+     * @param methodName
+     * @param oldParamName
+     * @param newParamName
+     * @return
+     */
+    public Boolean renameParameter(String className, String methodName, String oldParamName, String newParamName){
+        if(getClass(className).methodExists(methodName)){
+            if(getClass(className).getMethod(methodName).paramExists(oldParamName)){
+                if(!getClass(className).getMethod(methodName).paramExists(newParamName)){
+                    getClass(className).getMethod(methodName).renameParameter(oldParamName, newParamName);
+                    System.out.println("Renamed parameter '" + oldParamName + "' to '" + newParamName + "' in method '" + methodName + "'.");
+                    return true;
+                }
+                System.out.println("The parameter '" + newParamName + "' already exists in the method '" + methodName + "'.");
+                return false;
+            }
+            else{
+                System.out.println("The parameter named '" + oldParamName + "' does not exist in method '" + methodName + "'.");
+                return false;
+            }
+        }
+        System.out.println("The method '" + methodName + "' does not exist in the class.");
+        return false;
+    }
+
+    /**
+     * Removes ALL parameters from the method in the class.
+     * @param className
+     * @param methodName
+     * @return
+     */
+    public Boolean removeAllParameters(String className, String methodName){
+        if(getClass(className).methodExists(methodName)){
+            getClass(className).getMethod(methodName).removeAllParameters();
+            System.out.println("All of the parameters from the method '" + methodName + "' were removed.");
+            return true;
+        }
+        else{
+            System.out.println("The method '" + methodName + "' does not exist in the class.");
             return false;
         }
     }
