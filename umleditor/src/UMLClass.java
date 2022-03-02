@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class UMLClass {
     
     String className;
-    ArrayList<String> methods = new ArrayList<String>();
-    ArrayList<String> fields = new ArrayList<String>();
+    ArrayList<Field> fields = new ArrayList<Field>();
+    ArrayList<Method> methods = new ArrayList<Method>();
 
     /**
      * Constructor for a class in the uml diagram.
@@ -26,10 +26,6 @@ public class UMLClass {
         return this.className;
     }
 
-    public ArrayList<String> getAttributes() {
-        return this.attributes;
-    }
-
     /**
      * Renames a class.
      * @param newClassName
@@ -39,64 +35,167 @@ public class UMLClass {
     }
 
     /**
-     * Adds a new attribute to the class.
-     * @param newAttribute
+     * Returns the array list of fields that the class contains.
+     * @return ArrayList<Field>
      */
-    public void addAttribute(String newAttribute) {
-       attributes.add(newAttribute);  
+    public ArrayList<Field> getFields() {
+        return this.fields;
     }
 
     /**
-     * Removes an attribute from the class if it exists. 
-     * @param deleteAttribute
+     * Adds a new field to the class.
+     * @param newField
      */
-    public void removeAttribute(String deleteAttribute){
-        for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i).equals(deleteAttribute)){
-                attributes.remove(i);
+    public void addField(String newField) {
+       fields.add(new Field(newField));  
+    }
+
+    /**
+     * Removes a field from the class if it exists. 
+     * @param deleteField
+     */
+    public void removeField(String deleteField){
+        for(int i = 0; i < fields.size(); i++){
+            if(fields.get(i).getFieldName().equals(deleteField)){
+                fields.remove(i); 
             }
         }
     }
 
     /**
-     * Renames an attribute in the class if it exists and new name doesn't exist yet. 
-     * @param oldAttribute
-     * @param renameAttribute
+     * Renames a field in the class if it exists and new name doesn't exist yet. 
+     * @param oldField
+     * @param renameField
      */
-    public void renameAttribute(String oldAttribute, String renameAttribute){
-        for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i).equals(oldAttribute)){
-                attributes.set(i, renameAttribute);
+    public void renameField(String oldField, String renameField){
+        for(int i = 0; i < fields.size(); i++){
+            if(fields.get(i).getFieldName().equals(oldField)){
+                getField(oldField).renameField(renameField);
             }
         }
     }
 
     /**
-     * Returns an attribute by name. 
-     * @param attributeName
-     * @return attribute name
+     * Returns a field by name. 
+     * @param fieldName
+     * @return field
      */
-    public String getAttribute(String attributeName){
-        for(int i = 0; i < attributes.size(); i++){
-            if(attributes.get(i) == attributeName){
-                return attributes.get(i);
+    public Field getField(String fieldName){
+        for(int i = 0; i < fields.size(); i++){
+            if(fields.get(i).getFieldName().equals(fieldName)){
+                return fields.get(i);
             }
         }
         return null;
     }
 
     /**
-     * Checks to see if the attribute in the class exists. 
-     * @param attributeName
+     * Checks to see if the field in the class exists. 
+     * @param fieldName
      * @return boolean
      */
-    public boolean attributeExists(String attributeName){
-        for(int i = 0; i < attributes.size(); i++) {
-            if(attributes.get(i).equals(attributeName)) {
-                return true;
+    public boolean fieldExists(String fieldName){
+        return (getField(fieldName) != null);
+    }
+
+    /**
+     * Adds a new method to the class.
+     * @param newMethod
+     */
+    public void addMethod(String newMethod) {
+        methods.add(new Method(newMethod));  
+     }
+
+     /**
+     * Removes a method from the class if it exists. 
+     * @param deleteMethod
+     */
+    public void removeMethod(String deleteMethod){
+        for(int i = 0; i < methods.size(); i++){
+            if(methods.get(i).getMethodName().equals(deleteMethod)){
+                methods.remove(i); 
             }
         }
-        return false;
+    }
+
+    /**
+     * Renames a method in the class if it exists and new name doesn't exist yet. 
+     * @param oldMethod
+     * @param renameMethod
+     */
+    public void renameMethod(String oldMethod, String renameMethod){
+        for(int i = 0; i < methods.size(); i++){
+            if(methods.get(i).getMethodName().equals(oldMethod)){
+                getMethod(oldMethod).renameMethod(renameMethod);
+            }
+        }
+    }
+
+    /**
+     * Returns a method by name. 
+     * @param methodName
+     * @return method
+     */
+    public Method getMethod(String methodName){
+        for(int i = 0; i < methods.size(); i++){
+            if(methods.get(i).getMethodName().equals(methodName)){
+                return methods.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks to see if the method in the class exists. 
+     * @param methodName
+     * @return boolean
+     */
+    public boolean methodExists(String methodName){
+        return (getMethod(methodName) != null);
+    }
+
+    /**
+     * Adds a new parameter to the method in the class.
+     * @param methodName
+     * @param paramName
+     */
+    public void addParameter(String methodName, String paramName){
+        if(methodExists(methodName)){
+            getMethod(methodName).addParameter(paramName);
+        }
+    }
+
+    /**
+     * Removes a parameter from the method in the class.
+     * @param methodName
+     * @param paramName
+     */
+    public void removeParameter(String methodName, String paramName){
+        if(methodExists(methodName)){
+            getMethod(methodName).removeParameter(paramName);
+        }
+    }
+
+    /**
+     * Removes ALL of the parameters from the method in the class.
+     * @param methodName
+     */
+    public void removeAllParameters(String methodName){
+        if(methodExists(methodName)){
+            getMethod(methodName).removeAllParameters();
+        }
+    }
+
+    /**
+     * Renames a parameter in a method.
+     * @param methodName
+     * @param oldParamName
+     * @param newParamName
+     */
+    public void renameParameter(String methodName, String oldParamName, String newParamName){
+        if(methodExists(methodName)){
+            getMethod(methodName).renameParameter(oldParamName, newParamName);
+        }
     }
 
 }

@@ -62,38 +62,234 @@ public class UMLDiagram {
         return null;
     }
 
-    public Boolean addAttribute(String className, String newAttribute){
-        if(!getClass(className).attributeExists(newAttribute)){
-            getClass(className).addAttribute(newAttribute);
-            System.out.println("Added attribute '" + newAttribute + "' to class '" + className + "'.");
+    /**
+     * Adds a new field in the class if the class exists.
+     * @param className
+     * @param newField
+     * @return
+     */
+    public Boolean addField(String className, String newField){
+        if(isValidFieldName(newField)){
+            if(!getClass(className).fieldExists(newField)){
+                getClass(className).addField(newField);
+                System.out.println("Added field '" + newField + "' to class '" + className + "'.");
+                return true;
+            }
+            else{
+                System.out.println("The field '" + newField + "' already exists in the class '" + className + "'.");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Removes a field from the class if class and field exist.
+     * @param className
+     * @param removeField
+     * @return
+     */
+    public Boolean removeField(String className, String removeField){
+        if(getClass(className).fieldExists(removeField)){
+            getClass(className).removeField(removeField);
+            System.out.println("Removed field '" + removeField + "' from class '" + className + "'.");
             return true;
         }
         else{
-            System.out.println("The attribute '" + newAttribute + "' already exists in the class '" + className + "'.");
+            System.out.println("The field '" + removeField + "' does not exist in the class.");
             return false;
         }
     }
 
-    public Boolean removeAttribute(String className, String removeAttribute){
-        if(getClass(className).attributeExists(removeAttribute)){
-            getClass(className).removeAttribute(removeAttribute);
-            System.out.println("Removed attribute '" + removeAttribute + "' from class '" + className + "'.");
+    /**
+     * Renames a field in the class if class and field exist.
+     * @param className
+     * @param oldFieldName
+     * @param newFieldName
+     * @return
+     */
+    public Boolean renameField(String className, String oldFieldName, String newFieldName){
+        if(isValidFieldName(newFieldName)){
+            if((getClass(className).fieldExists(oldFieldName))){
+                if(!(getClass(className).fieldExists(newFieldName))){
+                    getClass(className).renameField(oldFieldName, newFieldName);
+                    System.out.println("Renamed field '" + oldFieldName + "' to '" + newFieldName + "' in class '" + className + "'.");
+                    return true;
+                }
+                else{
+                    System.out.println("An field named '" + newFieldName + "' already exists in class '" + className + "'.");
+                    return false;
+                }  
+            }
+            else {
+                System.out.println("The field named '" + oldFieldName + "' does not exist in class '" + className + "'.");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds a new method in the class if the class exists.
+     * @param className
+     * @param newMethod
+     * @return
+     */
+    public Boolean addMethod(String className, String newMethod){
+        if(isValidMethodName(newMethod)){
+            if(!getClass(className).methodExists(newMethod)){
+                getClass(className).addMethod(newMethod);
+                System.out.println("Added method '" + newMethod + "' to class '" + className + "'.");
+                return true;
+            }
+            else{
+                System.out.println("The method '" + newMethod + "' already exists in the class '" + className + "'.");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Removes a method from the class if class and method exist.
+     * @param className
+     * @param removeMethod
+     * @return
+     */
+    public Boolean removeMethod(String className, String removeMethod){
+        if(getClass(className).methodExists(removeMethod)){
+            getClass(className).removeMethod(removeMethod);
+            System.out.println("Removed method '" + removeMethod + "' from class '" + className + "'.");
             return true;
         }
         else{
-            System.out.println("The attribute '" + removeAttribute + "' does not exist in the class.");
+            System.out.println("The method '" + removeMethod + "' does not exist in the class.");
             return false;
         }
     }
+    
+    /**
+     * Renames a method in the class if class and method exist.
+     * @param className
+     * @param oldMethodName
+     * @param newMethodName
+     * @return
+     */
+    public Boolean renameMethod(String className, String oldMethodName, String newMethodName){
+        if(isValidMethodName(newMethodName)){
+            if((getClass(className).methodExists(oldMethodName))){
+                if(!(getClass(className).methodExists(newMethodName))){
+                    getClass(className).renameMethod(oldMethodName, newMethodName);
+                    System.out.println("Renamed method '" + oldMethodName + "' to '" + newMethodName + "' in class '" + className + "'.");
+                    return true;
+                }
+                else{
+                    System.out.println("A method named '" + newMethodName + "' already exists in class '" + className + "'.");
+                    return false;
+                }
+            }
+            else {
+                System.out.println("The method named '" + oldMethodName + "' does not exist in class '" + className + "'.");
+                return false;
+            }
+        }
+        return false;
+    }
 
-    public Boolean renameAttribute(String className, String oldAttributeName, String newAttributeName){
-        if(!(getClass(className).attributeExists(newAttributeName))){
-            getClass(className).renameAttribute(oldAttributeName, newAttributeName);
-            System.out.println("Renamed attribute '" + oldAttributeName + "' to '" + newAttributeName + "' in class '" + className + "'.");
+    /**
+     * Adds a parameter to the method if method and class exist.
+     * @param className
+     * @param methodName
+     * @param paramName
+     * @return
+     */
+    public Boolean addParameter(String className, String methodName, String paramName){
+        if(isValidName(paramName)){
+            if(getClass(className).methodExists(methodName)){
+                if(!getClass(className).getMethod(methodName).paramExists(paramName)){
+                    getClass(className).getMethod(methodName).addParameter(paramName);
+                    System.out.println("Added parameter '" + paramName + "' to method '" + methodName + "'.");
+                    return true;
+                }
+                else{
+                    System.out.println("A parameter named '" + paramName + "' already exists in method '" + methodName + "'.");
+                    return false;
+                }
+            }
+            System.out.println("The method '" + methodName + "' does not exist in the class.");
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * Removes a parameter from the method if the method and class exist.
+     * @param className
+     * @param methodName
+     * @param paramName
+     * @return
+     */
+    public Boolean removeParameter(String className, String methodName, String paramName){
+        if(getClass(className).methodExists(methodName)){
+            if(getClass(className).getMethod(methodName).paramExists(paramName)){
+                getClass(className).getMethod(methodName).removeParameter(paramName);
+                System.out.println("Removed parameter '" + paramName + "' from the method '" + methodName + "'.");
+                return true;
+            }
+            else{
+                System.out.println("The parameter named '" + paramName + "' does not exist in method '" + methodName + "'.");
+                return false;
+            }
+        }
+        System.out.println("The method '" + methodName + "' does not exist in the class.");
+        return false;
+    }
+
+    /**
+     * Renames a parameter in the method if the method and class exist.
+     * @param className
+     * @param methodName
+     * @param oldParamName
+     * @param newParamName
+     * @return
+     */
+    public Boolean renameParameter(String className, String methodName, String oldParamName, String newParamName){
+        if(isValidName(newParamName)){
+            if(getClass(className).methodExists(methodName)){
+                if(getClass(className).getMethod(methodName).paramExists(oldParamName)){
+                    if(!getClass(className).getMethod(methodName).paramExists(newParamName)){
+                        getClass(className).getMethod(methodName).renameParameter(oldParamName, newParamName);
+                        System.out.println("Renamed parameter '" + oldParamName + "' to '" + newParamName + "' in method '" + methodName + "'.");
+                        return true;
+                    }
+                    System.out.println("The parameter '" + newParamName + "' already exists in the method '" + methodName + "'.");
+                    return false;
+                }
+                else{
+                    System.out.println("The parameter named '" + oldParamName + "' does not exist in method '" + methodName + "'.");
+                    return false;
+                }
+            }
+            System.out.println("The method '" + methodName + "' does not exist in the class.");
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * Removes ALL parameters from the method in the class.
+     * @param className
+     * @param methodName
+     * @return
+     */
+    public Boolean removeAllParameters(String className, String methodName){
+        if(getClass(className).methodExists(methodName)){
+            getClass(className).getMethod(methodName).removeAllParameters();
+            System.out.println("All of the parameters from the method '" + methodName + "' were removed.");
             return true;
         }
-        else {
-            System.out.println("An attribute named '" + newAttributeName + "' already exists in class '" + className + "'.");
+        else{
+            System.out.println("The method '" + methodName + "' does not exist in the class.");
             return false;
         }
     }
@@ -194,5 +390,85 @@ public class UMLDiagram {
     }
     
     
+
+    /**
+     * Checks to see if input is valid for a name.
+     * @param name
+     * @return
+     */
+    public static Boolean isValidName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			return true;
+		}
+		else {
+			System.out.println("Error: Invalid name. Names can only contain A-Z, a-z, 0-9, and underscore.");
+			return false;
+		}
+    }
+    
+    /**
+     * Checks to see if field name is valid.
+     * @param name
+     * @return
+     */
+    public static Boolean isValidFieldName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			if(name.charAt(0) >= '0' && name.charAt(0) <= '9') {
+				System.out.println("Error: Invalid field name. Field names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Field names must follow standard Java naming conventions.");
+				return false;
+			}
+			else if(name.charAt(0) == ('_')) {
+				System.out.println("Error: Invalid field name. Field names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Field names must follow standard Java naming conventions.");
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			System.out.println("Error: Invalid field name. Field names can only contain A-Z, a-z, 0-9, and underscore.");
+			System.out.println("Field names must follow standard Java naming conventions.");
+			return false;
+		}
+    }
+    
+    /**
+     * Checks to see if method name is valid.
+     * @param name
+     * @return
+     */
+    public static Boolean isValidMethodName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			if(name.charAt(0) >= '0' && name.charAt(0) <= '9') {
+				System.out.println("Error: Invalid method name. Method names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Method names must follow standard Java naming conventions.");
+				return false;
+			}
+			else if(name.charAt(0) == ('_')) {
+				System.out.println("Error: Invalid method name. Method names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Method names must follow standard Java naming conventions.");
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			System.out.println("Error: Invalid method name. Method names can only contain A-Z, a-z, 0-9, and underscore.");
+			System.out.println("Method names must follow standard Java naming conventions.");
+			return false;
+		}
+	}
 
 }
