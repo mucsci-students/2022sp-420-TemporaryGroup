@@ -182,6 +182,21 @@ public class UMLCli {
 
 		}
 		else if(toAdd.equals("method")) {
+			System.out.println("Add method to which class?");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				System.out.println("Enter method name: ");
+				String methodName = getInput();
+				//change method once uml diagram is updated
+				if(isValidAttributeName(methodName)) {
+					hasUnsavedWork = umld.addMethod(whichClass, methodName);
+				}
+			}
+			else {
+				classDoesNotExist(whichClass);
+			}
+		}
+		/** else if(toAdd.equals("method")) {
 			System.out.println("add method to which class?");
 			String className = getInput();
 			if(!umld.classExists(className)) {
@@ -219,7 +234,7 @@ public class UMLCli {
 			
       		
 
-		}
+		} */
 		
 		else {
 			commandNotRecognized();
@@ -252,7 +267,7 @@ public class UMLCli {
 			System.out.println("The diagram is empty!");
 			return;
 		}
-		System.out.println("What do you want to rename? [class/attribute]");
+		System.out.println("What do you want to rename? [class/field/method/attribute]");
 		String toRename = getInput();
 		if(toRename.equals("class")) {
 			System.out.println("Rename which class?");
@@ -268,21 +283,42 @@ public class UMLCli {
 				classDoesNotExist(oldName);
 			}
 		}
-		else if(toRename.equals("attribute")) {
-			System.out.println("Rename an attribute in which class?");
+		else if(toRename.equals("field")) {
+			System.out.println("Rename a field in which class?");
 			String whichClass = getInput();
 			if(umld.classExists(whichClass)) {
-				System.out.println("Rename which attribute in class '" + whichClass + "'?");
+				System.out.println("Rename which field in class '" + whichClass + "'?");
 				String oldName = getInput();
-				if(umld.getClass(whichClass).attributeExists(oldName)) {
-					System.out.println("Enter new attribute name:");
+				if(umld.getClass(whichClass).fieldExists(oldName)) {
+					System.out.println("Enter new field name:");
 					String newName = getInput();
 					if(isValidAttributeName(newName)) {
-						hasUnsavedWork = umld.renameAttribute(whichClass, oldName, newName);
+						hasUnsavedWork = umld.renameField(whichClass, oldName, newName);
 					}
 				}
 				else {
-					System.out.println("Attribute '" + oldName + "' does not exist in class '" + whichClass + "'.");
+					System.out.println("Field '" + oldName + "' does not exist in class '" + whichClass + "'.");
+				}
+			}
+			else {
+				classDoesNotExist(whichClass);
+			}
+		}
+		else if(toRename.equals("method")) {
+			System.out.println("Rename a method in which class?");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				System.out.println("Rename which method in class '" + whichClass + "'?");
+				String oldName = getInput();
+				if(umld.getClass(whichClass).methodExists(oldName)) {
+					System.out.println("Enter new method name:");
+					String newName = getInput();
+					if(isValidAttributeName(newName)) {
+						hasUnsavedWork = umld.renameMethod(whichClass, oldName, newName);
+					}
+				}
+				else {
+					System.out.println("Method '" + oldName + "' does not exist in class '" + whichClass + "'.");
 				}
 			}
 			else {
@@ -304,7 +340,7 @@ public class UMLCli {
 			System.out.println("The diagram is empty!");
 			return;
 		}
-		System.out.println("What do you want to delete? [class/relationship/attribute]");
+		System.out.println("What do you want to delete? [class/relationship/field/method]");
 		String toRemove = getInput();
 		if(toRemove.equals("class")) {
 			System.out.println("Enter class to delete:");
@@ -316,13 +352,27 @@ public class UMLCli {
 				classDoesNotExist(whichClass);
 			}
 		}
-		else if(toRemove.equals("attribute")) {
-			System.out.println("Delete attribute from which class?");
+		// Removes a field
+		else if(toRemove.equals("field")) {
+			System.out.println("Delete field from which class?");
 			String whichClass = getInput();
 			if(umld.classExists(whichClass)) {
-				System.out.println("Enter attribute to delete:");
-				String whichAttribute = getInput();
-				hasUnsavedWork = umld.removeAttribute(whichClass, whichAttribute);
+				System.out.println("Enter field to delete:");
+				String whichField = getInput();
+				hasUnsavedWork = umld.removeField(whichClass, whichField);
+			}
+			else {
+				classDoesNotExist(whichClass);
+			}
+		}
+		// Removes a method
+		else if(toRemove.equals("method")) {
+			System.out.println("Delete method from which class?");
+			String whichClass = getInput();
+			if(umld.classExists(whichClass)) {
+				System.out.println("Enter method to delete:");
+				String whichMethod = getInput();
+				hasUnsavedWork = umld.removeMethod(whichClass, whichMethod);
 			}
 			else {
 				classDoesNotExist(whichClass);
@@ -367,11 +417,15 @@ public class UMLCli {
 		System.out.println();
 		System.out.println("Class: ");
 		System.out.println("- " + name);
-		System.out.println("Attributes:");
-		for(int i = 0; i < umld.getClass(name).attributes.size(); i++) {
-			System.out.println("- " + umld.getClass(name).attributes.get(i));
+		System.out.println("Fields:");
+		for(int i = 0; i < umld.getClass(name).fields.size(); i++) {
+			System.out.println("- " + umld.getClass(name).fields.get(i).getFieldName());
 		}
 		System.out.println();
+		System.out.println("Methods:");
+		for(int i = 0; i < umld.getClass(name).methods.size(); i++) {
+			System.out.println("- " + umld.getClass(name).methods.get(i).getMethodName());
+		}
 	}
 	
 	public static void listClassCommand () {
