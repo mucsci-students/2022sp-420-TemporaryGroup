@@ -8,32 +8,42 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.awt.Graphics;
+import java.awt.Canvas;
 //import java.awt.color.*;
 
 
-class GUIView implements ActionListener
-{
-    static JLabel text;
+public class GUIView extends Canvas implements ActionListener {
+    
+	static JLabel text;
 	static JFrame main = new JFrame("UMLEditor");
+	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static UMLDiagram umld = new UMLDiagram();
-	static final int WIDTH = 150;
-	static final int HEIGHT = 125;
-	//can have up to 6 classes across by up to 4 classes down
+	static final int WIDTH = 250;
+	static final int HEIGHT = 200;
+	//keep tracks of classes rectangles
 	static ArrayList<Rectangle> classRep = new ArrayList<> ();
-	static String[] classNames = new String [24];
+	static final int CLASSESPERROW = (screenSize.height - 75) / 200;
+	static final int CLASSESPERCOL = (screenSize.width - 50) / 250;
+	//store class name -- y pos for field -- y position for method -- y position for parameter
+	static String[] classNames = new String [CLASSESPERROW * CLASSESPERCOL];
+	
 	//keep track of current index
 	static int index = 0;
-	//keep track of available indexes if any
-	static int [] available = new int [24];
+	static int MAXALLOW = 0;
 
+	//keep track of available indexes if any
+	static int [] available = new int [CLASSESPERROW * CLASSESPERCOL];
 	
     //Driver function
     public static void main(String[] args)
     {
     	//Create a frame
-    	main.setSize(1920,1080);
+    	
+    	//main.pack();
+    	main.setSize(screenSize);
     	main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	main.setLayout(new FlowLayout());
+    	main.setResizable(false);
     	
     	//Create an object
     	GUIView obj = new GUIView();
@@ -161,7 +171,7 @@ class GUIView implements ActionListener
     	//Create the label
     	text = new JLabel();
     	main.add(text);
-	
+
     	//Display the frame
     	main.setVisible(true);
     }
@@ -171,26 +181,36 @@ class GUIView implements ActionListener
     {    	
     	
     	if (e.getActionCommand().equals("Add class")) {
+    		if (index == CLASSESPERROW * CLASSESPERCOL ) {
+    			text.setText("No more classes can be displayed ");
+    		} else {
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
     		if (className == null) {
     			text.setText("Error when creating class, try again");
     		} else if ( umld.addClass(className)) {
     			//draw class
-    			fillClassRep(className, index / 4, index % 4, index);
-    			available [0] = 24;
+    			fillClassRep(className, index / CLASSESPERROW, index % CLASSESPERROW, index);
+    			available [0] = CLASSESPERROW * CLASSESPERCOL;
     			index = valIndex();
     			updateFirstRow();
         	} else {
     			text.setText("class already exists, try again");
-        		updateFirstRow();
+    			updateFirstRow();
         	}
+    		}
     	
     	} else if (e.getActionCommand().equals("Rename class")) {
     		String oldName = JOptionPane.showInputDialog (main, "Enter class to rename");
+    		if (oldName == null) {
+    			text.setText("Error when renaming class, try again");
+    		}
     		int localIndex = findIndex(oldName);
     		if (localIndex != -1 ) {
     			String newName = JOptionPane.showInputDialog (main, "Enter new class name");
-    			umld.renameClass(oldName, newName);
+    			if (newName == null) {
+        			text.setText("Error when renaming class, try again");
+    			}
+        		umld.renameClass(oldName, newName);
     			classNames[localIndex] = newName;
     			Graphics classAdded = main.getGraphics();
     			classAdded.clearRect(classRep.get(localIndex).x, classRep.get(localIndex).y - 20, 125, 19);
@@ -200,6 +220,7 @@ class GUIView implements ActionListener
     			updateFirstRow();
     		}
     		updateFirstRow();
+    		
     	} else if (e.getActionCommand().equals("Delete class")) {
     		String className = JOptionPane.showInputDialog (main, "Enter class to delete");
     		if ( umld.removeClass(className) ) { 
@@ -209,7 +230,7 @@ class GUIView implements ActionListener
     			classAdded.clearRect (classRep.get(localIndex).x - 10, classRep.get(localIndex).y - 20, WIDTH + 25, HEIGHT + 25);
     			classRep.remove(localIndex);
     			classNames[localIndex] = " ";
-    			available[23] = localIndex;
+    			available[available.length - 1] = localIndex;
     			index = valIndex();
     			updateFirstRow();
     		}
@@ -220,18 +241,60 @@ class GUIView implements ActionListener
     		
     	} else if (e.getActionCommand().equals("List class")) {
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Error when creating class, try again");
+    		}
     		JOptionPane.showMessageDialog(main, listClass(className));
     		updateFirstRow();
+    		
     	} else if (e.getActionCommand().equals("List all classes")) {
     		JOptionPane.showMessageDialog(main, listOfClasses());
     		updateFirstRow();
-    	} else if (e.getActionCommand().equals("Add field")) {
-    		//TO DO
     		
+    		//handling fields menu
+    		//need to fix diagram when classname is null
+    	} else if (e.getActionCommand().equals("Add field")) {
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    		}
+    		String fieldName = JOptionPane.showInputDialog(main, "Enter field name");
+    		if (fieldName == null) {
+    			text.setText("Field name error, try again.");
+    		} else if (umld.getClass(className).getFields().size() >=5 ) {
+    			text.setText("Field will not be displayed");
+    		} else if (umld.addField(className, fieldName)) {
+    			clearFields(className);
+    			drawFields(className);
+    			updateFirstRow();
+    		} else {
+    			text.setText("Error when adding field, try again");
+    			updateFirstRow();
+    		}
     		
     	} else if (e.getActionCommand().equals("Rename field")) { 
-    		//TO DO
-    	
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		}
+    		String oldName = JOptionPane.showInputDialog(main, "Enter field name");
+    		if (oldName == null) {
+    			text.setText("Field name error, try again.");
+    			updateFirstRow();
+    		} 
+    		String newName = JOptionPane.showInputDialog(main, "Enter field name");
+    		if (newName == null) {
+    			text.setText("Field name error, try again.");
+    			updateFirstRow();
+    		} else if ( umld.renameField(className, oldName, newName) ) {
+    			clearFields(className);
+    			drawFields(className);
+    			updateFirstRow();
+    		} else {
+    			text.setText("Error when adding field, try again");
+    			updateFirstRow();
+    		}	
     		
     	} else if (e.getActionCommand().equals("Delete field")) { 
     		//TO DO
@@ -360,12 +423,21 @@ class GUIView implements ActionListener
 			String toReturn = "";
 			ArrayList<String> classToList = new ArrayList<String> ();
 				classToList.add(" Class:		" + className); 
-				//need to add fields and methods 
+				classToList.add(" Fields: 		 - ");
+				for(int i = 0; i < umld.getClass(className).fields.size(); i++) {
+					classToList.get(1).concat (umld.getClass(className).fields.get(i).getFieldName());
+				}
+				classToList.add(" Methods:		 - ");
+				
+				for (int i = 0; i < umld.getClass(className).methods.size(); i++) {
+					classToList.get(2).concat(umld.getClass(className).methods.get(i).getMethodName());
+				}
+				
 				for (int i = 0; i < classToList.size(); ++i ) {
 				toReturn += classToList.get(i) + '\n';
+				}
+				return toReturn;
 			}
-			return toReturn;
-    	}
     }
     
     //fill a class rectangle area  given an index for the position on the screen 
@@ -376,6 +448,9 @@ class GUIView implements ActionListener
     	Graphics classAdded = main.getGraphics();
 		classAdded.drawRect(classRep.get(index).x, classRep.get(index).y, WIDTH, HEIGHT);
 		classAdded.drawString(className, myComp[0] + 20, myComp[1] - 5);
+		classAdded.drawString ("Fields		: ", myComp[0] + 25, myComp[1] + 10);
+		classAdded.drawString ("Methods		: ", myComp[0] + 25, myComp[1] + 70);
+		classAdded.drawString ("Parameters	: ", myComp[0] + 25, myComp[1] + 130);
 		++ index;
     }
     
@@ -383,8 +458,8 @@ class GUIView implements ActionListener
     //x = 1 y = 4 would go position [1,4] on a matrix of 6x4
     public static int[] calculateXY (int x, int y) {
     	int startX = 50;
-    	int startY = 100;
-    	return new int[] {startX + x * 180, startY + y * 150};
+    	int startY = 75;
+    	return new int[] {startX + x * 275, startY + y * 225};
     }
     
     //gets the number of classes in the diagram
@@ -402,10 +477,16 @@ class GUIView implements ActionListener
     public static void updateFirstRow () {
     	for (int i = 0; i < classRep.size(); ++i)
     	{
-    		if (i % 4 == 0) {
+    		if (i % 3 == 0) {
+    			//JPanel localPanel = new JPanel();
     			Graphics classAdded = main.getGraphics();
-    			classAdded.drawRect(classRep.get(i).x, classRep.get(i).y, WIDTH, HEIGHT);
+    			classAdded.drawRect (classRep.get(i).x, classRep.get(i).y, WIDTH, HEIGHT);
     			classAdded.drawString (classNames[i], classRep.get(i).x + 20 ,classRep.get(i).y - 5);
+    			classAdded.drawString ("Fields		: ", classRep.get(i).x + 25, classRep.get(i).y + 10);
+    			classAdded.drawString ("Methods		: ", classRep.get(i).x + 25, classRep.get(i).y + 70);
+    			classAdded.drawString ("Parameters	: ", classRep.get(i).x + 25, classRep.get(i).y + 130);
+    			clearFields(classNames[i]);
+    			drawFields(classNames[i]);
     		}
     	}
     }
@@ -435,4 +516,52 @@ class GUIView implements ActionListener
     	Arrays.sort(available);
     	return available[0];
     }
+    
+    public static void drawFields (String className) {
+    	if (umld.classExists(className)) {
+    		ArrayList<Field> localFields = umld.getClass(className).getFields();
+    		int localIndex = findIndex (className);
+    		Graphics classAdded = main.getGraphics();
+    		for (int i = 0; i < localFields.size(); ++i) {
+    			classAdded.drawString(localFields.get(i).getFieldName() , classRep.get(localIndex).x + 50, classRep.get(localIndex).y + (i + 2) * 10);
+        		if (i == 4) {
+        			break;
+        		}
+    		}
+    	}
+    }
+    
+    public static void clearFields (String className) {
+    	if (umld.classExists(className)) {
+    		int localIndex = findIndex (className);
+    		Graphics classAdded = main.getGraphics();
+    		classAdded.clearRect(classRep.get(localIndex).x + 25, classRep.get(localIndex).y + 20, WIDTH - 40, 40);
+    		
+    	} 
+    }
+
+    
+    
+    //canvas paint method
+    /*public void paint (Graphics g, int x,  int y, String className) {
+    	int [] myComp = calculateXY (x, y);
+    	classRep.add(index, new Rectangle (myComp[0], myComp[1], WIDTH, HEIGHT));    	
+    	classNames[index] = className;
+    	Graphics classAdded = main.getGraphics();
+		classAdded.drawRect(classRep.get(index).x, classRep.get(index).y, WIDTH, HEIGHT);
+		classAdded.drawString(className, myComp[0] + 20, myComp[1] - 5);
+		++ index;
+    }
+    
+    class DrawTest extends JPanel {
+    	public void paintClass(Graphics g, int x, int y, String className) {
+    		int [] myComp = calculateXY (x, y);
+        	classRep.add(index, new Rectangle (myComp[0], myComp[1], WIDTH, HEIGHT));    	
+        	classNames[index] = className;
+        	g.drawRect(classRep.get(index).x, classRep.get(index).y, WIDTH, HEIGHT);
+    		g.drawString(className, myComp[0] + 20, myComp[1] - 5);
+    		
+    		++ index;
+    	}
+    } */
 }
