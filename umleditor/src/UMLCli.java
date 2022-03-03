@@ -176,10 +176,17 @@ public class UMLCli {
 				classDoesNotExist(dest);
 				return;
 			}
-			// fixed type for now, can be changed when more relationship types are needed
-			hasUnsavedWork = umld.addRelationship(source, dest, "Nondirectional");
-      		
-
+			System.out.println("What type of relationship is this? [Aggregation/Composition/Inheritance/Realization]");
+			String type = getInput();
+			if(!isValidType(type)) {
+				typeNotValid(type);
+				return;
+			}
+			if(!umld.relationshipExists(source, dest)) {
+				relationshipAlreadyExists(source, dest);
+				return;
+			}
+			hasUnsavedWork = umld.addRelationship(source, dest, type);
 		}
 		else if(toAdd.equals("method")) {
 			System.out.println("add method to which class?");
@@ -432,6 +439,10 @@ public class UMLCli {
 	public static void commandNotRecognized() {
 		System.out.println("Command not recognized. Type 'help' for list of valid commands.");
 	}
+
+	public static void relationshipAlreadyExists(source, dest) {
+		System.out.println("A relationship between " + source + " and " + dest + "already exists.");
+	}
 	//change name to className
 	public static Boolean isValidName(String name) {
 		if(name.equals("")) {
@@ -472,4 +483,23 @@ public class UMLCli {
 		}
 	}
 	
+	/**
+     * Helper method to determine if a relationship type is valid.
+     * Currently unused
+     * @param relType The relationship type being checked
+     * @return True if the relationship type is valid, false if it's not
+     */
+    public static Boolean isValidType(String relType) {
+        // Iterate through array containing valid types
+        for(String elem : UMLRelationship.validTypes)
+        {
+            if(relType.equals(elem))
+            {
+                // Type matches a valid type in the array
+                return true;
+            }
+        }
+        // Reached end of array
+        return false;
+    }
 }

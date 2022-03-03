@@ -127,6 +127,7 @@ public class UMLDiagram {
      * @param dest The destination class for this relationship
      * @param type The type of this relationship
      * @param name The name of this relationship
+     * @return True if the relationship was successfully added, false if not
      */
     public Boolean addRelationship(String source, String dest, String type) {
         // Check that the relationship is valid
@@ -163,6 +164,7 @@ public class UMLDiagram {
      * @param source The source class for the relationship to delete
      * @param dest The destination class for the relationship to delete
      * @param name The name of the relationship to delete
+     * @return True if the relationship was successfully deleted, false if not
      */
     public Boolean deleteRelationship(String source, String dest) {
         for(UMLRelationship rel : relationships) {
@@ -173,6 +175,21 @@ public class UMLDiagram {
             }
         }
         System.out.println("A relationship between '" + source + "' and '" + dest + "' does not exist.");
+        return false;
+    }
+
+    /**
+     * Determine if a relationship between two classes already exists in this diagram
+     * @param source The source class to check for
+     * @param dest The destination class to check for
+     * @return True if a relationship between these classes exists, false if not
+     */
+    public boolean relationshipExists(String source, String dest) {
+        for(UMLRelationship rel : relationships) {
+            if(rel.getSource().equals(source) && rel.getDestination().equals(dest)) {
+                return true;
+            }
+        }
         return false;
     }
 

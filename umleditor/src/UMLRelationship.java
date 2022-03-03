@@ -10,13 +10,13 @@ public class UMLRelationship {
     private String source, destination, type;
 
     // Valid relationship types
-    // private static final String[] validTypes = {"Nondirectional"};
+    public static final String[] validTypes = {"Aggregation", "Composition", "Inheritance", "Realization"};
 
     /**
      * Constructor for a relationship in a UML diagram
      * @param relSrc The source class for the relationship
      * @param relDest The destination class for the relationship
-     * @param relType The type of this relationship. Must be: Nondirectional
+     * @param relType The type of this relationship. Must be: "Aggregation", "Composition", "Inheritance", or "Realization"
      * @param relName The name of this relationship.
      */
     public UMLRelationship(String relSrc, String relDest, String relType) {
