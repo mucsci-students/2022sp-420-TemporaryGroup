@@ -10,13 +10,13 @@ public class UMLRelationship {
     private String source, destination, type;
 
     // Valid relationship types
-    // private static final String[] validTypes = {"Nondirectional"};
+    private static final String[] validTypes = {"aggregation", "composition", "inheritance", "realization"};
 
     /**
      * Constructor for a relationship in a UML diagram
      * @param relSrc The source class for the relationship
      * @param relDest The destination class for the relationship
-     * @param relType The type of this relationship. Must be: Nondirectional
+     * @param relType The type of this relationship. 
      * @param relName The name of this relationship.
      */
     public UMLRelationship(String relSrc, String relDest, String relType) {
@@ -78,7 +78,10 @@ public class UMLRelationship {
     public void setType(String newType) {
         type = newType;
     }
-}
+
+    public String[] listValidTypes() {
+        return validTypes;
+    }
 
     /**
      * Helper method to determine if a relationship type is valid.
@@ -86,7 +89,7 @@ public class UMLRelationship {
      * @param relType The relationship type being checked
      * @return True if the relationship type is valid, false if it's not
      */
-    /*private boolean isValidType(String relType) {
+    public boolean isValidType(String relType) {
         // Iterate through array containing valid types
         for(String elem : UMLRelationship.validTypes)
         {
@@ -98,4 +101,5 @@ public class UMLRelationship {
         }
         // Reached end of array
         return false;
-    }*/
+    }
+}
