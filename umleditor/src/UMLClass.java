@@ -41,6 +41,10 @@ public class UMLClass {
     public ArrayList<Field> getFields() {
         return this.fields;
     }
+    
+    public ArrayList<Method> getMethods() {
+    	return methods;
+    }
 
     /**
      * Adds a new field to the class.
