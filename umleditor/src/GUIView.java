@@ -568,19 +568,22 @@ public class GUIView extends Canvas implements ActionListener {
     		Iterator<HashMap.Entry<String, UMLClass>> hmIter = umld.umlDiagram.entrySet().iterator();
 			String toReturn = "";
 			ArrayList<String> classToList = new ArrayList<String> ();
-				classToList.add(" Class:		" + className); 
-				classToList.add(" Fields: 		 - ");
+				classToList.add("Class:		" + className + "\n"); 
+				classToList.add(" 	Fields:");
+				String toAdd = classToList.get(1);
 				for(int i = 0; i < umld.getClass(className).fields.size(); i++) {
-					classToList.get(1).concat (umld.getClass(className).fields.get(i).getFieldName());
+					toAdd += " \n" + "		" + (umld.getClass(className).fields.get(i).getFieldName());
 				}
-				classToList.add(" Methods:		 - ");
-				
+				classToList.set(1, toAdd);				
+				classToList.add(" Methods:	");
+				toAdd = classToList.get(2);
 				for (int i = 0; i < umld.getClass(className).methods.size(); i++) {
-					classToList.get(2).concat(umld.getClass(className).methods.get(i).getMethodName());
+					toAdd += " \n" + (umld.getClass(className).methods.get(i).getMethodName());
 				}
+				classToList.set(2, toAdd);
 				
 				for (int i = 0; i < classToList.size(); ++i ) {
-				toReturn += classToList.get(i) + '\n';
+					toReturn += classToList.get(i) + " \n";
 				}
 				return toReturn;
 			}
