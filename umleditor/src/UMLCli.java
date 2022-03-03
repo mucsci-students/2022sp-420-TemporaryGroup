@@ -12,7 +12,6 @@ public class UMLCli {
 	// > class
 	// Then prompt for names and call the associated method on our UMLDiagram object
 	public static String[] commands = new String [] {"add", "rename", "delete", "change", "help", "save", "load", "list", "exit", ""};
-	public static final String[] validTypes = {"aggregation", "composition", "inheritance", "realization"};
 	public static Scanner input = new Scanner (System.in);
 	public static UMLDiagram umld = new UMLDiagram();
 	public static boolean hasUnsavedWork = false;
@@ -125,10 +124,10 @@ public class UMLCli {
 			listCommand();
 		}
 		else if(command.equals("save")) {
-			//saveDiagram();
+			saveDiagram();
 		}
 		else if(command.equals("load")) {
-			//loadDiagram();
+			loadDiagram();
 		}
 		else if(command.equals("")) {
 			return;
