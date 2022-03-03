@@ -1,5 +1,7 @@
 /*Java Program to Create a Menu and Display the Menu Item Selected*/
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -501,39 +503,61 @@ public class GUIView extends Canvas implements ActionListener {
     		
     	} else if (e.getActionCommand().equals("Add relationship")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Change relationship")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Delete relationship")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("List relationship")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("List all relationships")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Save")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Load")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Help")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("CLI mode")) {
-    		
-    		
+    		String[] args = new String[1];
+    		try {
+    			UMLCli.main(args);
+    			
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+    		main.dispatchEvent(new WindowEvent(main, WindowEvent.WINDOW_CLOSING));    		
     	}
     }
     
