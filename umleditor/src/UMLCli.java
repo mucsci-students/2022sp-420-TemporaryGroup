@@ -89,9 +89,9 @@ public class UMLCli {
 		System.out.println("Have fun with your UML project!");
 		System.out.println();
 		System.out.println("List of commands: ");
-		System.out.println("\tadd: Add a new [class] or [relationship] to the diagram, or add an [attribute] to an existing class.");
-		System.out.println("\trename: Rename an existing [class], or [attribute].");
-		System.out.println("\tdelete: Delete an existing [class], [relationship], or [attribute].");
+		System.out.println("\tadd: Add a new [class] or [relationship] to the diagram, add a [field] or [method] to an existing class, or add a [parameter] to an existing field or method.");
+		System.out.println("\trename: Rename an existing [class], [field], [method], or [parameter].");
+		System.out.println("\tdelete: Delete an existing [class], [relationship], [field], [method], or [parameter].");
 		System.out.println("\tlist: List all [classes] in the diagram, all [relationships], or one specific [class].");
 		System.out.println("\tsave: Save the current UML diagram to a JSON or YAML file.");
 		System.out.println("\tload: Load an existing UML diagram from a JSON or YAML file.");
@@ -177,8 +177,13 @@ public class UMLCli {
 				classDoesNotExist(dest);
 				return;
 			}
-			// fixed type for now, can be changed when more relationship types are needed
-			hasUnsavedWork = umld.addRelationship(source, dest, "Nondirectional");
+			System.out.println("Enter relationship type: [aggregation/composition/inheritance/realization]");
+			String type = getInput();
+			if(!umld.isValidType(type)) {
+				System.out.println("Error: invalid relationship type.");
+				return;
+			}
+			hasUnsavedWork = umld.addRelationship(source, dest, type);
       		
 
 		}
@@ -535,12 +540,12 @@ public class UMLCli {
 			System.out.println("Relationships: ");
 			for(int i = 0; i < umld.relationships.size(); i++) {
 				System.out.println();
-				System.out.println("[Source: " + umld.relationships.get(i).getSource() + "]");
-				System.out.println("[Destination: " + umld.relationships.get(i).getSource() + "]");
+				System.out.println("Source: " + umld.relationships.get(i).getSource());
+				System.out.println("Destination: " + umld.relationships.get(i).getDestination());
+				System.out.println("Type: " + umld.relationships.get(i).getType());
 			}
 		} 
 	}
-	
 	public static void saveDiagram() throws Exception {
 		saver.saveDiagram = umld;
 		if(saver.saveFile()) {
@@ -563,7 +568,6 @@ public class UMLCli {
 		umld = loader.loadDiagram;
 	
 	}
-	
 	public static void classDoesNotExist(String className) {
 		System.out.println("Class '" + className + "' does not exist.");
 	}
@@ -591,13 +595,13 @@ public class UMLCli {
 		}
 		if(name.matches("^[-_A-Za-z0-9]+$")) {
 			if(name.charAt(0) >= '0' && name.charAt(0) <= '9') {
-				System.out.println("Error: Invalid attribute name. Attribute names can only contain A-Z, a-z, 0-9, and underscore.");
-				System.out.println("Attribute names must follow standard Java naming conventions.");
+				System.out.println("Error: Invalid name. Names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Names must follow standard Java naming conventions.");
 				return false;
 			}
 			else if(name.charAt(0) == ('_')) {
-				System.out.println("Error: Invalid attribute name. Attribute names can only contain A-Z, a-z, 0-9, and underscore.");
-				System.out.println("Attribute names must follow standard Java naming conventions.");
+				System.out.println("Error: Invalid name. Names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Names must follow standard Java naming conventions.");
 				return false;
 			}
 			else {
@@ -605,8 +609,8 @@ public class UMLCli {
 			}
 		}
 		else {
-			System.out.println("Error: Invalid attribute name. Attribute names can only contain A-Z, a-z, 0-9, and underscore.");
-			System.out.println("Attribute names must follow standard Java naming conventions.");
+			System.out.println("Error: Invalid name. Names can only contain A-Z, a-z, 0-9, and underscore.");
+			System.out.println("Names must follow standard Java naming conventions.");
 			return false;
 		}
 	}

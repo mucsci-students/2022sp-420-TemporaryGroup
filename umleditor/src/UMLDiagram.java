@@ -5,7 +5,7 @@ public class UMLDiagram {
     
     HashMap<String, UMLClass> umlDiagram = new HashMap<String, UMLClass>();
     ArrayList<UMLRelationship> relationships = new ArrayList<UMLRelationship>();
-    String[] validTypes = {"Nondirectional"};
+    private static String[] validTypes = {"aggregation", "composition", "inheritance", "realization"};
 
     public Boolean addClass(String className){
         if(!(classExists(className))){
@@ -299,22 +299,14 @@ public class UMLDiagram {
      * @param relType The relationship type being checked
      * @return True if the relationship type is valid, false if it's not
      */
-    /* no need to have a type for now
-    private boolean isValidType(String relType)
-    {
-        // Array of valid types
-        // Iterate through array containing valid types
-        for(String elem : validTypes)
-        {
-            if(relType == elem)
-            {
-                // Type matches a valid type in the array
-                return true;
-            }
-        }
-        // Reached end of array
-        return false;
-    } */
+    public boolean isValidType(String relType) {
+		for(String ele : validTypes) {
+			if(relType.equals(ele)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
     /**
      * Add a relationship to the diagram
@@ -334,12 +326,6 @@ public class UMLDiagram {
             System.out.println("The class '" + source + "' does not exist.");
             return false;
         }
-        /*
-        no need to check for now
-        if(!isValidType(type)) {
-            System.out.println("'" + type + "' is not a valid relationship type.");
-            return false;
-        } */
         // Check that the relationship doesn't already exist
         for(UMLRelationship rel : relationships) {
             if(rel.getSource().equals(source) && rel.getDestination().equals(dest)) {
