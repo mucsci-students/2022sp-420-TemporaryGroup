@@ -3,13 +3,15 @@
 public class Parameter {
 
     private String paramName;
+    private String paramType;
 
     /**
      * Creates a parameter.
      * @param paramName
      */
-    public Parameter(String paramName){
+    public Parameter(String paramName, String paramType){
         this.paramName = paramName;
+        this.paramType = paramType;
     }
 
     /**
@@ -17,7 +19,15 @@ public class Parameter {
      * @return paramName
      */
     public String getParamName(){
-        return paramName;
+        return this.paramName;
+    }
+
+    /**
+     * Returns the type of the parameter.
+     * @return paramType
+     */
+    public String getParamType(){
+        return this.paramType;
     }
 
     /**
@@ -26,6 +36,14 @@ public class Parameter {
      */
     public void renameParam(String newParamName){
         this.paramName = newParamName;
+    }
+
+    /**
+     * Changes the type of the parameter.
+     * @param newParamType
+     */
+    public void renameParamType(String newParamType){
+        this.paramType = newParamType;
     }
     
 }

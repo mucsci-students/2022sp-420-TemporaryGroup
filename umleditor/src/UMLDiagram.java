@@ -68,10 +68,10 @@ public class UMLDiagram {
      * @param newField
      * @return
      */
-    public Boolean addField(String className, String newField){
+    public Boolean addField(String className, String newField, String newFieldType){
         if(isValidFieldName(newField)){
             if(!getClass(className).fieldExists(newField)){
-                getClass(className).addField(newField);
+                getClass(className).addField(newField, newFieldType);
                 System.out.println("Added field '" + newField + "' to class '" + className + "'.");
                 return true;
             }
@@ -130,15 +130,37 @@ public class UMLDiagram {
     }
 
     /**
+     * Changes a field type if the class and field exist. 
+     * @param className
+     * @param fieldName
+     * @param newFieldType
+     * @return
+     */
+    public Boolean renameFieldType(String className, String fieldName, String newFieldType){
+        if(classExists(className)){
+            if(getClass(className).fieldExists(fieldName)){
+                getClass(className).getField(fieldName).renameFieldType(newFieldType);
+                System.out.println("Renamed type in field '" + fieldName + "'.");
+                return true;
+            }
+            else{
+                System.out.println("The field named '" + fieldName + "' does not exist in class '" + className + "'.");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Adds a new method in the class if the class exists.
      * @param className
      * @param newMethod
      * @return
      */
-    public Boolean addMethod(String className, String newMethod){
+    public Boolean addMethod(String className, String newMethod, String newMethodType){
         if(isValidMethodName(newMethod)){
             if(!getClass(className).methodExists(newMethod)){
-                getClass(className).addMethod(newMethod);
+                getClass(className).addMethod(newMethod, newMethodType);
                 System.out.println("Added method '" + newMethod + "' to class '" + className + "'.");
                 return true;
             }
@@ -197,17 +219,39 @@ public class UMLDiagram {
     }
 
     /**
+     * Renames the return type for the method if it exists in the class.
+     * @param className
+     * @param methodName
+     * @param newMethodType
+     * @return
+     */
+    public Boolean renameMethodType(String className, String methodName, String newMethodType){
+        if(classExists(className)){
+            if(getClass(className).methodExists(methodName)){
+                getClass(className).getMethod(methodName).renameMethodType(newMethodType);
+                System.out.println("Renamed type in method '" + methodName + "'.");
+                return true;
+            }
+            else{
+                System.out.println("The method named '" + methodName + "' does not exist in class '" + className + "'.");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Adds a parameter to the method if method and class exist.
      * @param className
      * @param methodName
      * @param paramName
      * @return
      */
-    public Boolean addParameter(String className, String methodName, String paramName){
+    public Boolean addParameter(String className, String methodName, String paramName, String paramType){
         if(isValidName(paramName)){
             if(getClass(className).methodExists(methodName)){
                 if(!getClass(className).getMethod(methodName).paramExists(paramName)){
-                    getClass(className).getMethod(methodName).addParameter(paramName);
+                    getClass(className).getMethod(methodName).addParameter(paramName, paramType);
                     System.out.println("Added parameter '" + paramName + "' to method '" + methodName + "'.");
                     return true;
                 }
@@ -272,6 +316,35 @@ public class UMLDiagram {
             }
             System.out.println("The method '" + methodName + "' does not exist in the class.");
             return false;
+        }
+        return false;
+    }
+
+    /**
+     * Changes the type for the parameter if it exists in the method.
+     * @param className
+     * @param methodName
+     * @param paramName
+     * @param newParamType
+     * @return
+     */
+    public Boolean renameParameterType(String className, String methodName, String paramName, String newParamType){
+        if(classExists(className)){
+            if(getClass(className).methodExists(methodName)){
+                if(getClass(className).getMethod(methodName).paramExists(paramName)){
+                    getClass(className).getMethod(methodName).getParameter(paramName).renameParamType(newParamType);
+                    System.out.println("Renamed type for parameter '" + paramName + "'.");
+                    return true;
+                }
+                else{
+                    System.out.println("The parameter named '" + paramName + "' does not exist in method '" + methodName + "'.");
+                    return false;
+                }
+            }
+            else{
+                System.out.println("The method named '" + methodName + "' does not exist in class '" + className + "'.");
+                return false;
+            }
         }
         return false;
     }
