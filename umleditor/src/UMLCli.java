@@ -577,18 +577,18 @@ public class UMLCli {
 		System.out.println("- " + name);
 		System.out.println("Fields:");
 		for(int i = 0; i < umld.getClass(name).fields.size(); i++) {
-			System.out.println("- " + umld.getClass(name).fields.get(i).getFieldName());
+			System.out.println("- " + umld.getClass(name).fields.get(i).getFieldName() + ": " + umld.getClass(name).fields.get(i).getFieldType());
 		}
 		System.out.println();
 		System.out.println("Methods:");
 		for(int i = 0; i < umld.getClass(name).methods.size(); i++) {
-			System.out.print("- " + umld.getClass(name).methods.get(i).getMethodName() + " ");
+			System.out.print("- " + umld.getClass(name).methods.get(i).getMethodName() + ": " + umld.getClass(name).methods.get(i).getMethodType() + " ");
 			System.out.print("(");
 			for(int j = 0; j < umld.getClass(name).methods.get(i).getParameterList().size(); j++){
 				if(j > 0){
 					System.out.print(", ");
 				}
-				System.out.print(umld.getClass(name).methods.get(i).getParameterList().get(j).getParamName());
+				System.out.print(umld.getClass(name).methods.get(i).getParameterList().get(j).getParamType() + " " + umld.getClass(name).methods.get(i).getParameterList().get(j).getParamName());
 			}
 			System.out.print(")");
 			System.out.println();
