@@ -1,5 +1,7 @@
 /*Java Program to Create a Menu and Display the Menu Item Selected*/
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -29,7 +31,9 @@ public class GUIView extends Canvas implements ActionListener {
 	
 	//keep track of current index
 	static int index = 0;
+
 	static int MAXALLOW = 0;
+
 
 	//keep track of available indexes if any
 	static int [] available = new int [CLASSESPERROW * CLASSESPERCOL];
@@ -71,12 +75,11 @@ public class GUIView extends Canvas implements ActionListener {
     	JMenu fields = new JMenu("Fields");
     	
     	//Create Menu Items for fields
-    	JMenuItem[] itemF = new JMenuItem[5];
+    	JMenuItem[] itemF = new JMenuItem[4];
     	itemF [0] = new JMenuItem ("Add field");
     	itemF [1] = new JMenuItem ("Rename field");
     	itemF [2] = new JMenuItem ("Delete field");
-    	itemF [3] = new JMenuItem ("List field");
-    	itemF [4] = new JMenuItem ("List all fields");
+    	itemF [3] = new JMenuItem ("List fields");
     	for (int i = 0; i < itemF.length ; ++i) {
     		itemF[i].addActionListener(obj);
     		fields.add(itemF[i]);
@@ -87,12 +90,11 @@ public class GUIView extends Canvas implements ActionListener {
     	JMenu methods = new JMenu("Methods");
     	
     	//Create Menu Items for methods
-    	JMenuItem[] itemM = new JMenuItem[5];
+    	JMenuItem[] itemM = new JMenuItem[4];
     	itemM [0] = new JMenuItem ("Add method");
-    	itemM [1] = new JMenuItem ("Change method");
+    	itemM [1] = new JMenuItem ("Rename method");
     	itemM [2] = new JMenuItem ("Delete method");
-    	itemM [3] = new JMenuItem ("List method");
-    	itemM [4] = new JMenuItem ("List all methods");
+    	itemM [3] = new JMenuItem ("List methods");
     	for (int i = 0; i < itemM.length; ++i) {
     		itemM[i].addActionListener(obj);
     		methods.add(itemM[i]);
@@ -261,7 +263,11 @@ public class GUIView extends Canvas implements ActionListener {
     		String fieldName = JOptionPane.showInputDialog(main, "Enter field name");
     		if (fieldName == null) {
     			text.setText("Field name error, try again.");
+
     		} else if (umld.getClass(className).getFields().size() >=5 ) {
+
+    		} else if (umld.getClass(className).getFields().size() >=7 ) {
+
     			text.setText("Field will not be displayed");
     		} else if (umld.addField(className, fieldName)) {
     			clearFields(className);
@@ -278,12 +284,20 @@ public class GUIView extends Canvas implements ActionListener {
     			text.setText("Class name error, try again");
     			updateFirstRow();
     		}
+
     		String oldName = JOptionPane.showInputDialog(main, "Enter field name");
+
+    		String oldName = JOptionPane.showInputDialog(main, "Enter field to rename");
+
     		if (oldName == null) {
     			text.setText("Field name error, try again.");
     			updateFirstRow();
     		} 
+
     		String newName = JOptionPane.showInputDialog(main, "Enter field name");
+
+    		String newName = JOptionPane.showInputDialog(main, "Enter field new name");
+
     		if (newName == null) {
     			text.setText("Field name error, try again.");
     			updateFirstRow();
@@ -297,97 +311,267 @@ public class GUIView extends Canvas implements ActionListener {
     		}	
     		
     	} else if (e.getActionCommand().equals("Delete field")) { 
-    		//TO DO
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		} 
+    		if (umld.classExists(className)) {
+    			String fieldName = JOptionPane.showInputDialog(main, "Enter field to delete");
+    			if (fieldName == null) {
+    			text.setText("Field name error, try again.");
+    			updateFirstRow();
+    			} else if ( umld.removeField(className, fieldName) ) {
+    				clearFields(className);
+    				drawFields(className);
+    				updateFirstRow();
+    			}
+    			} else {
+    			text.setText("Error when deleting field, try again");
+    			updateFirstRow();
+    		}
     		
-    		
-    	} else if (e.getActionCommand().equals("List field")) {
-    		//TO DO
-    	
-    	
-    	} else if (e.getActionCommand().equals("List all fields")) {
-    		//TO DO
-    		
+    	} else if (e.getActionCommand().equals("List fields")) {
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		} else if (umld.classExists (className)){
+    			JOptionPane.showMessageDialog(main, listFields (className));
+    			updateFirstRow();
+    		} else {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		}
     		
     	} else if (e.getActionCommand().equals("Add method")) {
-    		//TO DO
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    		}
+    		String methodName = JOptionPane.showInputDialog(main, "Enter method name");
+    		if (methodName == null) {
+    			text.setText("Field name error, try again.");
+    		} else if (umld.getClass(className).getFields().size() >=5 ) {
+    			text.setText("Method will not be displayed");
+    		} else if (umld.addMethod(className, methodName)) {
+    			clearMethods(className);
+    			drawMethods(className);
+    			updateFirstRow();
+    		} else {
+    			text.setText("Error when adding method, try again");
+    			updateFirstRow();
+    		}
     		
-    		
-    	} else if (e.getActionCommand().equals("Change method")) {
-    		//TO DO
-    		
+    	} else if (e.getActionCommand().equals("Rename method")) {
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		}
+    		String oldName = JOptionPane.showInputDialog(main, "Enter method to rename");
+    		if (oldName == null) {
+    			text.setText("Method name error, try again.");
+    			updateFirstRow();
+    		} 
+    		String newName = JOptionPane.showInputDialog(main, "Enter method new name");
+    		if (newName == null) {
+    			text.setText("Method name error, try again.");
+    			updateFirstRow();
+    		} else if ( umld.renameMethod(className, oldName, newName) ) {
+    			clearMethods(className);
+    			drawMethods(className);
+    			updateFirstRow();
+    		} else {
+    			text.setText("Error when adding field, try again");
+    			updateFirstRow();
+    		}
     		
     	} else if (e.getActionCommand().equals("Delete method")) {
-    		//TO DO
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		} 
+    		if (umld.classExists(className)) {
+    			String methodName = JOptionPane.showInputDialog(main, "Enter method to delete");
+    			if (methodName == null) {
+    			text.setText("Field name error, try again.");
+    			updateFirstRow();
+    			} else if ( umld.removeMethod(className, methodName) ) {
+    				clearMethods(className);
+    				drawMethods(className);
+    				updateFirstRow();
+    			}
+    			} else {
+    			text.setText("Error when deleting method, try again");
+    			updateFirstRow();
+    		}
     		
-    		
-    	} else if (e.getActionCommand().equals("List method")) {
-    		//TO DO
-    		
-    		
-    	} else if (e.getActionCommand().equals("List all methods")) {
-    		//TO DO
-    		
+    	} else if (e.getActionCommand().equals("List methods")) {
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		} else if (umld.classExists (className)){
+    			JOptionPane.showMessageDialog(main, listMethods (className));
+    			updateFirstRow();
+    		} else {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		}
     		
     	} else if (e.getActionCommand().equals("Add parameter")) {
-    		//TO DO
-    		
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		}
+    		String methodName = JOptionPane.showInputDialog(main, "Enter method name");
+    		if (methodName == null) {
+    			text.setText("Method name error, try again.");
+    			updateFirstRow();
+    		} 
+    		String parameterName = JOptionPane.showInputDialog(main, "Enter parameter name");
+    		if (methodName == null) {
+    			text.setText("Parameter name error, try again.");
+    			updateFirstRow();
+    		}
+    		else if (umld.addParameter(className, methodName, parameterName)) {
+    			clearMethods(className);
+    			drawMethods(className);
+    			updateFirstRow();
+    		} else {
+    			text.setText("Error when adding parameter, try again");
+    			updateFirstRow();
+    		}
     		
     	} else if (e.getActionCommand().equals("Add parameters")) {
-    		//TO DO
-    		
+    		text.setText("still working on it");  
+    		updateFirstRow();
     		
     	} else if (e.getActionCommand().equals("Change parameter")) {
-    		//TO DO
-    		
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		}
+    		String methodName = JOptionPane.showInputDialog(main, "Enter method name");
+    		if (methodName == null) {
+    			text.setText("Method name error, try again.");
+    			updateFirstRow();
+    		} 
+    		String oldName = JOptionPane.showInputDialog(main, "Enter parameter to change");
+    		if (methodName == null) {
+    			text.setText("Parameter name error, try again.");
+    			updateFirstRow();
+    		}
+    		String newName = JOptionPane.showInputDialog(main, "Enter parameter name");
+    		if (methodName == null) {
+    			text.setText("Parameter name error, try again.");
+    			updateFirstRow();
+    		}
+    		else if (umld.renameParameter(className, methodName, oldName, newName)) {
+    			clearMethods(className);
+    			drawMethods(className);
+    			updateFirstRow();
+    		} else {
+    			text.setText("Error when renaming parameter, try again");
+    			updateFirstRow();
+    		}
     		
     	} else if (e.getActionCommand().equals("Change parameters")) {
-    		//TO DO
-    		
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     	} else if (e.getActionCommand().equals("Delete parameter")) {
-    		//TO DO
+    		String className = JOptionPane.showInputDialog(main, "Enter class name");
+    		if (className == null) {
+    			text.setText("Class name error, try again");
+    			updateFirstRow();
+    		}
+    		String methodName = JOptionPane.showInputDialog(main, "Enter method name");
+    		if (methodName == null) {
+    			text.setText("Method name error, try again.");
+    			updateFirstRow();
+    		} 
+    		String parameterName = JOptionPane.showInputDialog(main, "Enter parameter to delete");
+    		if (methodName == null) {
+    			text.setText("Parameter name error, try again.");
+    			updateFirstRow();
+    		}
+    		else if (umld.removeParameter(className, methodName, parameterName)) {
+    			clearMethods(className);
+    			drawMethods(className);
+    			updateFirstRow();
+    		} else {
+    			text.setText("Error when deleting parameter, try again");
+    			updateFirstRow();
+    		}
     		
     		
     	} else if (e.getActionCommand().equals("Delete parameters")) {
-    		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Add relationship")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Change relationship")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Delete relationship")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("List relationship")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("List all relationships")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Save")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Load")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("Help")) {
     		//TO DO
+    		text.setText("still working on it");
+    		updateFirstRow();
     		
     		
     	} else if (e.getActionCommand().equals("CLI mode")) {
-    		//TO DO
-    		
-    		
+    		String[] args = new String[1];
+    		try {
+    			UMLCli.main(args);
+    			
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+    		main.dispatchEvent(new WindowEvent(main, WindowEvent.WINDOW_CLOSING));    		
     	}
     }
     
@@ -422,6 +606,7 @@ public class GUIView extends Canvas implements ActionListener {
     		Iterator<HashMap.Entry<String, UMLClass>> hmIter = umld.umlDiagram.entrySet().iterator();
 			String toReturn = "";
 			ArrayList<String> classToList = new ArrayList<String> ();
+
 				classToList.add(" Class:		" + className); 
 				classToList.add(" Fields: 		 - ");
 				for(int i = 0; i < umld.getClass(className).fields.size(); i++) {
@@ -435,6 +620,24 @@ public class GUIView extends Canvas implements ActionListener {
 				
 				for (int i = 0; i < classToList.size(); ++i ) {
 				toReturn += classToList.get(i) + '\n';
+
+				classToList.add("Class:		" + className + "\n"); 
+				classToList.add(" 	Fields:");
+				String toAdd = classToList.get(1);
+				for(int i = 0; i < umld.getClass(className).fields.size(); i++) {
+					toAdd += " \n" + "		" + (umld.getClass(className).fields.get(i).getFieldName());
+				}
+				classToList.set(1, toAdd);				
+				classToList.add(" Methods:	");
+				toAdd = classToList.get(2);
+				for (int i = 0; i < umld.getClass(className).methods.size(); i++) {
+					toAdd += " \n" + (umld.getClass(className).methods.get(i).getMethodName());
+				}
+				classToList.set(2, toAdd);
+				
+				for (int i = 0; i < classToList.size(); ++i ) {
+					toReturn += classToList.get(i) + " \n";
+
 				}
 				return toReturn;
 			}
@@ -449,8 +652,13 @@ public class GUIView extends Canvas implements ActionListener {
 		classAdded.drawRect(classRep.get(index).x, classRep.get(index).y, WIDTH, HEIGHT);
 		classAdded.drawString(className, myComp[0] + 20, myComp[1] - 5);
 		classAdded.drawString ("Fields		: ", myComp[0] + 25, myComp[1] + 10);
+
 		classAdded.drawString ("Methods		: ", myComp[0] + 25, myComp[1] + 70);
 		classAdded.drawString ("Parameters	: ", myComp[0] + 25, myComp[1] + 130);
+
+		classAdded.drawString ("Methods		: ", myComp[0] + 25, myComp[1] + 90);
+		classAdded.drawString ("Relationship: ", myComp[0] + 25, myComp[1] + 190);
+
 		++ index;
     }
     
@@ -483,8 +691,13 @@ public class GUIView extends Canvas implements ActionListener {
     			classAdded.drawRect (classRep.get(i).x, classRep.get(i).y, WIDTH, HEIGHT);
     			classAdded.drawString (classNames[i], classRep.get(i).x + 20 ,classRep.get(i).y - 5);
     			classAdded.drawString ("Fields		: ", classRep.get(i).x + 25, classRep.get(i).y + 10);
+
     			classAdded.drawString ("Methods		: ", classRep.get(i).x + 25, classRep.get(i).y + 70);
     			classAdded.drawString ("Parameters	: ", classRep.get(i).x + 25, classRep.get(i).y + 130);
+
+    			classAdded.drawString ("Methods		: ", classRep.get(i).x + 25, classRep.get(i).y + 90);
+    			classAdded.drawString ("Relationship: ", classRep.get(i).x + 25, classRep.get(i).y + 190);
+
     			clearFields(classNames[i]);
     			drawFields(classNames[i]);
     		}
@@ -524,7 +737,9 @@ public class GUIView extends Canvas implements ActionListener {
     		Graphics classAdded = main.getGraphics();
     		for (int i = 0; i < localFields.size(); ++i) {
     			classAdded.drawString(localFields.get(i).getFieldName() , classRep.get(localIndex).x + 50, classRep.get(localIndex).y + (i + 2) * 10);
-        		if (i == 4) {
+
+        		if (i == 6) {
+
         			break;
         		}
     		}
@@ -535,12 +750,76 @@ public class GUIView extends Canvas implements ActionListener {
     	if (umld.classExists(className)) {
     		int localIndex = findIndex (className);
     		Graphics classAdded = main.getGraphics();
-    		classAdded.clearRect(classRep.get(localIndex).x + 25, classRep.get(localIndex).y + 20, WIDTH - 40, 40);
+    		classAdded.clearRect(classRep.get(localIndex).x + 25, classRep.get(localIndex).y + 20, WIDTH - 40, 60);
     		
     	} 
     }
 
+    public static String listFields (String className) {
+    	String toReturn = "Fields ";
+    	for (int i = 0; i < umld.getClass(className).getFields().size(); ++i) {
+    		toReturn += "\n " + " " + ( umld.getClass(className).getFields().get(i).getFieldName());
+    	}
+    	return toReturn;
+    	
+    }
     
+    //methods
+    public static void drawMethods (String className) {
+    	if (umld.classExists(className)) {
+    		ArrayList<Method> localMethods = umld.getClass(className).getMethods();
+    		int localIndex = findIndex (className);
+    		Graphics classAdded = main.getGraphics();
+    		for (int i = 0; i < localMethods.size(); ++i) {
+    			classAdded.drawString(localMethods.get(i).getMethodName() + "==>" , classRep.get(localIndex).x + 50, classRep.get(localIndex).y + (2*i + 2) * 10 + 80);
+    			ArrayList<Parameter> localParameters = localMethods.get(i).getParameterList();
+    			int yOffset = 10;
+    			int xOffset = localMethods.get(i).getMethodName().length() * 5 + 75;
+    			for (int j = 0; j < localParameters.size(); ++j) {
+    				int newXOffset = localParameters.get(j).getParamName().length() * 5 + xOffset;  
+    				if (newXOffset >= 200) {
+    					yOffset += 10;
+    					xOffset = localMethods.get(i).getMethodName().length() * 5 + 75;
+    				}
+    				if (yOffset > 20) {
+    					break;
+    				}
+    				classAdded.drawString(" " + localParameters.get(j).getParamName(), classRep.get(localIndex).x + xOffset, classRep.get(localIndex).y + (i + 2) * 10 + yOffset + 70);
+    				xOffset = newXOffset; 
+    				
+    			}
+    			
+        		if (i == 4) {
+        			break;
+        		}
+    		}
+    	}
+    }
+    
+    public static void clearMethods (String className) {
+    	if (umld.classExists(className)) {
+    		int localIndex = findIndex (className);
+    		Graphics classAdded = main.getGraphics();
+    		classAdded.clearRect(classRep.get(localIndex).x + 25, classRep.get(localIndex).y + 70, WIDTH - 40, 90);
+
+    		
+    	} 
+    }
+
+    public static String listMethods (String className) {
+    	String toReturn = "Methods ";
+    	for (int i = 0; i < umld.getClass(className).getMethods().size(); ++i) {
+    		toReturn += "\n " + " " + ( umld.getClass(className).getMethods().get(i).getMethodName());
+    	}
+    	return toReturn;
+    	
+    }
+    
+    public static void drawRelationships (String className) {
+    	
+    }
+    
+
     
     //canvas paint method
     /*public void paint (Graphics g, int x,  int y, String className) {
