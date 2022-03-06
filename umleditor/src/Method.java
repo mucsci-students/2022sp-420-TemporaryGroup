@@ -3,14 +3,17 @@ import java.util.ArrayList;
 public class Method {
 
     private String methodName;
+    private String methodType;
+
     private ArrayList<Parameter> parameters = new ArrayList<Parameter>();
 
     /**
      * Creates a new method.
      * @param methodName
      */
-    public Method(String methodName){
+    public Method(String methodName, String methodType){
         this.methodName = methodName;
+        this.methodType = methodType;
     }
 
     /**
@@ -22,6 +25,14 @@ public class Method {
     }
 
     /**
+     * Returns the method type.
+     * @return methodType
+     */
+    public String getMethodType(){
+        return this.methodType;
+    }
+
+    /**
      * Renames the method.
      * @param newName
      */
@@ -30,11 +41,20 @@ public class Method {
     }
 
     /**
+     * Changes the method return type.
+     * @param newMethodType
+     */
+    public void renameMethodType(String newMethodType){
+        this.methodType = newMethodType;
+    }
+
+    /**
      * Adds a new parameter to the method.
      * @param paramName
+     * @param paramType
      */
-    public void addParameter(String paramName){
-        parameters.add(new Parameter(paramName));
+    public void addParameter(String paramName, String paramType){
+        parameters.add(new Parameter(paramName, paramType));
     }
 
     /**
@@ -66,6 +86,17 @@ public class Method {
             if(parameters.get(i).getParamName().equals(oldParamName)){
                 getParameter(oldParamName).renameParam(newParamName);
             }
+        }
+    }
+
+    /**
+     * Changes the type of the parameter. 
+     * @param paramName
+     * @param newParamType
+     */
+    public void renameParamType(String paramName, String newParamType){
+        if(paramExists(paramName)){
+            getParameter(paramName).renameParamType(newParamType);
         }
     }
 

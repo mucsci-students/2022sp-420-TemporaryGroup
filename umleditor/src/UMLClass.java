@@ -49,9 +49,10 @@ public class UMLClass {
     /**
      * Adds a new field to the class.
      * @param newField
+     * @param newFieldType
      */
-    public void addField(String newField) {
-       fields.add(new Field(newField));  
+    public void addField(String newField, String newFieldType) {
+       fields.add(new Field(newField, newFieldType));  
     }
 
     /**
@@ -76,6 +77,17 @@ public class UMLClass {
             if(fields.get(i).getFieldName().equals(oldField)){
                 getField(oldField).renameField(renameField);
             }
+        }
+    }
+
+    /**
+     * Changes the type of the field in the class if it exists.
+     * @param fieldName
+     * @param newFieldType
+     */
+    public void renameFieldType(String fieldName, String newFieldType){
+        if(fieldExists(fieldName)){
+            getField(fieldName).renameFieldType(newFieldType);
         }
     }
 
@@ -105,9 +117,10 @@ public class UMLClass {
     /**
      * Adds a new method to the class.
      * @param newMethod
+     * @param newMethodType
      */
-    public void addMethod(String newMethod) {
-        methods.add(new Method(newMethod));  
+    public void addMethod(String newMethod, String newMethodType) {
+        methods.add(new Method(newMethod, newMethodType));  
      }
 
      /**
@@ -132,6 +145,17 @@ public class UMLClass {
             if(methods.get(i).getMethodName().equals(oldMethod)){
                 getMethod(oldMethod).renameMethod(renameMethod);
             }
+        }
+    }
+
+    /**
+     * Changes the type of the method if it exists in the class.
+     * @param methodName
+     * @param newMethodType
+     */
+    public void renameMethodType(String methodName, String newMethodType){
+        if(methodExists(methodName)){
+            getMethod(methodName).renameMethodType(newMethodType);
         }
     }
 
@@ -162,10 +186,11 @@ public class UMLClass {
      * Adds a new parameter to the method in the class.
      * @param methodName
      * @param paramName
+     * @param paramType
      */
-    public void addParameter(String methodName, String paramName){
+    public void addParameter(String methodName, String paramName, String paramType){
         if(methodExists(methodName)){
-            getMethod(methodName).addParameter(paramName);
+            getMethod(methodName).addParameter(paramName, paramType);
         }
     }
 
