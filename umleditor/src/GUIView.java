@@ -57,12 +57,10 @@ public class GUIView extends Canvas implements ActionListener {
     	JMenu classes = new JMenu("Classes");
 		
     	//Create Menu Items for classes
-    	JMenuItem[] itemC = new JMenuItem[5];
+    	JMenuItem[] itemC = new JMenuItem[3];
     	itemC [0] = new JMenuItem ("Add class");
     	itemC [1] = new JMenuItem ("Rename class");
     	itemC [2] = new JMenuItem ("Delete class");
-    	itemC [3] = new JMenuItem ("List class");
-    	itemC [4] = new JMenuItem ("List all classes");
     	for (int i = 0; i < itemC.length; ++i) {
     		itemC[i].addActionListener(obj);
     		classes.add(itemC[i]);
@@ -73,11 +71,10 @@ public class GUIView extends Canvas implements ActionListener {
     	JMenu fields = new JMenu("Fields");
     	
     	//Create Menu Items for fields
-    	JMenuItem[] itemF = new JMenuItem[4];
+    	JMenuItem[] itemF = new JMenuItem[3];
     	itemF [0] = new JMenuItem ("Add field");
     	itemF [1] = new JMenuItem ("Rename field");
     	itemF [2] = new JMenuItem ("Delete field");
-    	itemF [3] = new JMenuItem ("List fields");
     	for (int i = 0; i < itemF.length ; ++i) {
     		itemF[i].addActionListener(obj);
     		fields.add(itemF[i]);
@@ -88,11 +85,10 @@ public class GUIView extends Canvas implements ActionListener {
     	JMenu methods = new JMenu("Methods");
     	
     	//Create Menu Items for methods
-    	JMenuItem[] itemM = new JMenuItem[4];
+    	JMenuItem[] itemM = new JMenuItem[3];
     	itemM [0] = new JMenuItem ("Add method");
     	itemM [1] = new JMenuItem ("Rename method");
     	itemM [2] = new JMenuItem ("Delete method");
-    	itemM [3] = new JMenuItem ("List methods");
     	for (int i = 0; i < itemM.length; ++i) {
     		itemM[i].addActionListener(obj);
     		methods.add(itemM[i]);
@@ -133,12 +129,10 @@ public class GUIView extends Canvas implements ActionListener {
     	JMenu relationship = new JMenu("Relationships");
     	
     	//Create Menu Items for relationships
-    	JMenuItem[] itemR = new JMenuItem[5];
+    	JMenuItem[] itemR = new JMenuItem[3];
     	itemR [0] = new JMenuItem ("Add relationship");
     	itemR [1] = new JMenuItem ("Change relationship");
     	itemR [2] = new JMenuItem ("Delete relationship");
-    	itemR [3] = new JMenuItem ("List relationship");
-    	itemR [4] = new JMenuItem ("List all relationships");
     	for (int i = 0; i < itemR.length; ++i) {
     		itemR[i].addActionListener(obj);
     		relationship.add(itemR[i]);
@@ -239,18 +233,6 @@ public class GUIView extends Canvas implements ActionListener {
     			updateFirstRow();
     		}
     		
-    	} else if (e.getActionCommand().equals("List class")) {
-    		String className = JOptionPane.showInputDialog(main, "Enter class name");
-    		if (className == null) {
-    			text.setText("Error when creating class, try again");
-    		}
-    		JOptionPane.showMessageDialog(main, listClass(className));
-    		updateFirstRow();
-    		
-    	} else if (e.getActionCommand().equals("List all classes")) {
-    		JOptionPane.showMessageDialog(main, listOfClasses());
-    		updateFirstRow();
-    		
     		//handling fields menu
     		//need to fix diagram when classname is null
     	} else if (e.getActionCommand().equals("Add field")) {
@@ -317,19 +299,7 @@ public class GUIView extends Canvas implements ActionListener {
     			updateFirstRow();
     		}
     		
-    	} else if (e.getActionCommand().equals("List fields")) {
-    		String className = JOptionPane.showInputDialog(main, "Enter class name");
-    		if (className == null) {
-    			text.setText("Class name error, try again");
-    			updateFirstRow();
-    		} else if (umld.classExists (className)){
-    			JOptionPane.showMessageDialog(main, listFields (className));
-    			updateFirstRow();
-    		} else {
-    			text.setText("Class name error, try again");
-    			updateFirstRow();
-    		}
-    		
+    	//methods menu
     	} else if (e.getActionCommand().equals("Add method")) {
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
     		if (className == null) {
@@ -394,19 +364,7 @@ public class GUIView extends Canvas implements ActionListener {
     			updateFirstRow();
     		}
     		
-    	} else if (e.getActionCommand().equals("List methods")) {
-    		String className = JOptionPane.showInputDialog(main, "Enter class name");
-    		if (className == null) {
-    			text.setText("Class name error, try again");
-    			updateFirstRow();
-    		} else if (umld.classExists (className)){
-    			JOptionPane.showMessageDialog(main, listMethods (className));
-    			updateFirstRow();
-    		} else {
-    			text.setText("Class name error, try again");
-    			updateFirstRow();
-    		}
-    		
+    	//parameters menu
     	} else if (e.getActionCommand().equals("Add parameter")) {
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
     		if (className == null) {
@@ -519,18 +477,6 @@ public class GUIView extends Canvas implements ActionListener {
     		updateFirstRow();
     		
     		
-    	} else if (e.getActionCommand().equals("List relationship")) {
-    		//TO DO
-    		text.setText("still working on it");
-    		updateFirstRow();
-    		
-    		
-    	} else if (e.getActionCommand().equals("List all relationships")) {
-    		//TO DO
-    		text.setText("still working on it");
-    		updateFirstRow();
-    		
-    		
     	} else if (e.getActionCommand().equals("Save")) {
     		//TO DO
     		text.setText("still working on it");
@@ -563,57 +509,7 @@ public class GUIView extends Canvas implements ActionListener {
     
     //helper functions 
     
-    //return string with names of all classes
-    public static String listOfClasses () {
-    	if (umld.umlDiagram.isEmpty()) {
-    		return "Diagram is empty"; 
-		} 
-		else {
-			Iterator<HashMap.Entry<String, UMLClass>> hmIter = umld.umlDiagram.entrySet().iterator();
-			String toReturn = "";
-			ArrayList<String> classes = new ArrayList<String> ();
-			while (hmIter.hasNext()) {
-				Map.Entry<String, UMLClass> mapElem = (Map.Entry<String, UMLClass>) hmIter.next();
-				classes.add(mapElem.getKey()); 
-				//need to add fields and methods 
-			}
-			for (int i = 0; i < classes.size(); ++i ) {
-				toReturn += classes.get(i) + '\n';
-			}
-			return toReturn;
-		}
-    }
-    
-    //returns string listing characteristics of the given class
-    public static String listClass (String className) {
-    	if (umld.umlDiagram.isEmpty()) {
-    		return "Diagram is empty";
-    	} else  {
-    		Iterator<HashMap.Entry<String, UMLClass>> hmIter = umld.umlDiagram.entrySet().iterator();
-			String toReturn = "";
-			ArrayList<String> classToList = new ArrayList<String> ();
-				classToList.add("Class:		" + className + "\n"); 
-				classToList.add(" 	Fields:");
-				String toAdd = classToList.get(1);
-				for(int i = 0; i < umld.getClass(className).fields.size(); i++) {
-					toAdd += " \n" + "		" + (umld.getClass(className).fields.get(i).getFieldName());
-				}
-				classToList.set(1, toAdd);				
-				classToList.add(" Methods:	");
-				toAdd = classToList.get(2);
-				for (int i = 0; i < umld.getClass(className).methods.size(); i++) {
-					toAdd += " \n" + (umld.getClass(className).methods.get(i).getMethodName());
-				}
-				classToList.set(2, toAdd);
-				
-				for (int i = 0; i < classToList.size(); ++i ) {
-					toReturn += classToList.get(i) + " \n";
-				}
-				return toReturn;
-			}
-    }
-    
-    //fill a class rectangle area  given an index for the position on the screen 
+   //fill a class rectangle area  given an index for the position on the screen 
     public static void fillClassRep (String className, int x, int y, int index) {
     	int [] myComp = calculateXY (x, y);
     	classRep.add(index, new Rectangle (myComp[0], myComp[1], WIDTH, HEIGHT));    	
@@ -713,16 +609,8 @@ public class GUIView extends Canvas implements ActionListener {
     	} 
     }
 
-    public static String listFields (String className) {
-    	String toReturn = "Fields ";
-    	for (int i = 0; i < umld.getClass(className).getFields().size(); ++i) {
-    		toReturn += "\n " + " " + ( umld.getClass(className).getFields().get(i).getFieldName());
-    	}
-    	return toReturn;
-    	
-    }
     
-    //methods
+    //draws methods
     public static void drawMethods (String className) {
     	if (umld.classExists(className)) {
     		ArrayList<Method> localMethods = umld.getClass(className).getMethods();
@@ -762,42 +650,10 @@ public class GUIView extends Canvas implements ActionListener {
     		
     	} 
     }
-
-    public static String listMethods (String className) {
-    	String toReturn = "Methods ";
-    	for (int i = 0; i < umld.getClass(className).getMethods().size(); ++i) {
-    		toReturn += "\n " + " " + ( umld.getClass(className).getMethods().get(i).getMethodName());
-    	}
-    	return toReturn;
-    	
-    }
     
     public static void drawRelationships (String className) {
     	
     }
     
-    
-    
-    //canvas paint method
-    /*public void paint (Graphics g, int x,  int y, String className) {
-    	int [] myComp = calculateXY (x, y);
-    	classRep.add(index, new Rectangle (myComp[0], myComp[1], WIDTH, HEIGHT));    	
-    	classNames[index] = className;
-    	Graphics classAdded = main.getGraphics();
-		classAdded.drawRect(classRep.get(index).x, classRep.get(index).y, WIDTH, HEIGHT);
-		classAdded.drawString(className, myComp[0] + 20, myComp[1] - 5);
-		++ index;
-    }
-    
-    class DrawTest extends JPanel {
-    	public void paintClass(Graphics g, int x, int y, String className) {
-    		int [] myComp = calculateXY (x, y);
-        	classRep.add(index, new Rectangle (myComp[0], myComp[1], WIDTH, HEIGHT));    	
-        	classNames[index] = className;
-        	g.drawRect(classRep.get(index).x, classRep.get(index).y, WIDTH, HEIGHT);
-    		g.drawString(className, myComp[0] + 20, myComp[1] - 5);
-    		
-    		++ index;
-    	}
-    } */
+
 }
