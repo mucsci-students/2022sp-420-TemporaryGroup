@@ -104,13 +104,13 @@ public class GUIView implements ActionListener {
     	JMenu parameters = new JMenu("Parameters");
     	
     	//Create Menu Items for parameters
-    	JMenuItem[] itemP = new JMenuItem[6];
+    	JMenuItem[] itemP = new JMenuItem[3];
     	itemP [0] = new JMenuItem ("Add parameter");
-    	itemP [1] = new JMenuItem ("Add parameters");
-    	itemP [2] = new JMenuItem ("Remove parameter");
-    	itemP [3] = new JMenuItem ("Remove parameters");
-    	itemP [4] = new JMenuItem ("Change parameter");
-    	itemP [5] = new JMenuItem ("Change parameters");
+    	//itemP [1] = new JMenuItem ("Add parameters");
+    	itemP [1] = new JMenuItem ("Remove parameter");
+    	//itemP [3] = new JMenuItem ("Remove parameters");
+    	itemP [2] = new JMenuItem ("Change parameter");
+    	//itemP [5] = new JMenuItem ("Change parameters");
     	for (int i = 0; i < itemP.length; ++i) { 
     		itemP[i].addActionListener(obj);
     		parameters.add(itemP[i]);
@@ -325,104 +325,43 @@ public class GUIView implements ActionListener {
 			
     	//parameters menu
     	} else if (e.getActionCommand().equals("Add parameter")) {
-    		String className = JOptionPane.showInputDialog(main, "Enter class name");
-    		if (className == null) {
-    			JOptionPane.showMessageDialog(main,"Class name error, try again");
-    			
-    		}
-    		String methodName = JOptionPane.showInputDialog(main, "Enter method name");
-    		if (methodName == null) {
-    			JOptionPane.showMessageDialog(main,"Method name error, try again.");
-    			
-    		} 
-    		String parameterName = JOptionPane.showInputDialog(main, "Enter parameter name");
-    		if (methodName == null) {
-    			JOptionPane.showMessageDialog(main,"Parameter name error, try again.");
-    			
-    		} /*
-    		else if (umld.addParameter(className, methodName, parameterName)) {
-    			clearMethods(className);
-    			drawMethods(className);
-    			
-    		} */else {
-    			JOptionPane.showMessageDialog(main,"Error when adding parameter, try again");
-    			
-    		}
-    		
-    	} else if (e.getActionCommand().equals("Add parameters")) {
-    		JOptionPane.showMessageDialog(main,"still working on it");  
-    		
-    		
-    	} else if (e.getActionCommand().equals("Change parameter")) {
-    		String className = JOptionPane.showInputDialog(main, "Enter class name");
-    		if (className == null) {
-    			JOptionPane.showMessageDialog(main,"Class name error, try again");
-    			
-    		}
-    		String methodName = JOptionPane.showInputDialog(main, "Enter method name");
-    		if (methodName == null) {
-    			JOptionPane.showMessageDialog(main,"Method name error, try again.");
-    			
-    		} 
-    		String oldName = JOptionPane.showInputDialog(main, "Enter parameter to change");
-    		if (methodName == null) {
-    			JOptionPane.showMessageDialog(main,"Parameter name error, try again.");
-    			
-    		}
-    		String newName = JOptionPane.showInputDialog(main, "Enter parameter name");
-    		if (methodName == null) {
-    			JOptionPane.showMessageDialog(main,"Parameter name error, try again.");
-    			
-    		}
-    		else if (umld.renameParameter(className, methodName, oldName, newName)) {
-    			clearMethods(className);
-    			drawMethods(className);
-    			
-    		} else {
+    		ListClassesWindow classesList = new ListClassesWindow (main, classNames);
+			int classIndex = classesList.getMyClassI();
+			if (classIndex >= 0) {
+				ListMethodsWindow methodsList = new ListMethodsWindow (main, umld.getClass(classNames[classIndex]).getMethods());
+				int methodIndex = methodsList.getIndex();
+				if (methodIndex >= 0) {
+					String [] typeAndName = getTypeAndName(); 
+					if ( umld.addParameter (classNames[classIndex], 
+							umld.getClass(classNames[classIndex]).getMethods().get(methodIndex).getMethodName(),
+							typeAndName[1], typeAndName[0] )) {
+							classRep.get(classIndex).addParameter(typeAndName[1], typeAndName[0], methodIndex);
+						}
+						} else {
+	    					JOptionPane.showMessageDialog(main,"Error when renaming method, try again");    			
+		    			}
+					}
+				   	
+		} else if (e.getActionCommand().equals("Change parameter")) {
     			JOptionPane.showMessageDialog(main,"Error when renaming parameter, try again");
     			
-    		}
-    		
-    	} else if (e.getActionCommand().equals("Change parameters")) {
-    		JOptionPane.showMessageDialog(main,"still working on it");
     		
     		
     	} else if (e.getActionCommand().equals("Delete parameter")) {
-    		String className = JOptionPane.showInputDialog(main, "Enter class name");
-    		if (className == null) {
-    			JOptionPane.showMessageDialog(main,"Class name error, try again");
+    		JOptionPane.showMessageDialog(main,"Error when deleting parameter, try again");
     			
-    		}
-    		String methodName = JOptionPane.showInputDialog(main, "Enter method name");
-    		if (methodName == null) {
-    			JOptionPane.showMessageDialog(main,"Method name error, try again.");
-    			
-    		} 
-    		String parameterName = JOptionPane.showInputDialog(main, "Enter parameter to delete");
-    		if (methodName == null) {
-    			JOptionPane.showMessageDialog(main,"Parameter name error, try again.");
-    			
-    		}
-    		else if (umld.removeParameter(className, methodName, parameterName)) {
-    			clearMethods(className);
-    			drawMethods(className);
-    			
-    		} else {
-    			JOptionPane.showMessageDialog(main,"Error when deleting parameter, try again");
-    			
-    		}
-    		
-    		
-    	} else if (e.getActionCommand().equals("Delete parameters")) {
-    		JOptionPane.showMessageDialog(main,"still working on it");
-    		
     		
     		
     	} else if (e.getActionCommand().equals("Add relationship")) {
-    		//TO DO
-    		JOptionPane.showMessageDialog(main,"still working on it");
-    		
-    		
+    			String[] myInputs = getRelInput ();
+    			int localIndex = findIndex (myInputs[0]);
+    			if (myInputs[0] != null && myInputs[1] != null && myInputs[2] != null) {
+    				if ( umld.addRelationship (myInputs[0], myInputs[1], myInputs[2])) {
+    					classRep.get(localIndex).addRelationship (myInputs[0], myInputs[1], myInputs[2]);
+    				}
+    			} else {
+    			JOptionPane.showMessageDialog (main, "Error when creating relationship, try again");
+    			} 
     		
     	} else if (e.getActionCommand().equals("Change relationship")) {
     		//TO DO
@@ -431,8 +370,8 @@ public class GUIView implements ActionListener {
     		
     		
     	} else if (e.getActionCommand().equals("Delete relationship")) {
-    		//TO DO
-    		JOptionPane.showMessageDialog(main,"still working on it");
+    			//need to complete
+    		
     		
     		
     		
@@ -523,6 +462,26 @@ public class GUIView implements ActionListener {
     	return toReturn;
     }
     
+    public String[] getRelInput () {
+    	JTextField srcF = new JTextField();
+    	JTextField destF = new JTextField();
+    	JTextField typeF = new JTextField();
+    	String [] toReturn = new String [3];
+    	Object [] inputs = {
+    			"source",		srcF,
+    			"destination",	destF,	
+    			"type", 		typeF, 
+    			
+    	};
+    	JOptionPane.showConfirmDialog(null, inputs, "Enter type and name", JOptionPane.OK_CANCEL_OPTION);
+    	if (typeF.getText() != null || srcF.getText() != null || destF.getText() != null) {
+    		toReturn[0] = srcF.getText();
+    		toReturn[1] = destF.getText();
+    		toReturn[2] = typeF.getText();
+    	}
+    	return toReturn;
+    }
+    
     //return index of class with the given name
     //if no class is found return -1
     public static int findIndex (String className) {
@@ -547,77 +506,5 @@ public class GUIView implements ActionListener {
     public static int valIndex () {
     	Arrays.sort(available);
     	return available[0];
-    }
-    
-    public static void drawFields (String className) {
-    	if (umld.classExists(className)) {
-    		ArrayList<Field> localFields = umld.getClass(className).getFields();
-    		int localIndex = findIndex (className);
-    		Graphics classAdded = main.getGraphics();
-    		for (int i = 0; i < localFields.size(); ++i) {
-    			classAdded.drawString(localFields.get(i).getFieldName() , classRep.get(localIndex).getX() + 50, classRep.get(localIndex).getY() + (i + 2) * 10);
-        		if (i == 6) {
-        			break;
-        		}
-    		}
-    	}
-    }
-    
-    public static void clearFields (String className) {
-    	if (umld.classExists(className)) {
-    		int localIndex = findIndex (className);
-    		Graphics classAdded = main.getGraphics();
-    		classAdded.clearRect(classRep.get(localIndex).getX() + 25, classRep.get(localIndex).getY() + 20, WIDTH - 40, 60);
-    		
-    	} 
-    }
-
-    
-    //draws methods
-    public static void drawMethods (String className) {
-    	if (umld.classExists(className)) {
-    		ArrayList<Method> localMethods = umld.getClass(className).getMethods();
-    		int localIndex = findIndex (className);
-    		Graphics classAdded = main.getGraphics();
-    		for (int i = 0; i < localMethods.size(); ++i) {
-    			classAdded.drawString(localMethods.get(i).getMethodName() + "==>" , classRep.get(localIndex).getX() + 50, classRep.get(localIndex).getY() + (2*i + 2) * 10 + 80);
-    			ArrayList<Parameter> localParameters = localMethods.get(i).getParameterList();
-    			int yOffset = 10;
-    			int xOffset = localMethods.get(i).getMethodName().length() * 5 + 75;
-    			for (int j = 0; j < localParameters.size(); ++j) {
-    				int newXOffset = localParameters.get(j).getParamName().length() * 5 + xOffset;  
-    				if (newXOffset >= 200) {
-    					yOffset += 10;
-    					xOffset = localMethods.get(i).getMethodName().length() * 5 + 75;
-    				}
-    				if (yOffset > 20) {
-    					break;
-    				}
-    				classAdded.drawString(" " + localParameters.get(j).getParamName(), classRep.get(localIndex).getX() + xOffset, classRep.get(localIndex).getY() + (i + 2) * 10 + yOffset + 70);
-    				xOffset = newXOffset; 
-    				
-    			}
-    			
-        		if (i == 4) {
-        			break;
-        		}
-    		}
-    	}
-    }
-    
-    public static void clearMethods (String className) {
-    	if (umld.classExists(className)) {
-    		int localIndex = findIndex (className);
-    		Graphics classAdded = main.getGraphics();
-    		classAdded.clearRect(classRep.get(localIndex).getX() + 25, classRep.get(localIndex).getY() + 70, WIDTH - 40, 90);
-    		
-    	} 
-    }
-    
-    public static int listClasses () {
-    	//JOptionPane.showOptionDialog(null, main, "Classes", JOptionPane.SELECTION_VALUES_PROPERTY, JOptionPane.INFORMATION_MESSAGE, null, classNames, 0);
-    	return 0;
-    }
-    
-    
+    }    
 }
