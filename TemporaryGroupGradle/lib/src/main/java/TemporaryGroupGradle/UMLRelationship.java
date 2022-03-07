@@ -1,3 +1,4 @@
+package TemporaryGroupGradle;
 /**
  * This class represents a relationship between two classes in a UML diagram.
  * It consists of a constructor and getter and setter methods for the class's data.

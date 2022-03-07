@@ -1,4 +1,4 @@
-
+package TemporaryGroupGradle;
 public class UMLEditor {
 
 	public static void main(String[] args) throws Exception {

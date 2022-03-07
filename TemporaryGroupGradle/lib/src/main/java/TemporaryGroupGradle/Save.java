@@ -1,4 +1,6 @@
+package TemporaryGroupGradle;
 import java.io.File;
+
 
 
 
@@ -11,6 +13,8 @@ import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+
+
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.annotation.*;

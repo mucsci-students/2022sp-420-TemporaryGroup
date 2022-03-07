@@ -1,4 +1,6 @@
+package TemporaryGroupGradle;
 import java.awt.Font;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 
 public class ListMethodsWindow extends JDialog implements ActionListener {
 	
