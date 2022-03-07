@@ -1,8 +1,6 @@
 package TemporaryGroupGradle;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -11,11 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-
-
 public class Classes extends JPanel {
 	
 	JLabel name = new JLabel();
+	JLabel relationship = new JLabel();
 	JComboBox<String> fieldsDrop = new JComboBox<String>();
 	JComboBox<String> methodsDrop = new JComboBox<String>();
 	
@@ -97,11 +94,45 @@ public class Classes extends JPanel {
 	}
 	
 	public void deleteMethod (int methodIndex) {
-		methodsDrop.removeItem(methodIndex);
+		methodsDrop.removeItemAt(methodIndex);
 	}
 	
-	public void addParameter (String parameterName) {
+	public void addParameter (String parameterName, String parameterType, int indexOfMethod ) {
+		String toAdd = methodsDrop.getItemAt(indexOfMethod);
+		String insideMethod = parameterType + " " + parameterName + " )";
+		toAdd = toAdd.replace( ")", insideMethod);
+		methodsDrop.removeItemAt(indexOfMethod);
+		methodsDrop.addItem(toAdd);
+	}
+	
+	public void changeParameterType (String parameterName, String oldType, String newType, int methodIndex) {
+		String toAdd = methodsDrop.getItemAt(methodIndex);
+		String toReplace = oldType + " " + parameterName;
+		String replaceWith = new String (newType + " " + parameterName);
+		toAdd = toAdd.replace(toReplace, replaceWith);
+		methodsDrop.removeItemAt(methodIndex);
+		methodsDrop.addItem(toAdd);
+	}
+	
+	//need to implement
+	public void changeParameterName (String oldName, String newName, String type, int methodIndex) {
 		
+	}
+	
+	public void deleteParamater () {
+		
+	}
+	
+	public void addRelationship (String src, String dest, String type) {
+		relationship.setBounds(25, 170, m_width - 30, 15);
+		relationship.setText("src: " + src + " dest: " + dest + " type " + type);
+		this.add(relationship);
+		this.repaint();
+	} 
+	
+	public void deleteRelationship () {
+		this.remove(relationship);
+		this.repaint();
 	}
 	
 	public int getX () {

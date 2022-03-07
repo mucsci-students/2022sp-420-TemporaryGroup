@@ -434,7 +434,7 @@ public class UMLDiagram {
         System.out.println("A relationship between '" + source + "' and '" + dest + "' does not exist.");
         return false;
     }
-
+    
     /**
      * Rename a relationship in the diagram
      * The same two classes cannot have multiple relationships with the same name.
@@ -533,5 +533,7 @@ public class UMLDiagram {
 			return false;
 		}
 	}
+    
+    
 
 }
