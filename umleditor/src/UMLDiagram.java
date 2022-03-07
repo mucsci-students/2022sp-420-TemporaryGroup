@@ -80,6 +80,7 @@ public class UMLDiagram {
                 return false;
             }
         }
+        System.out.println("Error when validating name of field");
         return false;
     }
 
