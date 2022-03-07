@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +23,8 @@ public class GUIView implements ActionListener {
 	static JLabel text;
 	static JFrame main = new JFrame("UMLEditor");
 
+	public static Save saver = new Save();
+	public static Load loader = new Load();
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static UMLDiagram umld = new UMLDiagram();
 	static final int WIDTH = 250;
@@ -435,13 +438,26 @@ public class GUIView implements ActionListener {
     		
     	} else if (e.getActionCommand().equals("Save")) {
     		//TO DO
-    		JOptionPane.showMessageDialog(main,"still working on it");
+    		saver.saveDiagram = umld;
+    		try {
+				saver.saveFileGUI();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
     		
     		
     		
     	} else if (e.getActionCommand().equals("Load")) {
     		//TO DO
-    		JOptionPane.showMessageDialog(main,"still working on it");
+    		try {
+				loader.loadFileGUI();
+				umld = loader.loadDiagram;
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+    		
     		
     		
     		

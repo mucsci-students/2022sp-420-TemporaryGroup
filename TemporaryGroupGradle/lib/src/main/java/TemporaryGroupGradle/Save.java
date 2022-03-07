@@ -3,11 +3,12 @@ import java.io.File;
 
 
 
-
 import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.Scanner;
+
+import javax.swing.JFileChooser;
 
 //import javax.swing.JFileChooser;
 
@@ -124,11 +125,57 @@ public class Save {
 		}
 			
 	}
+	
+public Boolean saveFileGUI() throws IOException {
+		
+		//User will input name of file first that they want to create (AT THIS MOMENT MUST TYPE .json AT THE END)
+		
+		
+		
+		String Json = new Gson().toJson(saveDiagram);	
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Object jsonObject = mapper.readValue(Json, Object.class);
+		String prettyJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
+		
+			
+
+		//Assigned location for save file
+		String fileLocation = saveFileLocation() + ".json";
+		
+
+		//cancel or 'X' button pressed on save prompt
+		if (fileLocation.equals("failed")) {
+			System.out.println("Save cancelled: Exiting save...");
+			return false;
+		}
+		
+		//File creation, if file already exists prompt overwrite method will run
+		try {
+		      File name = new File(fileLocation);
+		      if (name.createNewFile()) {
+		        System.out.println("File created: " + name.getName());
+		        FileWriter file = new FileWriter(fileLocation);
+		        file.write(prettyJson.toString());
+		        file.flush();
+				file.close();
+		        return true;
+		      } else {
+		        overwrite(fileLocation, Json);
+		        return true;
+		      }
+		    } catch (IOException|IllegalStateException|JsonSyntaxException e) {
+		      System.out.println("Error: Please ensure you have named your file and add '.json' at the end.");
+		      saveFile();
+		      return false;
+		    }
+		
+	}
 	/*
 	 * UI to show where the user can save their file. Must enter '.json' at the end of user's save file name.
 	 * If '.json' is not entered, system will error out and user will have to re-enter save location.
 	 */
-	/*
 	public String saveFileLocation() {
 	      JFileChooser file = new JFileChooser();
 	      file.setMultiSelectionEnabled(true);
@@ -141,5 +188,4 @@ public class Save {
 	      }
 	      return "failed";
 	   }
-	*/
 }
