@@ -16,20 +16,21 @@ To be able to run the program, please follow these steps.
 
 7. Create a directory to save .class files (optional)
 
-8. compile editor with command
+8. Download Gradle
     
-    (on linux or mac) : javac -cp gson-2.8.9.jar:json-simple1.1.1.jar -d "path to classes directory e.g /home/usr/johnDoe/Documents/umleditor" umlcli.java UMLDiagram.java UMLClass.java UMLRelationship.java Load.java Save.java
+    https://gradle.org/install/ and follow the download instructions based on your operating system
+    
+    Add GRADLE_HOME to environment variables and pathing the gradle installation from your pc
+    
+    Add JAVA_HOME to environment variables and pathing the java installation from your pc
+    
 
-    (on windows) : javac -cp gson-2.8.9.jar`;json-simple1.1.1.jar -d "path to classes directory e.g. C:\Users\johnDoe\Documents\umleditor" umlcli.java UMLDiagram.java UMLClass.java UMLRelationship.java Load.java Save.java
+9. Run editor with command 
 
-    note: if step 7 was skipped no need to use -d flag
+   Run "gradle build" to first build the gradle installation
+    
+   If you want to run the CLI, use the command "gradle run" to run CLI
 
-9. run editor with command 
-
-    (on linux or mac) : java -cp "path to classes directory e.g /home/usr/johnDoe/Documents/umleditor":gson-2.8.9.jar:json-simple.1.1.1.jar umlcli
-
-    (on windows) : java -cp "path to classes directory e.g C:\Users\johnDoe\Documents\umleditor"`;gson-2.8.9.jar`;json-simple.1.1.1.jar umlcli
-
-    note: if step 7 was skipped no need to use -d flag
+   If you want to run the GUI, use the command "gradle run --args=="GUI" to run GUI.
 
 10. Have fun with your command line UML editor!

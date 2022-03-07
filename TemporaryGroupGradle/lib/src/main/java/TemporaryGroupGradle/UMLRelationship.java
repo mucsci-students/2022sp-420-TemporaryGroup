@@ -1,3 +1,4 @@
+package TemporaryGroupGradle;
 /**
  * This class represents a relationship between two classes in a UML diagram.
  * It consists of a constructor and getter and setter methods for the class's data.
@@ -7,21 +8,21 @@ public class UMLRelationship {
     /**
      * Class data. This is accessed using getter and setter methods below.
      */
-    private String src, dest, type;
+    private String source, destination, type;
 
     // Valid relationship types
-    // private static final String[] validTypes = {"Nondirectional"};
+    private static final String[] validTypes = {"aggregation", "composition", "inheritance", "realization"};
 
     /**
      * Constructor for a relationship in a UML diagram
      * @param relSrc The source class for the relationship
      * @param relDest The destination class for the relationship
-     * @param relType The type of this relationship. Must be: Nondirectional
+     * @param relType The type of this relationship. 
      * @param relName The name of this relationship.
      */
     public UMLRelationship(String relSrc, String relDest, String relType) {
-        src = relSrc;
-        dest = relDest;
+        source = relSrc;
+        destination = relDest;
         type = relType;
     }
 
@@ -32,7 +33,7 @@ public class UMLRelationship {
      * @return This relationship's source class
      */
     public String getSource() {
-        return src;
+        return source;
     }
 
     /**
@@ -40,7 +41,7 @@ public class UMLRelationship {
      * @param newSrc New source class for this relationship
      */
     public void setSource(String newSrc) {
-        src = newSrc;
+        source = newSrc;
     }
 
     /////////////////////////////////////////////////////////////
@@ -50,7 +51,7 @@ public class UMLRelationship {
      * @return This relationship's destination class
      */
     public String getDestination() {
-        return dest;
+        return destination;
     }
 
     /**
@@ -58,7 +59,7 @@ public class UMLRelationship {
      * @param newDest New destination class for this relationship
      */
     public void setDestination(String newDest) {
-        dest = newDest;
+        destination = newDest;
     }
 
     /////////////////////////////////////////////////////////////
@@ -78,7 +79,10 @@ public class UMLRelationship {
     public void setType(String newType) {
         type = newType;
     }
-}
+
+    public String[] listValidTypes() {
+        return validTypes;
+    }
 
     /**
      * Helper method to determine if a relationship type is valid.
@@ -86,7 +90,7 @@ public class UMLRelationship {
      * @param relType The relationship type being checked
      * @return True if the relationship type is valid, false if it's not
      */
-    /*private boolean isValidType(String relType) {
+    public boolean isValidType(String relType) {
         // Iterate through array containing valid types
         for(String elem : UMLRelationship.validTypes)
         {
@@ -98,4 +102,5 @@ public class UMLRelationship {
         }
         // Reached end of array
         return false;
-    }*/
+    }
+}
