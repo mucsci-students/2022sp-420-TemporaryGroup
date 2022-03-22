@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="lib" path="C:/Users/irifa/Desktop/gson-2.8.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/irifa/Desktop/jackson-annotations-2.13.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/irifa/Desktop/jackson-core-2.13.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/irifa/Desktop/jackson-databind-2.13.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/irifa/Desktop/json-simple-1.1.1.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
