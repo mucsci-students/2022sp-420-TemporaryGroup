@@ -13,7 +13,7 @@ plugins {
 }
 
 application {
-    mainClass.set("TemporaryGroup.UMLEditor")
+    mainClass.set("TemporaryGroupGradle.UMLEditor")
 }
 
 run {
