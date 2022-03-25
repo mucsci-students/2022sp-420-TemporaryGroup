@@ -119,6 +119,8 @@ class TestClass {
 	}
 
 	void testRenameParameter() {
+		assertEquals("null", "null");
+		
 		fail("Not yet implemented");
 	}
 }
