@@ -1,7 +1,24 @@
 package TemporaryGroupGradle;
+import java.io.IOException;
 import java.util.*;
 
+import org.jline.builtins.Completers.Completer;
+import org.jline.console.impl.Builtins.Command;
+import org.jline.reader.Highlighter;
+import org.jline.reader.History;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.MaskingCallback;
+import org.jline.reader.ParsedLine;
+import org.jline.reader.LineReader.Option;
+import org.jline.reader.impl.DefaultParser;
 
+import org.jline.reader.impl.completer.AggregateCompleter;
+import org.jline.reader.impl.completer.ArgumentCompleter;
+import org.jline.reader.impl.completer.StringsCompleter;
+import org.jline.reader.impl.history.DefaultHistory;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
 
 public class UMLCli {
@@ -20,11 +37,21 @@ public class UMLCli {
 	public static boolean hasUnsavedWork = false;
 	public static Save saver = new Save();
 	public static Load loader = new Load();
+
+	/**
+	 * For the tab completer.
+	 */
+	private static LineReader reader;
+	private static Terminal terminal;
+	private static ParsedLine parser;
+	private static History history;
+	private static Highlighter highlighter;
 	
 	
 	//Driver for the cli class
 	public static void main (String[] args) throws Exception {
 		prompt();
+		setTerminal();
 		while (true) {
 			String command = getInput();
 			//if command not valid keep prompting for new one 
@@ -34,7 +61,20 @@ public class UMLCli {
 			}
 			runCommand(command);
 		}	
-	}	
+	}
+	
+	/**
+	 * Testing
+	 */
+	public static void setTerminal(){
+		try {
+			terminal = TerminalBuilder.builder().system(true).build();
+			AggregateCompleter comp = new TabComplete().updateCompleter();
+			reader = LineReaderBuilder.builder().terminal(terminal).completer(comp).highlighter(highlighter).history(history).variable(LineReader.MENU_COMPLETE, true).build();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+	}
 	
 	//cli functions 
 	
@@ -46,8 +86,20 @@ public class UMLCli {
   	}
   
 	public static String getInput () {
-		System.out.print("> ");
-		return input.nextLine();
+		//System.out.print("> ");
+
+		String result;
+
+		String line = null;
+		line = reader.readLine("> ");
+		//System.out.println(line);
+
+		parser = reader.getParsedLine();
+		String test = parser.words().toString();
+		result = test.substring(1, test.length() - 1);
+
+		//return input.nextLine();
+		return result;
 	}
 	
 	public static int getInt() {
