@@ -10,6 +10,7 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
     id 'application'
+    id 'jacoco'
 }
 
 application {
@@ -45,14 +46,22 @@ dependencies {
     
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    
+   	
+ 
 }
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		html.enabled false
+	}
+}
+
+check.dependsOn jacocoTestReport
+
+
 
 tasks.named('test') {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
-}
-
-//test
-task wrapper(type: Wrapper) {
-    gradleVersion = '7.4'
+   	finalizedBy(tasks.jacocoTestReport)
 }
