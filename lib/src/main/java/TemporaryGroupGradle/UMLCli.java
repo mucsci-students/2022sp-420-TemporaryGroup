@@ -87,12 +87,10 @@ public class UMLCli {
   
 	public static String getInput () {
 		//System.out.print("> ");
-
 		String result;
 
 		String line = null;
 		line = reader.readLine("> ");
-		//System.out.println(line);
 
 		parser = reader.getParsedLine();
 		String test = parser.words().toString();
