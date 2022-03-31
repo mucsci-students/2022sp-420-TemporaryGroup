@@ -68,6 +68,8 @@ public class CliController {
                         }else{
                             System.out.println("Please enter designated class, name and type of method.");
                         }
+                    }else{
+                        commandNotRecognized();
                     }
                 // DELETE
                 }else if(checkCommand(commands, 0, "delete")){
@@ -101,6 +103,8 @@ public class CliController {
                         }else{
                             System.out.println("Please enter a src and dst.");
                         }
+                    }else{
+                        commandNotRecognized();
                     }
                 // RENAME
                 }else if(checkCommand(commands, 0, "rename")){
@@ -128,6 +132,8 @@ public class CliController {
                         }else{
                             System.out.println("Please enter class, method, the current name, and new name.");
                         }
+                    }else{
+                        commandNotRecognized();
                     }
                 // CHANGE TYPE
                 }else if(checkCommand(commands, 0, "change")){
@@ -149,6 +155,8 @@ public class CliController {
                         }else{
                             System.out.println("Please enter class name, method name, parameter name and new type.");
                         }
+                    }else{
+                        commandNotRecognized();
                     }
                 // LIST
                 }else if(checkCommand(commands, 0, "list")){
@@ -162,6 +170,9 @@ public class CliController {
                         listClasses();
                     }else if(checkCommand(commands, 1, "relationships")){
                         listRelationships();
+                    }
+                    else{
+                        commandNotRecognized();
                     }
                 // SAVE    
                 }else if(checkCommand(commands, 0, "save")){
