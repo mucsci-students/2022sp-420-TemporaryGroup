@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.lang.model.element.Element;
 
@@ -14,16 +15,18 @@ public class CliController {
     public static boolean hasUnsavedWork = false;
 	public static Save saver = new Save();
 	public static Load loader = new Load();
+
+    public static Scanner input = new Scanner (System.in);
+
     
     public static void main(String[] args) {
         
-        //UMLDiagram model = new UMLDiagram();
         CLIView view = new CLIView();
         view.welcomeScreen();
         view.setTerminal(model);
         ArrayList<String> commands;
-
-        while(true){
+        Boolean userInput = true;
+        while(userInput){
             commands=view.getInput();
             try{
                 if(checkCommand(commands, 0, "exit")){
@@ -31,76 +34,141 @@ public class CliController {
                     if(hasUnsavedWork) {
                         System.out.print("There is currently unsaved work. ");
                     }
-                    System.out.println("Are you sure you want to exit? [y/n]");
-                    String answer = commands.get(0);
-                    // if "y", exit program
-                    if(answer.equals("y")) {
-                        System.exit(0);
-                    }
-                    // if neither "y" nor "n", invalid command (resume program)
-                    else if(!answer.equals("y") && !answer.equals("n")) {
-                        commandNotRecognized();
-                    }
-                    // if "n", do nothing (resume program)
+                    userInput = false;
                 }
                 // ADD
                 else if(checkCommand(commands, 0, "add")){
-                    System.out.println("What do you want to add? [class/relationship/method/field/parameter]");
                     if(checkCommand(commands, 1, "class")){
-                        model.addClass(commands.get(2));
-                    }else if(checkCommand(commands, 1, "field")){
-                        model.addField(commands.get(2), commands.get(3), commands.get(4));
+                        if(commandSize(commands, 2)){
+                            hasUnsavedWork = model.addClass(commands.get(2));
+                        }else{
+                            System.out.println("Please enter a name for the class.");
+                        }
+                    }else if(checkCommand(commands, 1, "field")){ ///CHECK
+                        if(commandSize(commands, 4)){
+                            hasUnsavedWork = model.addField(commands.get(2), commands.get(3), commands.get(4));
+                        }else{
+                            System.out.println("Please enter designated class, name and type of field.");
+                        } 
                     }else if(checkCommand(commands, 1, "method")){
-                        model.addMethod(commands.get(2), commands.get(3), commands.get(4));
+                        if(commandSize(commands, 4)){
+                            hasUnsavedWork = model.addMethod(commands.get(2), commands.get(3), commands.get(4));
+                        }else{
+                            System.out.println("Please enter designated class, name and type of method.");
+                        }
                     }else if(checkCommand(commands, 1, "parameter")){
-                        model.addParameter(commands.get(2), commands.get(3), commands.get(4), commands.get(5));
+                        if(commandSize(commands, 5)){
+                            hasUnsavedWork = model.addParameter(commands.get(2), commands.get(3), commands.get(4), commands.get(5));
+                        }else{
+                            System.out.println("Please enter designated class, method, name and type of parameter.");
+                        }
+                    }else if(checkCommand(commands, 1, "relationship")){
+                        if(commandSize(commands, 4)){
+                            hasUnsavedWork = model.addRelationship(commands.get(2), commands.get(3), commands.get(4));
+                        }else{
+                            System.out.println("Please enter designated class, name and type of method.");
+                        }
                     }
                 // DELETE
                 }else if(checkCommand(commands, 0, "delete")){
                     if(checkCommand(commands, 1, "class")){
-                        model.removeClass(commands.get(2));
+                        if(commandSize(commands, 2)){
+                            hasUnsavedWork = model.removeClass(commands.get(2));
+                        }else{
+                            System.out.println("Please enter the name of the class.");
+                        }
                     }else if(checkCommand(commands, 1, "field")){
-                        model.removeField(commands.get(2), commands.get(3));
+                        if(commandSize(commands, 3)){
+                            hasUnsavedWork = model.removeField(commands.get(2), commands.get(3));
+                        }else{
+                            System.out.println("Please enter a name for the class and field.");
+                        }
                     }else if(checkCommand(commands, 1, "method")){
-                        model.removeMethod(commands.get(2), commands.get(3));
+                        if(commandSize(commands, 3)){
+                            hasUnsavedWork = model.removeMethod(commands.get(2), commands.get(3));
+                        }else{
+                            System.out.println("Please enter a name for the class and method.");
+                        }
                     }else if(checkCommand(commands, 1, "parameter")){
-                        model.removeParameter(commands.get(2), commands.get(3), commands.get(4));
+                        if(commandSize(commands, 4)){
+                            hasUnsavedWork = model.removeParameter(commands.get(2), commands.get(3), commands.get(4));
+                        }else{
+                            System.out.println("Please enter a name for the class, method, and parameter.");
+                        }
+                    }else if(checkCommand(commands, 1, "relationship")){
+                        if(commandSize(commands, 3)){
+                            hasUnsavedWork = model.deleteRelationship(commands.get(2), commands.get(3));
+                        }else{
+                            System.out.println("Please enter a src and dst.");
+                        }
                     }
                 // RENAME
                 }else if(checkCommand(commands, 0, "rename")){
                     if(checkCommand(commands, 1, "class")){
-                        model.renameClass(commands.get(2), commands.get(3));
+                        if(commandSize(commands, 3)){
+                            hasUnsavedWork = model.renameClass(commands.get(2), commands.get(3));
+                        }else{
+                            System.out.println("Please enter the current name and new name.");
+                        }
                     }else if(checkCommand(commands, 1, "field")){
-                        model.renameField(commands.get(2), commands.get(3), commands.get(4));
+                        if(commandSize(commands, 4)){
+                            hasUnsavedWork = model.renameField(commands.get(2), commands.get(3), commands.get(4));
+                        }else{
+                            System.out.println("Please enter class name, the current name, and new name.");
+                        }
                     }else if(checkCommand(commands, 1, "method")){
-                        model.renameMethod(commands.get(2), commands.get(3), commands.get(4));
+                        if(commandSize(commands, 4)){
+                            hasUnsavedWork = model.renameMethod(commands.get(2), commands.get(3), commands.get(4));
+                        }else{
+                            System.out.println("Please enter class name, the current name, and new name.");
+                        }
                     }else if(checkCommand(commands, 1, "parameter")){
-                        model.renameParameter(commands.get(2), commands.get(3), commands.get(4), commands.get(5));
+                        if(commandSize(commands, 5)){
+                            hasUnsavedWork = model.renameParameter(commands.get(2), commands.get(3), commands.get(4), commands.get(5));
+                        }else{
+                            System.out.println("Please enter class, method, the current name, and new name.");
+                        }
                     }
                 // CHANGE TYPE
                 }else if(checkCommand(commands, 0, "change")){
                     if(checkCommand(commands, 1, "field")){
-                        model.renameFieldType(commands.get(2), commands.get(3), commands.get(4));
+                        if(commandSize(commands, 4)){
+                            hasUnsavedWork = model.renameFieldType(commands.get(2), commands.get(3), commands.get(4));
+                        }else{
+                            System.out.println("Please enter class name, field name, and new type.");
+                        }
                     }else if(checkCommand(commands, 1, "method")){
-                        model.renameMethodType(commands.get(2), commands.get(3), commands.get(4));
+                        if(commandSize(commands, 4)){
+                            hasUnsavedWork = model.renameMethodType(commands.get(2), commands.get(3), commands.get(4));
+                        }else{
+                            System.out.println("Please enter class name, method name, and new type.");
+                        }
                     }else if(checkCommand(commands, 1, "parameter")){
-                        model.renameParameterType(commands.get(2), commands.get(3), commands.get(4), commands.get(5));
+                        if(commandSize(commands, 5)){
+                            hasUnsavedWork = model.renameParameterType(commands.get(2), commands.get(3), commands.get(4), commands.get(5));
+                        }else{
+                            System.out.println("Please enter class name, method name, parameter name and new type.");
+                        }
                     }
                 // LIST
                 }else if(checkCommand(commands, 0, "list")){
                     if(checkCommand(commands, 1, "class")){
-                        listClass(commands.get(2));
-                    }else if(checkCommand(commands, 1, "classes")){
+                        if(commandSize(commands, 2)){
+                            listClass(commands.get(2));
+                        }else{
+                            System.out.println("Please enter name of class to list.");
+                        }
+                    }else if(checkCommand(commands, 1, "all")){
                         listClasses();
                     }else if(checkCommand(commands, 1, "relationships")){
                         listRelationships();
                     }
                 // SAVE    
                 }else if(checkCommand(commands, 0, "save")){
-                   // saveDiagram();
+                    saveDiagram();
                 // LOAD
                 }else if(checkCommand(commands, 0, "load")){
-                    //loadDiagram();
+                    loadDiagram();
                 // HELP
                 }else if(checkCommand(commands, 0, "help")){
                     System.out.println();
@@ -120,15 +188,15 @@ public class CliController {
                     System.out.println();
                 // NOTHING
                 }else if(checkCommand(commands, 0, "")){
-                    return;
+                    commandNotRecognized();
+                }else{
+                    commandNotRecognized();
                 }
-            }finally{
-
+            }catch(Exception error){
+                System.out.println(error.getMessage());
             }
         
         }
-
-
 
     }
 
@@ -142,6 +210,10 @@ public class CliController {
            return false;
        }
        return false;
+    }
+
+    public static Boolean commandSize(ArrayList<String> commands, int size){
+        return (commands.size() > size);
     }
 
     public static void listClasses () {
@@ -220,7 +292,7 @@ public class CliController {
     public static void loadDiagram() throws Exception {
 		if(hasUnsavedWork) {
 			System.out.println("There is unsaved work. Are you sure you want to load a file? [y/n]");
-			String answer = getInput();
+			String answer = input.nextLine();
 			if(answer.equals("n")) {
 				return;
 			}

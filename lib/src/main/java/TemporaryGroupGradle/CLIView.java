@@ -3,6 +3,7 @@ package TemporaryGroupGradle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import org.jline.builtins.Completers.Completer;
 import org.jline.console.impl.Builtins.Command;
@@ -30,9 +31,11 @@ public class CLIView {
 	private History history;
 	private Highlighter highlighter;
 
+    public static Scanner input = new Scanner (System.in);
+
     //Initial prompt 
 	public static void welcomeScreen () {
-		System.out.println("Welcome to the UML editor.");
+		System.out.println("Welcome to TemporaryGroup's UML editor.");
 		System.out.println("Type 'help' for list of valid commands.");
 		System.out.println("Type 'exit' to quit the editor.");
   	}
@@ -56,11 +59,25 @@ public class CLIView {
 		String line = null;
 		line = reader.readLine("> ");
 
-		parser = reader.getParsedLine();
-		String[] arrayLine = parser.words().toArray(new String[parser.words().size()]);
-		result = new ArrayList<String>(Arrays.asList(arrayLine));
-    
+        if(line.trim().equalsIgnoreCase("exit") ){
+            System.out.println("Are you sure you want to exit? [y/n]");
+            String answer = input.nextLine();
+            if(answer.equals("y")){
+                System.exit(0);
+            }else if(!answer.equals("y") && !answer.equals("n")) {
+                commandNotRecognized();
+            }
+        }else{
+            parser = reader.getParsedLine();
+		    String[] arrayLine = parser.words().toArray(new String[parser.words().size()]);
+		    result = new ArrayList<String>(Arrays.asList(arrayLine));
+
+        }
         return result;
     }
+
+    public static void commandNotRecognized() {
+		System.out.println("Command not recognized. Type 'help' for list of valid commands.");
+	}
     
 }
