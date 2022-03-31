@@ -13,8 +13,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.awt.Graphics;
-import java.awt.Canvas;
 //import java.awt.color.*;
 
 
@@ -42,6 +40,9 @@ public class GUIView implements ActionListener {
 
 	//keep track of available indexes if any
 	static int [] available = new int [CLASSESPERROW * CLASSESPERCOL];
+	//use for dragging
+	static ComponentMover cm = new ComponentMover();
+	
 	
     //Driver function
     public static void main(String[] args)
@@ -50,7 +51,6 @@ public class GUIView implements ActionListener {
     	main.setSize(screenSize);
     	main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	main.setLayout(null);
-    	main.setResizable(false);
     	
     	//Create an object
     	GUIView obj = new GUIView();
@@ -357,7 +357,7 @@ public class GUIView implements ActionListener {
     			int localIndex = findIndex (myInputs[0]);
     			if (myInputs[0] != null && myInputs[1] != null && myInputs[2] != null) {
     				if ( umld.addRelationship (myInputs[0], myInputs[1], myInputs[2])) {
-    					classRep.get(localIndex).addRelationship (myInputs[0], myInputs[1], myInputs[2]);
+    					//to do
     				}
     			} else {
     			JOptionPane.showMessageDialog (main, "Error when creating relationship, try again");
@@ -376,17 +376,12 @@ public class GUIView implements ActionListener {
     		
     		
     	} else if (e.getActionCommand().equals("Save")) {
-    		//TO DO
     		saver.saveDiagram = umld;
     		try {
 				saver.saveFileGUI();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-    		
-    		
-    		
     	} else if (e.getActionCommand().equals("Load")) {
     		//TO DO
     		try {
@@ -396,10 +391,6 @@ public class GUIView implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-    		
-    		
-    		
-    		
     	} else if (e.getActionCommand().equals("Help")) {
     		//TO DO
     		JOptionPane.showMessageDialog(main,"still working on it");
@@ -428,11 +419,13 @@ public class GUIView implements ActionListener {
     	classNames[index] = className;
     	classRep.get(index).addName(className);
     	main.add(classRep.get(index));
+    	cm.registerComponent(classRep.get(index));
     	main.repaint();
     	++ index; 
     }
     
     public static void removeClass (int classIndex) {
+    	cm.deregisterComponent(classRep.get(classIndex));
     	main.remove(classRep.get(classIndex));
     	main.repaint();
     }
