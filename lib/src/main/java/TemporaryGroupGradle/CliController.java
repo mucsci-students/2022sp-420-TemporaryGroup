@@ -22,7 +22,7 @@ public class CliController {
     public static void main(String[] args) {
         
         CLIView view = new CLIView();
-        view.welcomeScreen();
+        view.startup();
         view.setTerminal(model);
         ArrayList<String> commands;
         Boolean userInput = true;

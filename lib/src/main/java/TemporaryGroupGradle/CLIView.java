@@ -34,7 +34,7 @@ public class CLIView {
     public static Scanner input = new Scanner (System.in);
 
     //Initial prompt 
-	public static void welcomeScreen () {
+	public static void startup () {
 		System.out.println("Welcome to TemporaryGroup's UML editor.");
 		System.out.println("Type 'help' for list of valid commands.");
 		System.out.println("Type 'exit' to quit the editor.");
