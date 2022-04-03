@@ -34,3 +34,5 @@ To be able to run the program, please follow these steps.
    If you want to run the GUI, use the command "gradle run --args=="GUI" to run GUI.
 
 10. Have fun with your command line UML editor!
+
+11. The design patterns are inside the design_patterns.txt file.
