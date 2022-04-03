@@ -51,7 +51,7 @@ public class GUIView implements ActionListener {
     	main.setSize(screenSize);
     	main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	main.setLayout(null);
-    	main.getContentPane().setBackground(Color.darkGray);
+    	//main.getContentPane().setBackground(Color.darkGray);
     	
     	//Create an object
     	GUIView obj = new GUIView();
@@ -433,11 +433,23 @@ public class GUIView implements ActionListener {
     	} else if (e.getActionCommand().equals("Help")) {
     		//TO DO
     		JOptionPane.showMessageDialog(main,"still working on it");
-    		
-    		
-    		
+    	
     	} 
     }
+    
+    /*
+    loadClasses (json file) {
+    	
+    	parse each line do the command;
+    	addClass (className)
+    	setPos
+    	field add field
+    	if rel 
+    	draw from src to dest pos 
+    	
+    	
+    }
+    */
     
     //helper functions 
     
@@ -475,6 +487,7 @@ public class GUIView implements ActionListener {
 				classRep.get(dest).getX(),
 				classRep.get(dest).getY());
     	main.getContentPane().add(rel);
+    	main.repaint();
     	
     }
     
