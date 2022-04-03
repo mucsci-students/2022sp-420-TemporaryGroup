@@ -181,7 +181,7 @@ public Boolean saveFileGUI() throws IOException {
 	      file.setMultiSelectionEnabled(true);
 	      file.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 	      file.setFileHidingEnabled(false);
-	      if (file.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+	      if (file.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 	         java.io.File f = file.getSelectedFile();
 	         System.err.println(f.getPath());
 	         return f.getPath();

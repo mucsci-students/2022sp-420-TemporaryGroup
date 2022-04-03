@@ -9,12 +9,13 @@ import javax.swing.JLabel;
 
 public class ListClassesWindow extends JDialog implements ActionListener {
 	
+	private static final long serialVersionUID = 1L;
 	JDialog listClasses;
 	JLabel myClasses;
-	JComboBox listOfClasses;
+	JComboBox<String> listOfClasses;
 	
 	ListClassesWindow (JFrame frame, String[] classes ) {
-		listClasses = new JDialog (frame, "", JDialog.DEFAULT_MODALITY_TYPE.APPLICATION_MODAL);
+		listClasses = new JDialog (frame, "", ModalityType.APPLICATION_MODAL);
 		m_classes = classes;
 		listClasses.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		listClasses.setResizable(false);
@@ -24,20 +25,20 @@ public class ListClassesWindow extends JDialog implements ActionListener {
 		myClasses.setBounds(50, 50, 390, 25);
 		myClasses.setText(" Select class");
 		myClasses.setFont(new Font ("Arial", Font.BOLD, 20));
-		listOfClasses = new JComboBox (m_classes);
+		listOfClasses = new JComboBox<String> (m_classes);
 		listOfClasses.setBounds(75, 75, 200, 25);
 		listOfClasses.addActionListener(this);
+		listOfClasses.setSelectedIndex(-1);
 		listClasses.add(myClasses);
 		listClasses.add(listOfClasses);
 		listClasses.setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		myClassI = -1;
-		if (e.getSource() == listOfClasses) {
+		
 			myClassI = listOfClasses.getSelectedIndex();
 			listClasses.dispose();
-		}
+		
 			
 	}
 	

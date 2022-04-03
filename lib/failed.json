@@ -1,0 +1,19 @@
+{
+  "umlDiagram" : {
+    "bank" : {
+      "className" : "bank",
+      "fields" : [ ],
+      "methods" : [ ]
+    },
+    "car" : {
+      "className" : "car",
+      "fields" : [ ],
+      "methods" : [ ]
+    }
+  },
+  "relationships" : [ {
+    "source" : "car",
+    "destination" : "bank",
+    "type" : "composition"
+  } ]
+}

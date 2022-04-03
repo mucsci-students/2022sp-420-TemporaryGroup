@@ -393,7 +393,7 @@ public class UMLDiagram {
      * @param type The type of this relationship
      * @param name The name of this relationship
      */
-    public Boolean addRelationship(String source, String dest, String type) {
+    public Boolean addRelationship (String source, String dest, String type) {
         // Check that the relationship is valid
         if(!classExists(source)) {
             System.out.println("The class '" + source + "' does not exist.");
@@ -411,10 +411,17 @@ public class UMLDiagram {
             }
         }
         // Add the relationship
-        UMLRelationship newRel = new UMLRelationship(source, dest, type);
+        UMLRelationship newRel;
+        try {
+        	newRel = new UMLRelationship(source, dest, type);
+        } catch (Exception e){
+        	System.out.println("Error when creating relationship");
+        	return false;
+        }
         relationships.add(newRel);
         System.out.println("Added new relationship between class '" + source + "' and class '" + dest + "'.");
         return true;
+        
     }
 
     /**
