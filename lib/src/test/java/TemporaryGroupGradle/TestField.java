@@ -35,6 +35,6 @@ class TestField {
 	void testRenameFieldType() {
 		Field test = new Field ("main", "int");
 		test.renameFieldType("String");
-		assertEquals ("String", test.getFieldName(), "the renameFieldType method failed");
+		assertEquals ("String", test.getFieldType(), "the renameFieldType method failed");
 	}
 }
