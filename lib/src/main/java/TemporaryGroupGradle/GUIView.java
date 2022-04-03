@@ -389,8 +389,18 @@ public class GUIView implements ActionListener {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
-    			JOptionPane.showMessageDialog (main, "Error when creating relationship, try again");
-    			} 
+    			String[] myInputs = getRelInput ();	
+    			int localIndex = findIndex (myInputs[0]);
+    			if (myInputs[0] != null && myInputs[1] != null && myInputs[2] != null) {
+    				if ( umld.addRelationship (myInputs[0], myInputs[1], myInputs[2])) {
+    					int srcIndex = findIndex (myInputs[0]);
+    					int destIndex = findIndex (myInputs[1]);
+    					addRel (srcIndex, destIndex);
+    				} else {
+    					JOptionPane.showMessageDialog (main, "Error when creating relationship, try again"); 
+    				}
+    			}
+    		}
     		
     	} else if (e.getActionCommand().equals("Change relationship")) {
     		//TO DO
@@ -452,9 +462,20 @@ public class GUIView implements ActionListener {
     //get the x and y position for the given indexes 
     //x = 1 y = 4 would go position [1,4] on a matrix of 6x4
     public static int[] calculateXY (int x, int y) {
-    	int startX = 50;
-    	int startY = 50;
-    	return new int[] {startX + x * 275, startY + y * 225};
+    	int [] xAndY = new int [] {50 + x * 275, 50 + y * 225};
+    	if (xAndY[0] >= (int)screenSize.getWidth() - WIDTH || xAndY[1] >= (int)screenSize.getHeight()- HEIGHT) {
+    		return new int [] {50, 50};
+    	}
+    	return xAndY;
+    }
+    
+    public static void addRel (int src, int dest) {
+    	Arrow rel = new Arrow ( classRep.get(src).getX(),
+				classRep.get(src).getY(),
+				classRep.get(dest).getX(),
+				classRep.get(dest).getY());
+    	main.getContentPane().add(rel);
+    	
     }
     
     //get type and name for user 
