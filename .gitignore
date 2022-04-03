@@ -25,3 +25,8 @@ hs_err_pid*
 .classpath
 /.gradle/
 *.lock
+*.lock
+*.bin
+*.tar
+*.css
+*.html
