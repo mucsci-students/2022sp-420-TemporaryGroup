@@ -20,6 +20,9 @@ application {
 run {
     standardInput = System.in
 }
+test {
+	useJUnitPlatform()
+}
 
 repositories {
     // Use Maven Central for resolving dependencies.

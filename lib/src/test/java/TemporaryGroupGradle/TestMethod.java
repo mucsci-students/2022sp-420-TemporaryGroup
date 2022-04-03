@@ -8,33 +8,39 @@ import org.junit.jupiter.api.Test;
 
 class TestMethod {
 	
+	@Test
 	void testMethodConstructor() {
 		Method test = new Method ("calcDeterminant", "float");
 		assertNotNull (test, "a new method failed to be created");
 	}
-
+	
+	@Test
 	void testGetMethodName() {
 		Method test = new Method ("getSize", "double");
 		assertEquals ("getSize", test.getMethodName(), "method name is not as expected");
 	}
 
+	@Test
 	void testGetMethodType() {
 		Method test = new Method ("getSize", "double");
 		assertEquals ("double", test.getMethodType(), "method name is not as expected");
 	}
 
+	@Test
 	void testRenameMethod() {
 		Method test = new Method ("badName", "int");
 		test.renameMethod("goodName");
 		assertEquals ("goodName", test.getMethodName(), "renameMethod failed");
 	}
 
+	@Test
 	void testRenameMethodType() {
 		Method test = new Method ("getSize", "double");
 		test.renameMethodType("size_t");
 		assertEquals ("size_t", test.getMethodType(), "renameMethodType failed");
 	}
 
+	@Test
 	void testAddParameter() {
 		Method test = new Method ("calcArea", "double");
 		int oldSize = test.getParameterList().size();
@@ -42,6 +48,7 @@ class TestMethod {
 		assertEquals (oldSize + 1, test.getParameterList().size(), "addParameter failed");
 	}
 
+	@Test
 	void testRemoveParameter() {
 		Method test = new Method ("calcArea", "double");
 		test.addParameter("lentgh", "int");
@@ -49,7 +56,8 @@ class TestMethod {
 		test.removeParameter("calcArea");
 		assertEquals (oldSize - 1, test.getParameterList().size(), "removeParameter failed");
 	}
-
+	
+	@Test
 	void testRemoveAllParameters() {
 		Method test = new Method ("calcArea", "double");
 		test.addParameter("lentgh", "int");
@@ -59,6 +67,7 @@ class TestMethod {
 		assertEquals (0, test.getParameterList().size(), "removeAllParameters failed");
 	}
 
+	@Test
 	void testRenameParameter() {
 		Method test = new Method ("calcArea", "double");
 		test.addParameter("lentgh", "int");
@@ -66,7 +75,8 @@ class TestMethod {
 		test.renameParameter(parTest.getParamName(), "width");
 		assertEquals ("width", parTest.getParamName(), "renameParameter failed");
 	}
-
+	
+	@Test
 	void testRenameParamType() {
 		Method test = new Method ("calcArea", "double");
 		test.addParameter("lentgh", "int");
@@ -75,6 +85,7 @@ class TestMethod {
 		assertEquals ("double", parTest.getParamType(), "renameParameterType failed");
 	}
 
+	@Test
 	void testGetParameter() {
 		Parameter par1 = new Parameter ("firstName", "string");
 		Method test = new Method ("getName", "string");
@@ -82,12 +93,14 @@ class TestMethod {
 		assertEquals (par1, test.getParameter("firstName"), "getParameter failed");
 	}
 
+	@Test
 	void testParamExists() {
 		Method test = new Method ("getName", "string");
 		test.addParameter("firstName", "string");
 		assertEquals (true, test.paramExists("firstName"), "paramExists failed");
 	}
 
+	@Test
 	void testGetParameterList() {
 		Parameter par1 = new Parameter ("firstName", "string");
 		Parameter par2 = new Parameter ("middleName", "string");
