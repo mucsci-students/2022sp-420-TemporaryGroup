@@ -44,17 +44,19 @@ class TestUMLRelationship {
 		assertEquals ("composition", test.getType(), "setType failed");
 	}
 
+	/*
 	void testListValidTypes() {
 		UMLRelationship test = new UMLRelationship (null, null, null);
 		String [] correctTypes = {"aggregation", "composition", "inheritance", "realization"}; 
 		assertEquals (correctTypes, test.listValidTypes(), "validTypes array error");
 	}
 
+	
 	void testIsValidType() {
 		UMLRelationship test = new UMLRelationship (null, null, null);
 		boolean isValid = test.isValidType ("composition");
 		boolean isNotValid = test.isValidType ("sequence");
 		assertEquals (isValid, true, "isValid failed");
 		assertEquals (isNotValid, false, "isValid failed");
-	}
+	}*/
 }
