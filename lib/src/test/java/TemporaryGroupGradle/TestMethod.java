@@ -79,7 +79,7 @@ class TestMethod {
 	@Test
 	void testRenameParamType() {
 		Method test = new Method ("calcArea", "double");
-		test.addParameter("lentgh", "int");
+		test.addParameter("length", "int");
 		Parameter parTest = test.getParameter("calcArea");
 		test.renameParamType(parTest.getParamName(), "double");
 		assertEquals ("double", parTest.getParamType(), "renameParameterType failed");
