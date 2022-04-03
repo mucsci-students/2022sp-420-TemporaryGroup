@@ -6,7 +6,9 @@ import javax.swing.*;
 
 
 public class Arrow extends JComponent {
-
+	
+	
+	//crating pr
 	private static final long serialVersionUID = 1L;
 	private
 		double x1;
