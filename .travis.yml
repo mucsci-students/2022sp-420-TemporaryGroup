@@ -1,0 +1,18 @@
+language: java
+install: skip
+
+os: linux
+dist: trusty
+jdk: oraclejdk8
+
+script:
+  - chmod +x gradlew
+  - ./gradlew build --scan -s
+ 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+test:
+  post:
+      - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
+      - bash <(curl -s https://codecov.io/bash) -t uuid-repo-token

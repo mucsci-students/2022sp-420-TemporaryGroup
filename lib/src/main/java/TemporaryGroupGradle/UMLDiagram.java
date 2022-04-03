@@ -11,15 +11,19 @@ public class UMLDiagram {
     private static String[] validTypes = {"aggregation", "composition", "inheritance", "realization"};
 
     public Boolean addClass(String className){
-        if(!(classExists(className))){
-            UMLClass myClass = new UMLClass(className);
-            umlDiagram.put(className, myClass);
-            System.out.println("Added class '" + className + "' to the diagram.");
-            return true;
-        }else{
-            System.out.println("The class '" + className + "' already exists in the diagram.");
-            return false;
+        if(isValidClassName(className)){
+            if(!(classExists(className))){
+                UMLClass myClass = new UMLClass(className);
+                umlDiagram.put(className, myClass);
+                System.out.println("Added class '" + className + "' to the diagram.");
+                return true;
+            }else{
+                System.out.println("The class '" + className + "' already exists in the diagram.");
+                return false;
+            }
         }
+        System.out.println("Error when validating name of Class");
+        return false;
     }
 
     public Boolean removeClass(String className){
@@ -40,18 +44,22 @@ public class UMLDiagram {
     }
 
     public Boolean renameClass(String oldClassName, String newClassName){
-        if(!classExists(newClassName)){
-            UMLClass classCopy = umlDiagram.get(oldClassName);
-            classCopy.renameClass(newClassName);
-            umlDiagram.remove(oldClassName);
-            umlDiagram.put(newClassName, classCopy);
-            System.out.println("Renamed class '" + oldClassName + "' to '" + newClassName + "'.");
-            return true;
+        if(isValidClassName(newClassName)){
+            if(!classExists(newClassName)){
+                UMLClass classCopy = umlDiagram.get(oldClassName);
+                classCopy.renameClass(newClassName);
+                umlDiagram.remove(oldClassName);
+                umlDiagram.put(newClassName, classCopy);
+                System.out.println("Renamed class '" + oldClassName + "' to '" + newClassName + "'.");
+                return true;
+            }
+            else{
+                System.out.println("A class named '" + newClassName + "' already exists in the diagram.");
+                return false;
+            }
         }
-        else{
-            System.out.println("A class named '" + newClassName + "' already exists in the diagram.");
-            return false;
-        }
+        System.out.println("Error when validating name of Class");
+        return false;
     }
 
     public boolean classExists(String className){
@@ -536,6 +544,37 @@ public class UMLDiagram {
 		else {
 			System.out.println("Error: Invalid method name. Method names can only contain A-Z, a-z, 0-9, and underscore.");
 			System.out.println("Method names must follow standard Java naming conventions.");
+			return false;
+		}
+	}
+
+    /**
+     * Checks to see if class name is valid.
+     * @param name
+     * @return
+     */
+    public static Boolean isValidClassName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			if(name.charAt(0) >= '0' && name.charAt(0) <= '9') {
+				System.out.println("Error: Invalid class name. Class names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Class names must follow standard Java naming conventions.");
+				return false;
+			}
+			else if(name.charAt(0) == ('_')) {
+				System.out.println("Error: Invalid Class name. Class names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Class names must follow standard Java naming conventions.");
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			System.out.println("Error: Invalid Class name. Class names can only contain A-Z, a-z, 0-9, and underscore.");
+			System.out.println("Class names must follow standard Java naming conventions.");
 			return false;
 		}
 	}
