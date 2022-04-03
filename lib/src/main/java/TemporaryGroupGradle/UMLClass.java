@@ -10,8 +10,6 @@ public class UMLClass {
     String className;
     ArrayList<Field> fields = new ArrayList<Field>();
     ArrayList<Method> methods = new ArrayList<Method>();
-    int xPos;
-    int yPos;
 
     /**
      * Constructor for a class in the uml diagram.
@@ -228,22 +226,6 @@ public class UMLClass {
         if(methodExists(methodName)){
             getMethod(methodName).renameParameter(oldParamName, newParamName);
         }
-    }
-    
-    public int getX() {
-    	return xPos;
-    }
-    
-    public int getY() {
-    	return yPos;
-    }
-    
-    public void setX (int x) {
-    	xPos = x;
-    }
-    
-    public void setY (int y) {
-    	yPos = y;
     }
 
 }

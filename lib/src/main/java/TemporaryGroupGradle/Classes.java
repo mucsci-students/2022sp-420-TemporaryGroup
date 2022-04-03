@@ -113,6 +113,9 @@ public class Classes extends JPanel {
 		methodsDrop.addItem(toAdd);
 	}
 	
+	public void drawRelArrow () {
+		
+	}
 	
 	//need to implement
 	public void changeParameterName (String oldName, String newName, String type, int methodIndex) {
@@ -144,10 +147,11 @@ public class Classes extends JPanel {
 	}
 	
 	private Point corner;
-	private Point prevPt;
+	//private Point prevPt;
 	private int m_width;
 	private int m_height;
 
+	/*
 	public class ClickListener extends MouseAdapter {
 	 	public void mousePressed (MouseEvent e) {
 			prevPt = e.getPoint();
@@ -161,6 +165,8 @@ public class Classes extends JPanel {
 						(int)(currPt.getX() - prevPt.getX()),
 						(int)(currPt.getY() - prevPt.getY()));
 			prevPt = currPt;
+			
 		}
-	}
+	} */
+	
 }

@@ -61,7 +61,6 @@ public class ComponentMover extends MouseAdapter
 	{
 		this.destinationClass = destinationClass;
 		registerComponent( components );
-		
 	}
 
 	/**

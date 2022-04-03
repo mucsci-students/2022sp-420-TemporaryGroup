@@ -32,7 +32,7 @@ public class GUIView implements ActionListener {
 	static final int CLASSESPERROW = (screenSize.height - 75) / 200;
 	static final int CLASSESPERCOL = (screenSize.width - 50) / 250;
 	//store class name -- y pos for field -- y position for method -- y position for parameter
-	static String[] classNames = new String [100];
+	static String[] classNames = new String [CLASSESPERROW * CLASSESPERCOL];
 	
 	//keep track of current index
 	static int index = 0;
@@ -51,7 +51,6 @@ public class GUIView implements ActionListener {
     	main.setSize(screenSize);
     	main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	main.setLayout(null);
-    	main.getContentPane().setBackground(Color.darkGray);
     	
     	//Create an object
     	GUIView obj = new GUIView();
@@ -149,8 +148,9 @@ public class GUIView implements ActionListener {
     	JMenu editor = new JMenu ("Editor");
     	
     	//Create menu items for program menu
-    	JMenuItem[] itemE = new JMenuItem[1];
+    	JMenuItem[] itemE = new JMenuItem[2];
     	itemE [0] = new JMenuItem ("Help");
+    	itemE [1] = new JMenuItem ("CLI mode");
     	for (int i = 0; i < itemE.length; ++i) {
     		itemE[i].addActionListener(obj);
     		editor.add(itemE[i]);
@@ -178,22 +178,23 @@ public class GUIView implements ActionListener {
     {    	
     	
     	if (e.getActionCommand().equals("Add class")) {
+    		if (index == CLASSESPERROW * CLASSESPERCOL ) {
+    			JOptionPane.showMessageDialog(main,"No more classes can be displayed");
+    		} else {
     		String className = JOptionPane.showInputDialog(main, "Enter class name");
     		if (className == null) {
-    			JOptionPane.showMessageDialog(main,"Class name not valid, try again");
+    			JOptionPane.showMessageDialog(main,"Error when creating class, try again");
     		} else if ( umld.addClass(className)) {
     			//draw class
-    			addClass(className, index / CLASSESPERROW, index % CLASSESPERROW, index);
+    			fillClassRep(className, index / CLASSESPERROW, index % CLASSESPERROW, index);
     			available [0] = CLASSESPERROW * CLASSESPERCOL;
     			index = valIndex();
         	} else {
-    			JOptionPane.showMessageDialog(main,"Error when creating a class, try again");    			
+    			JOptionPane.showMessageDialog(main,"class already exists, try again");    			
         	}
-    		
+    		}
+    	
     	} else if (e.getActionCommand().equals("Rename class")) {
-    		if (umld.umlDiagram.isEmpty()) {
-    			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-    		} else {
     		ListClassesWindow myList = new ListClassesWindow (main, classNames);
     		int localIndex = myList.getMyClassI();
     		if (localIndex >= 0) {
@@ -207,12 +208,8 @@ public class GUIView implements ActionListener {
     		} else {
     			JOptionPane.showMessageDialog(main,"Error when renaming the class, try again");
     		}
-    		}
     		
     	} else if (e.getActionCommand().equals("Delete class")) {
-    		if (umld.umlDiagram.isEmpty()) {
-    			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-    		} else {
     		ListClassesWindow myList = new ListClassesWindow (main, classNames);
     		int localIndex = myList.getMyClassI();
     		if (localIndex >= 0) {
@@ -226,13 +223,9 @@ public class GUIView implements ActionListener {
     		} else {
     			JOptionPane.showMessageDialog(main, "Class not found");	
     		}
-    		}
     		
     		//handling fields menu
     	} else if (e.getActionCommand().equals("Add field")) {
-    		if (umld.umlDiagram.isEmpty()) {
-    			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-    		} else {
     		ListClassesWindow myList = new ListClassesWindow (main, classNames);
     		int localIndex = myList.getMyClassI();
     		if (localIndex >= 0) {
@@ -246,12 +239,8 @@ public class GUIView implements ActionListener {
     			JOptionPane.showMessageDialog(main,"Error when adding field, try again");
     		
     		} 
-    		}
     		} else if (e.getActionCommand().equals("Rename field")) { 
-    			if (umld.umlDiagram.isEmpty()) {
-        			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-        		} else {
-        		ListClassesWindow classesList = new ListClassesWindow (main, classNames);
+    			ListClassesWindow classesList = new ListClassesWindow (main, classNames);
     			int classIndex = classesList.getMyClassI();
     			if (classIndex >= 0) {
     				ListFieldsWindow fieldsList = new ListFieldsWindow (main, umld.getClass(classNames[classIndex]).getFields());
@@ -268,11 +257,7 @@ public class GUIView implements ActionListener {
     					}
     				}    	
     				}
-        		}
     		} else if (e.getActionCommand().equals("Delete field")) { 
-    			if (umld.umlDiagram.isEmpty()) {
-        			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-        		} else {
     			ListClassesWindow classesList = new ListClassesWindow (main, classNames);
     			int classIndex = classesList.getMyClassI();
     			if (classIndex >= 0) {
@@ -286,14 +271,10 @@ public class GUIView implements ActionListener {
     	    					JOptionPane.showMessageDialog(main,"Error when deleting field, try again");    			
     		    			}
     					}
-    			}
-        		}
+    			}    	
     				   		
     	//methods menu
     	} else if (e.getActionCommand().equals("Add method")) {
-    		if (umld.umlDiagram.isEmpty()) {
-    			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-    		} else {
     		ListClassesWindow myList = new ListClassesWindow (main, classNames);
     		int localIndex = myList.getMyClassI();
     		if (localIndex >= 0) {
@@ -306,12 +287,8 @@ public class GUIView implements ActionListener {
     		} else {
     			JOptionPane.showMessageDialog(main,"Error when adding method, try again");
     		
-    		}
     		} 
     	} else if (e.getActionCommand().equals("Rename method")) {
-    		if (umld.umlDiagram.isEmpty()) {
-    			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-    		} else {
     		ListClassesWindow classesList = new ListClassesWindow (main, classNames);
 			int classIndex = classesList.getMyClassI();
 			if (classIndex >= 0) {
@@ -329,11 +306,7 @@ public class GUIView implements ActionListener {
 					}
 				}    	
 				}
-    		}
     	} else if (e.getActionCommand().equals("Delete method")) {
-    		if (umld.umlDiagram.isEmpty()) {
-    			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-    		} else {
     		ListClassesWindow classesList = new ListClassesWindow (main, classNames);
 			int classIndex = classesList.getMyClassI();
 			if (classIndex >= 0) {
@@ -348,13 +321,10 @@ public class GUIView implements ActionListener {
 		    			}
 					}
 			}    
-    		}
+			
 			
     	//parameters menu
     	} else if (e.getActionCommand().equals("Add parameter")) {
-    		if (umld.umlDiagram.isEmpty()) {
-    			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-    		} else {
     		ListClassesWindow classesList = new ListClassesWindow (main, classNames);
 			int classIndex = classesList.getMyClassI();
 			if (classIndex >= 0) {
@@ -371,7 +341,6 @@ public class GUIView implements ActionListener {
 	    					JOptionPane.showMessageDialog(main,"Error when renaming method, try again");    			
 		    			}
 					}
-    		}
 				   	
 		} else if (e.getActionCommand().equals("Change parameter")) {
     			JOptionPane.showMessageDialog(main,"Error when renaming parameter, try again");
@@ -384,23 +353,15 @@ public class GUIView implements ActionListener {
     		
     		
     	} else if (e.getActionCommand().equals("Add relationship")) {
-    		if (umld.umlDiagram.size() < 2) {
-    			JOptionPane.showMessageDialog(main,"No enough classes, add a class first");
-    		} else 	{
-    			String[] myInputs = getRelInput ();	
+    			String[] myInputs = getRelInput ();
     			int localIndex = findIndex (myInputs[0]);
     			if (myInputs[0] != null && myInputs[1] != null && myInputs[2] != null) {
     				if ( umld.addRelationship (myInputs[0], myInputs[1], myInputs[2])) {
-    					int srcIndex = findIndex (myInputs[0]);
-    					int destIndex = findIndex (myInputs[1]);
-    					addRel (srcIndex, destIndex);
-    					
+    					//to do
     				}
-    			else {
+    			} else {
     			JOptionPane.showMessageDialog (main, "Error when creating relationship, try again");
-    			}
-    			}
-    		}
+    			} 
     		
     	} else if (e.getActionCommand().equals("Change relationship")) {
     		//TO DO
@@ -410,7 +371,7 @@ public class GUIView implements ActionListener {
     		
     	} else if (e.getActionCommand().equals("Delete relationship")) {
     			//need to complete
-    		JOptionPane.showMessageDialog(main,"still working on it");
+    		
     		
     		
     		
@@ -434,13 +395,25 @@ public class GUIView implements ActionListener {
     		//TO DO
     		JOptionPane.showMessageDialog(main,"still working on it");
     		
-    	} 
+    		
+    		
+    	} else if (e.getActionCommand().equals("CLI mode")) {
+    		String[] args = new String[1];
+    		try {
+    			main.setVisible(false);    		
+    			UMLCli.main(args);
+    			
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+    		
+    	}
     }
     
     //helper functions 
     
    //fill a class rectangle area  given an index for the position on the screen 
-    public static void addClass (String className, int x, int y, int index) {
+    public static void fillClassRep (String className, int x, int y, int index) {
     	int [] myComp = calculateXY (x, y);
     	classRep.add(index, new Classes(myComp[0], myComp[1], WIDTH, HEIGHT));
     	classNames[index] = className;
@@ -457,23 +430,12 @@ public class GUIView implements ActionListener {
     	main.repaint();
     }
     
-    public static void addRel (int src, int dest) {
-    	Arrow rel = new Arrow ( classRep.get(src).getX(),
-				classRep.get(src).getY(),
-				classRep.get(dest).getX(),
-				classRep.get(dest).getY());
-    	main.getContentPane().add(rel);
-    	
-    }
-    
     //get the x and y position for the given indexes 
     //x = 1 y = 4 would go position [1,4] on a matrix of 6x4
     public static int[] calculateXY (int x, int y) {
-    	int [] xAndY = new int [] {50 + x * 275, 50 + y * 225};
-    	if (xAndY[0] >= (int)screenSize.getWidth() - WIDTH || xAndY[1] >= (int)screenSize.getHeight()- HEIGHT) {
-    		return new int [] {50, 50};
-    	}
-    	return xAndY;
+    	int startX = 50;
+    	int startY = 50;
+    	return new int[] {startX + x * 275, startY + y * 225};
     }
     
     //get type and name for user 

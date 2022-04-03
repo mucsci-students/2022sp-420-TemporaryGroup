@@ -1,13 +1,11 @@
 package TemporaryGroupGradle;
-
 /**
  * This class represents a relationship between two classes in a UML diagram.
  * It consists of a constructor and getter and setter methods for the class's data.
  */
 
 public class UMLRelationship {
-    
-	/**
+    /**
      * Class data. This is accessed using getter and setter methods below.
      */
     private String source, destination, type;
@@ -21,15 +19,8 @@ public class UMLRelationship {
      * @param relDest The destination class for the relationship
      * @param relType The type of this relationship. 
      * @param relName The name of this relationship.
-     * @return 
      */
-    public UMLRelationship (String relSrc, String relDest, String relType) {
-        if (relSrc == relDest) {
-        	throw new IllegalArgumentException ("Source and Destination can not be the same");
-        }
-        if ( !isValidType (relType)) {
-        	throw new IllegalArgumentException ("Type is not valid");
-        }
+    public UMLRelationship(String relSrc, String relDest, String relType) {
         source = relSrc;
         destination = relDest;
         type = relType;
