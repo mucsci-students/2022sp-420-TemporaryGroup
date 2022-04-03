@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="C:/Users/irifa/Desktop/jackson-core-2.13.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/irifa/Desktop/jackson-databind-2.13.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/irifa/Desktop/json-simple-1.1.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

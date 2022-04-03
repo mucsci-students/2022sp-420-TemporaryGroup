@@ -7,23 +7,27 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 class TestClass {
-
+	
+	@Test
 	void testUMLClassConstructor() {
 		UMLClass test = new UMLClass ("car");
 		assertNotNull (test, "failed when creating a class");
 	}
-
+	
+	@Test
 	void testGetClassName() {
 		UMLClass test = new UMLClass ("car");
 		assertEquals ("car", test.getClassName(), "getClassName failed");
 	}
-
+	
+	@Test
 	void testRenameClass() {
 		UMLClass test = new UMLClass ("car");
 		test.renameClass("bank");
 		assertEquals ("bank", test.getClassName(), "renameClass failed");
 	}
 
+	@Test
 	void testGetFields() {
 		Field f1 = new Field ("wheels", "int");
 		Field f2 = new Field ("tankCapacity", "double");
@@ -38,7 +42,8 @@ class TestClass {
 		test.addField("tankCapacity", "double");
 		assertEquals (ftest, test.getFields(), "getFields failed");
 	}
-
+	
+	@Test
 	void testGetMethods() {
 		Method m1 = new Method ("tools", "string");
 		Method m2 = new Method ("setBreaks", "bool");
@@ -72,7 +77,8 @@ class TestClass {
 	void testRenameFieldType() {
 		fail("Not yet implemented");
 	}
-
+	
+	@Test
 	void testGetField() {
 		Field ftest = new Field ("wheels", "int");
 		UMLClass test = new UMLClass ("car");
