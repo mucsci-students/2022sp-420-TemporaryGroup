@@ -8,3 +8,26 @@ jdk: oraclejdk8
 script:
   - chmod +x gradlew
   - ./gradlew build --scan -s
+ 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  
+<plugin>
+  <groupId>org.jacoco</groupId>
+  <artifactId>jacoco-maven-plugin</artifactId>
+  <version>0.7.5.201505241946</version>
+  <executions>
+    <execution>
+      <goals>
+        <goal>prepare-agent</goal>
+      </goals>
+    </execution>
+    <execution>
+      <id>report</id>
+      <phase>test</phase>
+      <goals>
+        <goal>report</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
