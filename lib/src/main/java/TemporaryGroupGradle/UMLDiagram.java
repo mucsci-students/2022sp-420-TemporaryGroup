@@ -411,7 +411,13 @@ public class UMLDiagram {
             }
         }
         // Add the relationship
-        UMLRelationship newRel = new UMLRelationship(source, dest, type);
+        UMLRelationship newRel;
+        try {
+        	newRel = new UMLRelationship(source, dest, type);
+        } catch (Exception e){
+        	System.out.println("Error when creating relationship");
+        	return false;
+        }
         relationships.add(newRel);
         System.out.println("Added new relationship between class '" + source + "' and class '" + dest + "'.");
         return true;
