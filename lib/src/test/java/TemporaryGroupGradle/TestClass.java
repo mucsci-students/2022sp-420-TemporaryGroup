@@ -28,6 +28,7 @@ class TestClass {
 		assertEquals ("bank", test.getClassName(), "renameClass failed");
 	}
 
+	/*
 	@Test
 	void testGetFields() {
 		Field f1 = new Field ("wheels", "int");
@@ -60,7 +61,7 @@ class TestClass {
 		assertEquals (mtest, test.getMethods(), "getMethods failed");
 		
 	}
-
+	*/
 	void testAddField() {
 		
 		
@@ -75,6 +76,7 @@ class TestClass {
 	void testRenameFieldType() {
 	}
 
+		/*
 	@Test
 	void testGetField() {
 		Field ftest = new Field ("wheels", "int");
@@ -82,7 +84,7 @@ class TestClass {
 		test.addField("wheels", "int");
 		assertEquals (ftest, test.getField(null), "getFields failed");
 	}
-
+*/
 	void testFieldExists() {
 	}
 
