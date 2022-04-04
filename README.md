@@ -29,9 +29,9 @@ To be able to run the program, please follow these steps.
 
    Run "gradle build" to first build the gradle installation
     
-   If you want to run the CLI, use the command "gradle run" to run CLI
+   If you want to run the CLI, use the command "gradle run" to run GUI
 
-   If you want to run the GUI, use the command "gradle run --args=="GUI" to run GUI.
+   If you want to run the GUI, use the command "gradle run --args=="cli" to run CLI.
 
 10. Have fun with your command line UML editor!
 
