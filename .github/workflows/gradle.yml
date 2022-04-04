@@ -12,7 +12,11 @@ on:
     branches: [ develop ]
   pull_request:
     branches: [ develop ]
-
+    
+env:
+  CODECOV_TOKEN: '6a88199a-bc86-4ad4-8298-0a7a1beffa52'
+  
+  
 jobs:
   build:
 
