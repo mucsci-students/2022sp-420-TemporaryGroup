@@ -1,0 +1,12 @@
+1. MVC - The UML Editor uses model, view, controller components. For example, we have a diagram MODEL named
+UMLEditor.java, a CONTROLLER named CliController.java, and a VIEW named CLIView.java.
+
+2. Builder - Classes/Objects such as the UMLCLass.java is composed of the field class, method class, and 
+parameter class. 
+
+3. Observer - The Jline3 line reader observes change in the command line interface for the user input and 
+notifies the tab completer. 
+
+4. Chain of Resposibility  - When a user types exit in the CLI, the input handler passes the request further
+and then prompts the user for a yes (y) or no (n). If the input is something other than that then the controller 
+has to handle it. 
