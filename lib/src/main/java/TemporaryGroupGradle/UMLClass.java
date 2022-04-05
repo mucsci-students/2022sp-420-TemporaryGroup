@@ -42,7 +42,7 @@ public class UMLClass {
      * @return ArrayList<Field>
      */
     public ArrayList<Field> getFields() {
-        return this.fields;
+        return fields;
     }
     
     public ArrayList<Method> getMethods() {
