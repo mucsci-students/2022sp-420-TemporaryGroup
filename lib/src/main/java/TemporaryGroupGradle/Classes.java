@@ -23,7 +23,6 @@ public class Classes extends JPanel {
 	//creating class with given position
 	Classes (int x, int y, int width, int height) {
 		corner = new Point (x, y);
-		//m_width = width;
 		m_width = width;
 		m_height = height;
 		//ClickListener clickListener = new ClickListener ();
