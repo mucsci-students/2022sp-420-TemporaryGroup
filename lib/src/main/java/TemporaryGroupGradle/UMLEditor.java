@@ -5,7 +5,7 @@ public class UMLEditor {
 		
 		if (args.length != 0 ) {
 			if (args[0].equals("cli")) {
-			UMLCli.main(args);
+			CliController.main(args);
 			}
 		} else {
 			GUIView.main(args);

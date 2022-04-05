@@ -52,7 +52,7 @@ public class CLIView {
 			System.out.println(e);
 		}
 	}
-
+	
     public ArrayList<String> getInput() {
 
     	ArrayList<String> result = new ArrayList<String>();
