@@ -9,33 +9,33 @@ class TestParameter {
 	@Test
 	void testParameterConstructor() {
 		Parameter test = new Parameter ("size", "int");
-		assertNotNull (test, "failed when creating new parameter");
+		assertNotNull (test);
 	}
 
 	@Test
 	void testGetParamName() {
 		Parameter test = new Parameter ("size", "int");
-		assertEquals ("size", test.getParamName(), "error when setting Parameter name");
+		assertEquals ("size", test.getParamName());
 		
 	}
 
 	@Test
 	void testGetParamType() {
 		Parameter test = new Parameter ("size", "int");
-		assertEquals ("int", test.getParamType(), "error when setting Parameter type");
+		assertEquals ("int", test.getParamType());
 	}
 
 	@Test
 	void testRenameParam() {
 		Parameter test = new Parameter ("size", "double");
 		test.renameParam("length");
-		assertEquals ("length", test.getParamName(), "renameParam failed");
+		assertEquals ("length", test.getParamName());
 	}
 
 	@Test
 	void testRenameParamType() {
 		Parameter test = new Parameter ("size", "double");
 		test.renameParamType("int");
-		assertEquals ("int", test.getParamType(), "renameParamType failed");
+		assertEquals ("int", test.getParamType());
 	}
 }
