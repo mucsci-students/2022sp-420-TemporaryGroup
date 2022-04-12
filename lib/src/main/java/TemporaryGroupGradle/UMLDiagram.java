@@ -22,6 +22,8 @@ public class UMLDiagram implements Cloneable {
             System.out.println("The class '" + className + "' already exists in the diagram.");
             return false;
         }
+        System.out.println("Error when validating name of Class");
+        return false;
     }
 
     public Boolean removeClass(String className){
@@ -56,6 +58,8 @@ public class UMLDiagram implements Cloneable {
             System.out.println("A class named '" + newClassName + "' already exists in the diagram.");
             return false;
         }
+        System.out.println("Error when validating name of Class");
+        return false;
     }
 
     public boolean classExists(String className){
@@ -429,6 +433,7 @@ public class UMLDiagram implements Cloneable {
             }
         }
         // Add the relationship
+
         updateUndoRedoStacks();
         UMLRelationship newRel = new UMLRelationship(source, dest, type);
         relationships.add(newRel);
@@ -610,4 +615,35 @@ public class UMLDiagram implements Cloneable {
 			return false;
 		}
 	}
+
+    /**
+     * Checks to see if class name is valid.
+     * @param name
+     * @return
+     
+    public static Boolean isValidClassName(String name) {
+		if(name.equals("")) {
+			return false;
+		}
+		if(name.matches("^[-_A-Za-z0-9]+$")) {
+			if(name.charAt(0) >= '0' && name.charAt(0) <= '9') {
+				System.out.println("Error: Invalid class name. Class names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Class names must follow standard Java naming conventions.");
+				return false;
+			}
+			else if(name.charAt(0) == ('_')) {
+				System.out.println("Error: Invalid Class name. Class names can only contain A-Z, a-z, 0-9, and underscore.");
+				System.out.println("Class names must follow standard Java naming conventions.");
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			System.out.println("Error: Invalid Class name. Class names can only contain A-Z, a-z, 0-9, and underscore.");
+			System.out.println("Class names must follow standard Java naming conventions.");
+			return false;
+		}
+	} */
 }

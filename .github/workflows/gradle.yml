@@ -12,7 +12,11 @@ on:
     branches: [ develop ]
   pull_request:
     branches: [ develop ]
-
+    
+env:
+  CODECOV_TOKEN: '6a88199a-bc86-4ad4-8298-0a7a1beffa52'
+  
+  
 jobs:
   build:
 
@@ -33,6 +37,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Code coverage
-      uses: codecov/codecov-action@v1.0.6
+      uses: codecov/codecov-action@v2
       with:
-        fail_ci_if_error: false
+        token: 6a88199a-bc86-4ad4-8298-0a7a1beffa52
+        fail_ci_if_error: true

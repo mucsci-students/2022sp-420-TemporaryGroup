@@ -20,7 +20,13 @@ public class UMLRelationship {
      * @param relType The type of this relationship. 
      * @param relName The name of this relationship.
      */
-    public UMLRelationship(String relSrc, String relDest, String relType) {
+    public UMLRelationship (String relSrc, String relDest, String relType) {
+        if (relSrc == relDest) {
+        	throw new IllegalArgumentException ("Source and Destination can not be the same");
+        }
+        if ( !isValidType (relType)) {
+        	throw new IllegalArgumentException ("Type is not valid");
+        }
         source = relSrc;
         destination = relDest;
         type = relType;
