@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.Stack;
 
 
-public class UMLDiagram {
-    
+public class UMLDiagram implements Cloneable {
+    // rename this to classes
     HashMap<String, UMLClass> umlDiagram = new HashMap<String, UMLClass>();
     ArrayList<UMLRelationship> relationships = new ArrayList<UMLRelationship>();
-
     private static Stack<UMLDiagram> undoStack = new Stack<UMLDiagram>();
     private static Stack<UMLDiagram> redoStack = new Stack<UMLDiagram>();
 
@@ -474,8 +473,11 @@ public class UMLDiagram {
             return false;
         }
         else {
-            redoStack.push(this);
-            this = undoStack.pop();
+            redoStack.push(this.clone());
+            UMLDiagram temp = undoStack.pop();
+            umlDiagram = temp.umlDiagram;
+            relationships = temp.relationships;
+            System.out.println("Action successfully undone.");
             return true;
         }
     }
@@ -490,8 +492,11 @@ public class UMLDiagram {
             return false;
         }
         else {
-            undoStack.push(this);
-            this = redoStack.pop();
+            undoStack.push(this.clone());
+            UMLDiagram temp = redoStack.pop();
+            umlDiagram = temp.umlDiagram;
+            relationships = temp.relationships;
+            System.out.println("Action successfully redone.");
             return true;
         }
     }
@@ -503,7 +508,17 @@ public class UMLDiagram {
      */
     private void updateUndoRedoStacks() {
         redoStack.clear();
-        undoStack.push(this);
+        undoStack.push(this.clone());
+    }
+    
+    /**
+     * Returns a clone of this UML Diagram
+     */
+    public UMLDiagram clone() {
+    	UMLDiagram toReturn = new UMLDiagram();
+    	toReturn.relationships = (ArrayList<UMLRelationship>) relationships.clone();
+    	toReturn.umlDiagram = (HashMap<String, UMLClass>) umlDiagram.clone();
+    	return toReturn;
     }
 
     /**
