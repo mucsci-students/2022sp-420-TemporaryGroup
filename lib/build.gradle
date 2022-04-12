@@ -11,6 +11,7 @@ plugins {
     id 'java-library'
     id 'application'
     id 'jacoco'
+    id 'com.github.johnrengelman.shadow' version "7.1.2"
 }
 
 application {
@@ -24,9 +25,18 @@ test {
 	useJUnitPlatform()
 }
 
+shadowJar {
+	manifest {
+		attributes 'Main-Class': 'TemporaryGroupGradle.UMLEditor'
+	}
+	baseName = 'UML'
+}
+
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
