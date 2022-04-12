@@ -93,6 +93,8 @@ public class Load {
 			UMLDiagram savedDiagram = gson.fromJson(json, typeOfUMLDiagram);
 
 			loadDiagram = savedDiagram; 
+			UMLDiagram.clearUndoRedo();
+			
 			System.out.println("Successfully loaded!");
 			//Print out for proof of it working TO BE DELETED
 			String Json = new Gson().toJson(loadDiagram);
