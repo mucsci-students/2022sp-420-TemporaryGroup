@@ -22,8 +22,6 @@ public class UMLDiagram implements Cloneable {
             System.out.println("The class '" + className + "' already exists in the diagram.");
             return false;
         }
-        System.out.println("Error when validating name of Class");
-        return false;
     }
 
     public Boolean removeClass(String className){
@@ -58,8 +56,6 @@ public class UMLDiagram implements Cloneable {
             System.out.println("A class named '" + newClassName + "' already exists in the diagram.");
             return false;
         }
-        System.out.println("Error when validating name of Class");
-        return false;
     }
 
     public boolean classExists(String className){
