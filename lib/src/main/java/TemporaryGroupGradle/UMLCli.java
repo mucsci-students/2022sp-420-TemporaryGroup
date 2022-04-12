@@ -37,6 +37,7 @@ public class UMLCli {
 	public static boolean hasUnsavedWork = false;
 	public static Save saver = new Save();
 	public static Load loader = new Load();
+	public 
 	/**
 	 * For the tab completer.
 	 */
