@@ -24,6 +24,7 @@ public class TestUMLDiagram {
     @Test
     void testCanUndoFalse() {
         UMLDiagram umld = new UMLDiagram();
+        umld.undo();
         assertFalse(umld.canUndo());
     }
 
