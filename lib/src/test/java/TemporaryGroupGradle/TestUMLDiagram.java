@@ -24,15 +24,12 @@ public class TestUMLDiagram {
     @Test
     void testCanUndoFalse() {
         UMLDiagram umld = new UMLDiagram();
-        umld.addClass("c1");
-        umld.undo();
         assertFalse(umld.canUndo());
     }
 
     @Test
     void testcanRedoFalse() {
         UMLDiagram umld = new UMLDiagram();
-        umld.addClass("c1");
         assertFalse(umld.canRedo());
     }
 
