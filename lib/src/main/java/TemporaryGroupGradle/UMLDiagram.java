@@ -464,6 +464,24 @@ public class UMLDiagram implements Cloneable {
     	return umlDiagram; 
     }
 
+    public Boolean canUndo() {
+        if(undoStack.empty()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public Boolean canRedo() {
+        if(redoStack.empty()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     /**
      * Undoes the last action, if any
      * @return True if there was an action to undo, false if not
