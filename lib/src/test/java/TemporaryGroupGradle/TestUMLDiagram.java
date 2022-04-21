@@ -21,16 +21,4 @@ public class TestUMLDiagram {
         assertTrue(umld.canRedo());
     }
 
-    @Test
-    void testCanUndoFalse() {
-        UMLDiagram umld = new UMLDiagram();
-        assertFalse(umld.canUndo());
-    }
-
-    @Test
-    void testcanRedoFalse() {
-        UMLDiagram umld = new UMLDiagram();
-        assertFalse(umld.canRedo());
-    }
-
 }
