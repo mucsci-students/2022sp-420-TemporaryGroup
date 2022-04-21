@@ -28,4 +28,11 @@ public class TestUMLDiagram {
         assertFalse(umld.canUndo());
     }
 
+    @Test
+    void testCanRedoFalse() {
+        UMLDiagram umld = new UMLDiagram();
+        umld.redo();
+        assertFalse(umld.canRedo());
+    }
+
 }
