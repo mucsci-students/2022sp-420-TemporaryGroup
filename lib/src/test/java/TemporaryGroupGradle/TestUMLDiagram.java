@@ -7,18 +7,33 @@ import org.junit.jupiter.api.Test;
 public class TestUMLDiagram {
     
     @Test
-	void testCanUndo() {
+	void testCanUndoTrue() {
         UMLDiagram umld = new UMLDiagram();
         umld.addClass("c1");
         assertTrue(umld.canUndo());
     }
 
     @Test
-    void testCanRedo() {
+    void testCanRedoTrue() {
         UMLDiagram umld = new UMLDiagram();
         umld.addClass("c1");
         umld.undo();
         assertTrue(umld.canRedo());
+    }
+
+    @Test
+    void testCanUndoFalse() {
+        UMLDiagram umld = new UMLDiagram();
+        umld.addClass("c1");
+        umld.undo();
+        assertFalse(umld.canUndo());
+    }
+
+    @Test
+    void testcanRedoFalse() {
+        UMLDiagram umld = new UMLDiagram();
+        umld.addClass("c1");
+        assertFalse(umld.canRedo());
     }
 
 }
