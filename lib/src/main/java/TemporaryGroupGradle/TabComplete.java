@@ -1,11 +1,14 @@
 package TemporaryGroupGradle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.jline.reader.Candidate;
 import org.jline.reader.Completer;
+import org.jline.reader.Editor;
 import org.jline.reader.LineReader;
 import org.jline.reader.ParsedLine;
 import org.jline.reader.impl.completer.NullCompleter;
@@ -77,9 +80,54 @@ public class TabComplete {
         );
     }
 
-    public AggregateCompleter updateCompleter(){
+    public AggregateCompleter updateCompleter(UMLDiagram model){
         Collection<Completer> completers = comp.getCompleters();
         completers = new ArrayList<>(completers);
+        
+        ArrayList<UMLClass> classes = model.getClasses();
+        ArrayList<String> classNames = new ArrayList<String>();
+        Iterator<HashMap.Entry<String, UMLClass>> hmIter = model.umlDiagram.entrySet().iterator();
+			while (hmIter.hasNext()) {
+				Map.Entry<String, UMLClass> mapElem = (Map.Entry<String, UMLClass>) hmIter.next();
+				classNames.add(mapElem.getKey());
+            }
+        
+    
+        for(UMLClass key : classes){
+            classNames.add(key.getClassName());
+
+
+            ArrayList<String> fields = new ArrayList<String>();
+            for(Field field : key.getFields()){
+                fields.add(field.getFieldName());
+
+                completers.add(
+                    new ArgumentCompleter(
+                        new StringsCompleter("delete", "rename", "change"),
+                        new StringsCompleter("field"),
+                        new StringsCompleter(classNames),
+                        new StringsCompleter(fields),
+                        new NullCompleter()
+                    )
+                );
+            }
+
+            ArrayList<String> methods = new ArrayList<String>();
+            for(Method method : key.getMethods()){
+                methods.add(method.getMethodName());
+
+                completers.add(
+                    new ArgumentCompleter(
+                        new StringsCompleter("delete", "rename", "change"),
+                        new StringsCompleter("method"),
+                        new StringsCompleter(classNames),
+                        new StringsCompleter(methods),
+                        new NullCompleter()
+                    )
+                );
+            }
+        }
+
         return new AggregateCompleter(completers);
     }
 

@@ -69,6 +69,22 @@ public class UMLDiagram implements Cloneable {
         return null;
     }
 
+    public ArrayList<UMLClass> getClasses(){
+        ArrayList<UMLClass> classes = new ArrayList<UMLClass>();
+        for(int i = 0; i < umlDiagram.size(); i++){
+            classes.add(umlDiagram.get(i));
+        }
+        return classes;
+    }
+
+    public ArrayList<String> getClassNames(){
+        ArrayList<String> classes = new ArrayList<String>();
+        for(int i = 0; i < umlDiagram.size(); i++){
+            classes.add(umlDiagram.getClass().getName());
+        }
+        return classes;
+    }
+
     /**
      * Adds a new field in the class if the class exists.
      * @param className

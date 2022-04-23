@@ -46,7 +46,7 @@ public class CLIView {
 	public void setTerminal(UMLDiagram model){
 		try {
 			terminal = TerminalBuilder.builder().system(true).build();
-			AggregateCompleter comp = new TabComplete().updateCompleter();
+			AggregateCompleter comp = new TabComplete().updateCompleter(model);
 			reader = LineReaderBuilder.builder().terminal(terminal).completer(comp).highlighter(highlighter).history(history).variable(LineReader.MENU_COMPLETE, true).build();
 		} catch (IOException e) {
 			System.out.println(e);
