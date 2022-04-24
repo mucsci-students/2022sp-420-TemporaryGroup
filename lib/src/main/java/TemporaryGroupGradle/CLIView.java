@@ -58,21 +58,9 @@ public class CLIView {
     	ArrayList<String> result = new ArrayList<String>();
 		String line = null;
 		line = reader.readLine("> ");
-
-        if(line.trim().equalsIgnoreCase("exit") ){
-            System.out.println("Are you sure you want to exit? [y/n]");
-            String answer = input.nextLine();
-            if(answer.equals("y")){
-                System.exit(0);
-            }else if(!answer.equals("y") && !answer.equals("n")) {
-                commandNotRecognized();
-            }
-        }else{
-            parser = reader.getParsedLine();
-		    String[] arrayLine = parser.words().toArray(new String[parser.words().size()]);
-		    result = new ArrayList<String>(Arrays.asList(arrayLine));
-
-        }
+        parser = reader.getParsedLine();
+		String[] arrayLine = parser.words().toArray(new String[parser.words().size()]);
+		result = new ArrayList<String>(Arrays.asList(arrayLine));
         return result;
     }
 

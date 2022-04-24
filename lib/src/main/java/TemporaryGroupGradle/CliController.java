@@ -34,7 +34,18 @@ public class CliController {
                     if(hasUnsavedWork) {
                         System.out.print("There is currently unsaved work. ");
                     }
-                    userInput = false;
+                    System.out.println("Are you sure you want to exit? [y/n]");
+                    ArrayList<String> answer = view.getInput();
+                    // if "y", exit program
+		            if(checkCommand(answer, 0, "y")) {
+			            System.exit(0);
+		            }
+		            // if neither "y" nor "n", invalid command (resume program)
+		            else if(!checkCommand(answer, 0, "y") && !(checkCommand(answer, 0, "n"))) {
+			            commandNotRecognized();
+		            }
+		            // if "n", do nothing (resume program)
+                    
                 }
                 // ADD
                 else if(checkCommand(commands, 0, "add")){
@@ -180,6 +191,12 @@ public class CliController {
                 // LOAD
                 }else if(checkCommand(commands, 0, "load")){
                     loadDiagram();
+                // UNDO
+                }else if(checkCommand(commands, 0, "undo")) {
+                    undoCommand();
+                // REDO
+                }else if(checkCommand(commands, 0, "redo")) {
+                    redoCommand();
                 // HELP
                 }else if(checkCommand(commands, 0, "help")){
                     System.out.println();
@@ -194,6 +211,8 @@ public class CliController {
                     System.out.println("\tlist: List all [classes] in the diagram, all [relationships], or one specific [class].");
                     System.out.println("\tsave: Save the current UML diagram to a JSON or YAML file.");
                     System.out.println("\tload: Load an existing UML diagram from a JSON or YAML file.");
+                    System.out.println("\tundo: Undo the previous action.");
+                    System.out.println("\tredo: Redo the last undone action, as long as no new actions have been done since then.");
                     System.out.println("\thelp: View all editor commands.");
                     System.out.println("\texit: Quit the editor.");
                     System.out.println();
@@ -241,17 +260,15 @@ public class CliController {
 	}
 
     public static void listClass (String name) {
-		System.out.println();
-		System.out.println("Class: ");
-		System.out.println("- " + name);
+        System.out.println();
+		System.out.println("Class: " + name);
 		System.out.println("Fields:");
 		for(int i = 0; i < model.getClass(name).fields.size(); i++) {
 			System.out.println("- " + model.getClass(name).fields.get(i).getFieldName() + ": " + model.getClass(name).fields.get(i).getFieldType());
 		}
-		System.out.println();
 		System.out.println("Methods:");
 		for(int i = 0; i < model.getClass(name).methods.size(); i++) {
-			System.out.print("- " + model.getClass(name).methods.get(i).getMethodName() + ": " + model.getClass(name).methods.get(i).getMethodType() + " ");
+			System.out.print("+ " + model.getClass(name).methods.get(i).getMethodType() + " " + model.getClass(name).methods.get(i).getMethodName());
 			System.out.print("(");
 			for(int j = 0; j < model.getClass(name).methods.get(i).getParameterList().size(); j++){
 				if(j > 0){
@@ -292,6 +309,14 @@ public class CliController {
 			}
 		} 
 	}
+
+    public static void undoCommand() {
+        model.undo();
+    }
+
+    public static void redoCommand() {
+        model.redo();
+    }
 
 	public static void saveDiagram() throws Exception {
 		saver.saveDiagram = model;
