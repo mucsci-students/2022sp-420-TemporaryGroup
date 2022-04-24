@@ -5,7 +5,7 @@ import java.io.File;
 
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
@@ -25,6 +25,8 @@ public class Save {
 	
 	UMLDiagram saveDiagram = new UMLDiagram();
 	UMLClass atTest = new UMLClass("create!");
+	ArrayList<UMLClass> classes;
+	SaveTemplate saveTemplate = new SaveTemplate();
 
 	
 	/*
@@ -36,6 +38,14 @@ public class Save {
 		//User will input name of file first that they want to create (AT THIS MOMENT MUST TYPE .json AT THE END)
 		
 		//GSON for JSON file to be converted (Test TO BE DELETED)
+/*		Iterator<HashMap.Entry<String, UMLClass>> hmIter = saveDiagram.Classes.entrySet().iterator();
+		while (hmIter.hasNext()) {
+			
+			Map.Entry<String, UMLClass> mapElem = (Map.Entry<String, UMLClass>) hmIter.next();
+			classes.add(saveDiagram.Classes.get(mapElem.getKey()));
+		}
+		
+*/
 		Scanner filepath = new Scanner(System.in);
 		Scanner filename = new Scanner(System.in);
 		
@@ -49,7 +59,10 @@ public class Save {
 		System.out.print("> ");
 		String FilePath = filepath.next();
 		
-		String Json = new Gson().toJson(saveDiagram);	
+		classes = new ArrayList<>(saveDiagram.umlDiagram.values());
+		saveTemplate.classes = classes;
+		saveTemplate.relationships = saveDiagram.relationships;
+		String Json = new Gson().toJson(saveTemplate);	
 		
 		ObjectMapper mapper = new ObjectMapper();
 		

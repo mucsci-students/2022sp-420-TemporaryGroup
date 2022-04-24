@@ -2,8 +2,8 @@ package TemporaryGroupGradle;
 
 public class Field {
 
-    private String fieldName;
-    private String fieldType;
+    private String name;
+    private String type;
 
     /**
      * Creates a new field.
@@ -11,8 +11,8 @@ public class Field {
      * @param fieldType
      */
     public Field(String fieldName, String fieldType){
-        this.fieldName = fieldName;
-        this.fieldType = fieldType;
+        this.name = fieldName;
+        this.type = fieldType;
     }
 
     /**
@@ -20,7 +20,7 @@ public class Field {
      * @return fieldName
      */
     public String getFieldName(){
-        return this.fieldName;
+        return this.name;
     }
 
     /**
@@ -28,7 +28,7 @@ public class Field {
      * @return
      */
     public String getFieldType(){
-        return this.fieldType;
+        return this.type;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Field {
      * @param newName
      */
     public void renameField(String newName){
-        this.fieldName = newName;
+        this.name = newName;
     }
 
     /**
@@ -44,7 +44,7 @@ public class Field {
      * @param newFieldType
      */
     public void renameFieldType(String newFieldType){
-        this.fieldType = newFieldType;
+        this.type = newFieldType;
     }
 
 
