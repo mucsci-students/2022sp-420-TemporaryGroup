@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class UMLClass {
     
-    String className;
+    String name;
     ArrayList<Field> fields = new ArrayList<Field>();
     ArrayList<Method> methods = new ArrayList<Method>();
     Point location = new Point (0,0);
@@ -18,7 +18,7 @@ public class UMLClass {
      * @param className
      */
     public UMLClass(String className){
-        this.className = className;
+        this.name = className;
     }
 
     /**
@@ -26,7 +26,7 @@ public class UMLClass {
      * @return className
      */
     public String getClassName(){
-        return this.className;
+        return this.name;
     }
 
     /**
@@ -34,7 +34,7 @@ public class UMLClass {
      * @param newClassName
      */
     public void renameClass(String newClassName){
-        this.className = newClassName;
+        this.name = newClassName;
     }
 
     /**
@@ -124,7 +124,7 @@ public class UMLClass {
      */
     public void addMethod(String newMethod, String newMethodType) {
         methods.add(new Method(newMethod, newMethodType));  
-     }
+    }
 
      /**
      * Removes a method from the class if it exists. 

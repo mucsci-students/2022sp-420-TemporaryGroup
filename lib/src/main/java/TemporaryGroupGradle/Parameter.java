@@ -3,16 +3,16 @@ package TemporaryGroupGradle;
 
 public class Parameter {
 
-    private String paramName;
-    private String paramType;
+    private String name;
+    private String type;
 
     /**
      * Creates a parameter.
      * @param paramName
      */
     public Parameter(String paramName, String paramType){
-        this.paramName = paramName;
-        this.paramType = paramType;
+        this.name = paramName;
+        this.type = paramType;
     }
 
     /**
@@ -20,7 +20,7 @@ public class Parameter {
      * @return paramName
      */
     public String getParamName(){
-        return this.paramName;
+        return this.name;
     }
 
     /**
@@ -28,7 +28,7 @@ public class Parameter {
      * @return paramType
      */
     public String getParamType(){
-        return this.paramType;
+        return this.type;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Parameter {
      * @param newParamName
      */
     public void renameParam(String newParamName){
-        this.paramName = newParamName;
+        this.name = newParamName;
     }
 
     /**
@@ -44,7 +44,7 @@ public class Parameter {
      * @param newParamType
      */
     public void renameParamType(String newParamType){
-        this.paramType = newParamType;
+        this.type = newParamType;
     }
     
 }

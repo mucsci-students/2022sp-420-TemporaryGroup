@@ -23,7 +23,7 @@ import javax.swing.JFileChooser;
 public class Load {
 	
 	UMLDiagram loadDiagram = new UMLDiagram();
-	
+	SaveTemplate saveTemplate = new SaveTemplate();
 
 	public Boolean loadFile() throws Exception {
 		//file location picked from JSwing
@@ -56,13 +56,14 @@ public class Load {
 			String json = readFileAsString(fileLocation);
 			Gson gson = new Gson();
 			
-			Type typeOfUMLDiagram = new TypeToken<UMLDiagram>() { }.getType();
-			UMLDiagram savedDiagram = gson.fromJson(json, typeOfUMLDiagram);
+			Type typeOfUMLDiagram = new TypeToken<SaveTemplate>() { }.getType();
+			SaveTemplate savedDiagram = gson.fromJson(json, typeOfUMLDiagram);
 
-			loadDiagram = savedDiagram; 
-			System.out.println("Successfully loaded!");
-			//Print out for proof of it working TO BE DELETED
-			String Json = new Gson().toJson(loadDiagram);
+			saveTemplate = savedDiagram;
+			for (int i = 0; i < saveTemplate.classes.size(); i++) { 		      
+				loadDiagram.umlDiagram.put(saveTemplate.classes.get(i).getClassName(), saveTemplate.classes.get(i));
+		    }   
+			loadDiagram.relationships = saveTemplate.relationships;
 			System.out.println("Successfully loaded!");
 			return true;
 		} catch (AccessDeniedException|IllegalStateException|JsonSyntaxException | NoSuchFileException e){
