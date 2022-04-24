@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 //test
 public class Classes extends JPanel {
 	
+	private static final long serialVersionUID = 1L;
 	JLabel name = new JLabel();
 	JComboBox<String> fieldsDrop = new JComboBox<String>();
 	JComboBox<String> methodsDrop = new JComboBox<String>();
@@ -26,6 +27,7 @@ public class Classes extends JPanel {
 		//m_width = width;
 		m_width = width;
 		m_height = height;
+		relID = -1;
 		//ClickListener clickListener = new ClickListener ();
 		//DragListener dragListener = new DragListener();
 		this.setBackground(Color.white);
@@ -147,10 +149,19 @@ public class Classes extends JPanel {
 		m_height = height;
 	}
 	
+	public int getRelID () {
+		return relID;
+	}
+	
+	public void setRelID (int id) {
+		relID = id;
+	}
+	
 	private Point corner;
 	//private Point prevPt;
 	private int m_width;
 	private int m_height;
+	private int relID;
 
 	/*
 	public class ClickListener extends MouseAdapter {

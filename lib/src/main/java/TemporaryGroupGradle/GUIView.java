@@ -20,7 +20,7 @@ public class GUIView implements ActionListener {
     
 	static JLabel text;
 	static JFrame main = new JFrame("UMLEditor");
-
+	
 	public static Save saver = new Save();
 	public static Load loader = new Load();
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -29,6 +29,7 @@ public class GUIView implements ActionListener {
 	static final int HEIGHT = 200;
 	//keep tracks of classes rectangles
 	static ArrayList<Classes> classRep = new ArrayList<> ();
+	static ArrayList<Arrow> relationships = new ArrayList<> ();
 	static final int CLASSESPERROW = (screenSize.height - 75) / 200;
 	static final int CLASSESPERCOL = (screenSize.width - 50) / 250;
 	//store class name -- y pos for field -- y position for method -- y position for parameter
@@ -36,12 +37,14 @@ public class GUIView implements ActionListener {
 	
 	//keep track of current index
 	static int index = 0;
-	
+	//keep track of relationship and classes associated
+	static int relationshipID = 0;
 
 	//keep track of available indexes if any
 	static int [] available = new int [CLASSESPERROW * CLASSESPERCOL];
 	//use for dragging
 	static ComponentMover cm = new ComponentMover();
+
 	
 	
     //Driver function
@@ -51,7 +54,7 @@ public class GUIView implements ActionListener {
     	main.setSize(screenSize);
     	main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	main.setLayout(null);
-    	main.getContentPane().setBackground(Color.darkGray);
+    	main.getContentPane().setBackground(Color.WHITE);
     	
     	//Create an object
     	GUIView obj = new GUIView();
@@ -401,12 +404,11 @@ public class GUIView implements ActionListener {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
     			String[] myInputs = getRelInput ();	
-    			int localIndex = findIndex (myInputs[0]);
     			if (myInputs[0] != null && myInputs[1] != null && myInputs[2] != null) {
     				if ( umld.addRelationship (myInputs[0], myInputs[1], myInputs[2])) {
     					int srcIndex = findIndex (myInputs[0]);
     					int destIndex = findIndex (myInputs[1]);
-    					addRel (srcIndex, destIndex);
+    					addRel (srcIndex, destIndex, myInputs[2]);
     				} else {
     					JOptionPane.showMessageDialog (main, "Error when creating relationship, try again"); 
     				}
@@ -420,10 +422,18 @@ public class GUIView implements ActionListener {
     		
     		
     	} else if (e.getActionCommand().equals("Delete Relationship")) {
-    			//need to complete
-    		
-    		
-    		
+    		if (umld.umlDiagram.isEmpty()) {
+    			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
+    		} else if (relationshipID == 0) {
+    			JOptionPane.showMessageDialog(main,"No relationships are present on diagram");
+    		} else {
+        		ListRelationshipsWindow relationshipsList = new ListRelationshipsWindow (main, umld.relationships);
+        		if (umld.deleteRelationship(relationshipsList.getSource(), relationshipsList.getSource())) {
+        			removeRel (classRep.get(findIndex(relationshipsList.getSource())).getRelID());
+        		} else {
+        			JOptionPane.showMessageDialog(main,"deleting relationship failed");
+        		}
+    		} 
     		
     	} else if (e.getActionCommand().equals("Save")) {
     		saver.saveDiagram = umld;
@@ -475,8 +485,10 @@ public class GUIView implements ActionListener {
     	classRep.add(index, new Classes(myComp[0], myComp[1], WIDTH, HEIGHT));
     	classNames[index] = className;
     	classRep.get(index).addName(className);
-    	main.add(classRep.get(index));
-    	cm.registerComponent(classRep.get(index));
+    	main.getLayeredPane().add(classRep.get(index), Integer.valueOf(1));
+    	cm.registerComponent(umld.getClass(className), classRep.get(index));
+    	umld.getClass(className).setLoc(classRep.get(index).getLocation());
+    	main.validate();
     	main.repaint();
     	++ index; 
     }
@@ -484,6 +496,7 @@ public class GUIView implements ActionListener {
     public static void removeClass (int classIndex) {
     	cm.deregisterComponent(classRep.get(classIndex));
     	main.remove(classRep.get(classIndex));
+    	main.validate();
     	main.repaint();
     }
     
@@ -497,13 +510,24 @@ public class GUIView implements ActionListener {
     	return xAndY;
     }
     
-    public static void addRel (int src, int dest) {
-    	Arrow rel = new Arrow ( classRep.get(src).getX(),
-				classRep.get(src).getY(),
-				classRep.get(dest).getX(),
-				classRep.get(dest).getY());
-    	main.getContentPane().add(rel);
+    public static void addRel (int src, int dest, String type) {
+    	relationships.add( new Arrow (classRep.get(src).getX(),
+    						   classRep.get(src).getY(),
+    						   classRep.get(dest).getX(),
+    						   classRep.get(dest).getY(), type));
+    	main.getLayeredPane().add(relationships.get(relationshipID), Integer.valueOf(0));
+    	classRep.get(src).setRelID (relationshipID);
+    	classRep.get(dest).setRelID(relationshipID);
+    	++relationshipID;
+    	main.validate();
+    	main.repaint();
     	
+    }
+    
+    public static void removeRel (int id) {
+    	main.remove(relationships.get(id));
+    	main.validate();
+    	main.repaint();
     }
     
     //get type and name for user 

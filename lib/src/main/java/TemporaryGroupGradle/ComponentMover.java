@@ -38,11 +38,12 @@ public class ComponentMover extends MouseAdapter
 	private Cursor originalCursor;
 	private boolean autoscrolls;
 	private boolean potentialDrag;
-
+	
+	private UMLClass m_class;
 
 	/**
 	 *  Constructor for moving individual components. The components must be
-	 *  regisetered using the registerComponent() method.
+	 *  registered using the registerComponent() method.
 	 */
 	public ComponentMover()
 	{
@@ -60,7 +61,7 @@ public class ComponentMover extends MouseAdapter
 	public ComponentMover(Class destinationClass, Component... components)
 	{
 		this.destinationClass = destinationClass;
-		registerComponent( components );
+		registerComponent( m_class, components );
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class ComponentMover extends MouseAdapter
 	public ComponentMover(Component destinationComponent, Component... components)
 	{
 		this.destinationComponent = destinationComponent;
-		registerComponent( components );
+		registerComponent( m_class, components );
 	}
 
 	/**
@@ -180,8 +181,9 @@ public class ComponentMover extends MouseAdapter
 	 *
 	 *  @param component  the component the listeners are added to
 	 */
-	public void registerComponent(Component... components)
+	public void registerComponent(UMLClass myClass, Component... components)
 	{
+		m_class = myClass;
 		for (Component component : components)
 			component.addMouseListener( this );
 	}
@@ -305,6 +307,7 @@ public class ComponentMover extends MouseAdapter
 		//  Adjustments are finished, move the component
 
 		destination.setLocation(locationX, locationY);
+		m_class.setLoc(destination.getLocation());
 	}
 
 	/*
@@ -351,6 +354,7 @@ public class ComponentMover extends MouseAdapter
 
 		if (changeCursor)
 			source.setCursor( originalCursor );
+		
 
 		if (destination instanceof JComponent)
 		{
