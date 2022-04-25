@@ -1,4 +1,5 @@
 package TemporaryGroupGradle;
+import java.awt.Point;
 import java.util.ArrayList;
 
 /**
@@ -7,18 +8,17 @@ import java.util.ArrayList;
 
 public class UMLClass {
     
-    String className;
+    String name;
     ArrayList<Field> fields = new ArrayList<Field>();
     ArrayList<Method> methods = new ArrayList<Method>();
-    int xPos;
-    int yPos;
+    Point location = new Point (0,0);
 
     /**
      * Constructor for a class in the uml diagram.
      * @param className
      */
     public UMLClass(String className){
-        this.className = className;
+        this.name = className;
     }
 
     /**
@@ -26,7 +26,7 @@ public class UMLClass {
      * @return className
      */
     public String getClassName(){
-        return this.className;
+        return this.name;
     }
 
     /**
@@ -34,7 +34,7 @@ public class UMLClass {
      * @param newClassName
      */
     public void renameClass(String newClassName){
-        this.className = newClassName;
+        this.name = newClassName;
     }
 
     /**
@@ -42,7 +42,7 @@ public class UMLClass {
      * @return ArrayList<Field>
      */
     public ArrayList<Field> getFields() {
-        return this.fields;
+        return fields;
     }
     
     public ArrayList<Method> getMethods() {
@@ -124,7 +124,7 @@ public class UMLClass {
      */
     public void addMethod(String newMethod, String newMethodType) {
         methods.add(new Method(newMethod, newMethodType));  
-     }
+    }
 
      /**
      * Removes a method from the class if it exists. 
@@ -230,20 +230,8 @@ public class UMLClass {
         }
     }
     
-    public int getX() {
-    	return xPos;
-    }
-    
-    public int getY() {
-    	return yPos;
-    }
-    
-    public void setX (int x) {
-    	xPos = x;
-    }
-    
-    public void setY (int y) {
-    	yPos = y;
+    public void setLoc (Point loc) {
+    	location.setLocation(loc);
     }
 
 }

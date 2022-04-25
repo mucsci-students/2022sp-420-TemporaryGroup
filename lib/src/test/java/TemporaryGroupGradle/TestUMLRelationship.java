@@ -9,63 +9,45 @@ class TestUMLRelationship {
 	@Test
 	void testUMLRelationshipConstructor() {
 		UMLRelationship test = new UMLRelationship ("car", "bank", "aggregation");
-		assertNotNull (test, "failed when creating a new relationship");
+		assertNotNull (test);
 	}
 
 	@Test
 	void testGetSource() {
 		UMLRelationship test = new UMLRelationship ("car", "bank", "aggregation");
-		assertEquals ("car", test.getSource(), "source class is not as expected");
+		assertEquals ("car", test.getSource());
 	}
 
 	@Test
 	void testSetSource() {
 		UMLRelationship test = new UMLRelationship ("car", "bank", "aggregation");
 		test.setSource("church");
-		assertEquals ("church", test.getSource(), "setSource failed");
+		assertEquals ("church", test.getSource());
 	}
 
 	@Test
 	void testGetDestination() {
 		UMLRelationship test = new UMLRelationship ("car", "bank", "aggregation");
-		assertEquals ("bank", test.getDestination(), "source destination is not as expected");
+		assertEquals ("bank", test.getDestination());
 	}
 
 	@Test
 	void testSetDestination() {
 		UMLRelationship test = new UMLRelationship ("car", "bank", "aggregation");
 		test.setDestination("park");
-		assertEquals ("park", test.getDestination(), "setDestination failed");
+		assertEquals ("park", test.getDestination());
 	}
 
 	@Test
 	void testGetType() {
 		UMLRelationship test = new UMLRelationship ("car", "bank", "aggregation");
-		assertEquals ("aggregation",test.getType(), "type of relationship is not as expected");
+		assertEquals ("aggregation",test.getType());
 	}
 
 	@Test
 	void testSetType() {
 		UMLRelationship test = new UMLRelationship ("car", "bank", "aggregation");
 		test.setType("composition");
-		assertEquals ("composition", test.getType(), "setType failed");
+		assertEquals ("composition", test.getType());
 	}
-
-	/*
-	@Test
-	void testListValidTypes() {
-		UMLRelationship test = new UMLRelationship (null, null, null);
-		String [] correctTypes = {"aggregation", "composition", "inheritance", "realization"}; 
-		assertEquals (correctTypes, test.listValidTypes(), "validTypes array error");
-	}
-
-	
-	@Test
-	void testIsValidType() {
-		UMLRelationship test = new UMLRelationship (null, null, null);
-		boolean isValid = test.isValidType ("composition");
-		boolean isNotValid = test.isValidType ("sequence");
-		assertEquals (isValid, true, "isValid failed");
-		assertEquals (isNotValid, false, "isValid failed");
-	}*/
 }

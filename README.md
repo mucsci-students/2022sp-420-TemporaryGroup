@@ -24,15 +24,16 @@ To be able to run the program, please follow these steps.
     
     Add JAVA_HOME to environment variables and pathing the java installation from your pc
     
-
-9. Run editor with command 
-
-   Run "gradle build" to first build the gradle installation
+9.  Run command "gradle build" to first build the gradle installation
     
-   If you want to run the CLI, use the command "gradle run" to run GUI
+10. Run command "gradle installShadowDist" to install the UML editor
 
-   If you want to run the GUI, use the command "gradle run --args=="cli" to run CLI.
+11. Go to ~/2022sp-420-TemporaryGroup/lib/build/install/lib-shadow/bin/
 
-10. Have fun with your command line UML editor!
+12. Run editor with  ./lib.bat
 
-11. The design patterns are inside the design_patterns.txt file.
+13. Select either CLI or GUI mode
+
+14. Have fun with your command line UML editor!
+
+15. The design patterns are inside the design_patterns.txt file.

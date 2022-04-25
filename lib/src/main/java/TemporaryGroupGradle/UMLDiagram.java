@@ -1,33 +1,32 @@
 package TemporaryGroupGradle;
 import java.util.ArrayList;
-
 import java.util.HashMap;
+import java.util.Stack;
 
 
-public class UMLDiagram {
-    
+public class UMLDiagram implements Cloneable {
+    // rename this to classes
     HashMap<String, UMLClass> umlDiagram = new HashMap<String, UMLClass>();
     ArrayList<UMLRelationship> relationships = new ArrayList<UMLRelationship>();
-    private static String[] validTypes = {"aggregation", "composition", "inheritance", "realization"};
+    private static Stack<UMLDiagram> undoStack = new Stack<UMLDiagram>();
+    private static Stack<UMLDiagram> redoStack = new Stack<UMLDiagram>();
 
     public Boolean addClass(String className){
-        if(isValidClassName(className)){
-            if(!(classExists(className))){
-                UMLClass myClass = new UMLClass(className);
-                umlDiagram.put(className, myClass);
-                System.out.println("Added class '" + className + "' to the diagram.");
-                return true;
-            }else{
-                System.out.println("The class '" + className + "' already exists in the diagram.");
-                return false;
-            }
+        if(!(classExists(className))){
+            updateUndoRedoStacks();
+            UMLClass myClass = new UMLClass(className);
+            umlDiagram.put(className, myClass);
+            System.out.println("Added class '" + className + "' to the diagram.");
+            return true;
+        }else{
+            System.out.println("The class '" + className + "' already exists in the diagram.");
+            return false;
         }
-        System.out.println("Error when validating name of Class");
-        return false;
     }
 
     public Boolean removeClass(String className){
         if(classExists(className)){
+            updateUndoRedoStacks();
             for(int i = 0 ; i < relationships.size(); i++){
                 UMLRelationship tempRel = relationships.get(i);
                 if((tempRel.getSource().equals(className)) || (tempRel.getDestination().equals(className))){
@@ -44,22 +43,19 @@ public class UMLDiagram {
     }
 
     public Boolean renameClass(String oldClassName, String newClassName){
-        if(isValidClassName(newClassName)){
-            if(!classExists(newClassName)){
-                UMLClass classCopy = umlDiagram.get(oldClassName);
-                classCopy.renameClass(newClassName);
-                umlDiagram.remove(oldClassName);
-                umlDiagram.put(newClassName, classCopy);
-                System.out.println("Renamed class '" + oldClassName + "' to '" + newClassName + "'.");
-                return true;
-            }
-            else{
-                System.out.println("A class named '" + newClassName + "' already exists in the diagram.");
-                return false;
-            }
+        if(!classExists(newClassName)){
+            updateUndoRedoStacks();
+            UMLClass classCopy = umlDiagram.get(oldClassName);
+            classCopy.renameClass(newClassName);
+            umlDiagram.remove(oldClassName);
+            umlDiagram.put(newClassName, classCopy);
+            System.out.println("Renamed class '" + oldClassName + "' to '" + newClassName + "'.");
+            return true;
         }
-        System.out.println("Error when validating name of Class");
-        return false;
+        else{
+            System.out.println("A class named '" + newClassName + "' already exists in the diagram.");
+            return false;
+        }
     }
 
     public boolean classExists(String className){
@@ -82,6 +78,7 @@ public class UMLDiagram {
     public Boolean addField(String className, String newField, String newFieldType){
         if(isValidFieldName(newField)){
             if(!getClass(className).fieldExists(newField)){
+                updateUndoRedoStacks();
                 getClass(className).addField(newField, newFieldType);
                 System.out.println("Added field '" + newField + "' to class '" + className + "'.");
                 return true;
@@ -103,6 +100,7 @@ public class UMLDiagram {
      */
     public Boolean removeField(String className, String removeField){
         if(getClass(className).fieldExists(removeField)){
+            updateUndoRedoStacks();
             getClass(className).removeField(removeField);
             System.out.println("Removed field '" + removeField + "' from class '" + className + "'.");
             return true;
@@ -124,6 +122,7 @@ public class UMLDiagram {
         if(isValidFieldName(newFieldName)){
             if((getClass(className).fieldExists(oldFieldName))){
                 if(!(getClass(className).fieldExists(newFieldName))){
+                    updateUndoRedoStacks();
                     getClass(className).renameField(oldFieldName, newFieldName);
                     System.out.println("Renamed field '" + oldFieldName + "' to '" + newFieldName + "' in class '" + className + "'.");
                     return true;
@@ -151,6 +150,7 @@ public class UMLDiagram {
     public Boolean renameFieldType(String className, String fieldName, String newFieldType){
         if(classExists(className)){
             if(getClass(className).fieldExists(fieldName)){
+                updateUndoRedoStacks();
                 getClass(className).getField(fieldName).renameFieldType(newFieldType);
                 System.out.println("Renamed type in field '" + fieldName + "'.");
                 return true;
@@ -172,6 +172,7 @@ public class UMLDiagram {
     public Boolean addMethod(String className, String newMethod, String newMethodType){
         if(isValidMethodName(newMethod)){
             if(!getClass(className).methodExists(newMethod)){
+                updateUndoRedoStacks();
                 getClass(className).addMethod(newMethod, newMethodType);
                 System.out.println("Added method '" + newMethod + "' to class '" + className + "'.");
                 return true;
@@ -192,6 +193,7 @@ public class UMLDiagram {
      */
     public Boolean removeMethod(String className, String removeMethod){
         if(getClass(className).methodExists(removeMethod)){
+            updateUndoRedoStacks();
             getClass(className).removeMethod(removeMethod);
             System.out.println("Removed method '" + removeMethod + "' from class '" + className + "'.");
             return true;
@@ -213,6 +215,7 @@ public class UMLDiagram {
         if(isValidMethodName(newMethodName)){
             if((getClass(className).methodExists(oldMethodName))){
                 if(!(getClass(className).methodExists(newMethodName))){
+                    updateUndoRedoStacks();
                     getClass(className).renameMethod(oldMethodName, newMethodName);
                     System.out.println("Renamed method '" + oldMethodName + "' to '" + newMethodName + "' in class '" + className + "'.");
                     return true;
@@ -240,6 +243,7 @@ public class UMLDiagram {
     public Boolean renameMethodType(String className, String methodName, String newMethodType){
         if(classExists(className)){
             if(getClass(className).methodExists(methodName)){
+                updateUndoRedoStacks();
                 getClass(className).getMethod(methodName).renameMethodType(newMethodType);
                 System.out.println("Renamed type in method '" + methodName + "'.");
                 return true;
@@ -263,6 +267,7 @@ public class UMLDiagram {
         if(isValidName(paramName)){
             if(getClass(className).methodExists(methodName)){
                 if(!getClass(className).getMethod(methodName).paramExists(paramName)){
+                    updateUndoRedoStacks();
                     getClass(className).getMethod(methodName).addParameter(paramName, paramType);
                     System.out.println("Added parameter '" + paramName + "' to method '" + methodName + "'.");
                     return true;
@@ -288,6 +293,7 @@ public class UMLDiagram {
     public Boolean removeParameter(String className, String methodName, String paramName){
         if(getClass(className).methodExists(methodName)){
             if(getClass(className).getMethod(methodName).paramExists(paramName)){
+                updateUndoRedoStacks();
                 getClass(className).getMethod(methodName).removeParameter(paramName);
                 System.out.println("Removed parameter '" + paramName + "' from the method '" + methodName + "'.");
                 return true;
@@ -314,6 +320,7 @@ public class UMLDiagram {
             if(getClass(className).methodExists(methodName)){
                 if(getClass(className).getMethod(methodName).paramExists(oldParamName)){
                     if(!getClass(className).getMethod(methodName).paramExists(newParamName)){
+                        updateUndoRedoStacks();
                         getClass(className).getMethod(methodName).renameParameter(oldParamName, newParamName);
                         System.out.println("Renamed parameter '" + oldParamName + "' to '" + newParamName + "' in method '" + methodName + "'.");
                         return true;
@@ -344,6 +351,7 @@ public class UMLDiagram {
         if(classExists(className)){
             if(getClass(className).methodExists(methodName)){
                 if(getClass(className).getMethod(methodName).paramExists(paramName)){
+                    updateUndoRedoStacks();
                     getClass(className).getMethod(methodName).getParameter(paramName).renameParamType(newParamType);
                     System.out.println("Renamed type for parameter '" + paramName + "'.");
                     return true;
@@ -369,6 +377,7 @@ public class UMLDiagram {
      */
     public Boolean removeAllParameters(String className, String methodName){
         if(getClass(className).methodExists(methodName)){
+            updateUndoRedoStacks();
             getClass(className).getMethod(methodName).removeAllParameters();
             System.out.println("All of the parameters from the method '" + methodName + "' were removed.");
             return true;
@@ -385,6 +394,7 @@ public class UMLDiagram {
      * @return True if the relationship type is valid, false if it's not
      */
     public boolean isValidType(String relType) {
+        String[] validTypes = {"aggregation", "composition", "inheritance", "realization"};
 		for(String ele : validTypes) {
 			if(relType.equals(ele)) {
 				return true;
@@ -419,15 +429,16 @@ public class UMLDiagram {
             }
         }
         // Add the relationship
-        UMLRelationship newRel;
+
+        updateUndoRedoStacks();
         try {
-        	newRel = new UMLRelationship(source, dest, type);
-        } catch (Exception e){
-        	System.out.println("Error when creating relationship");
+        	UMLRelationship newRel = new UMLRelationship(source, dest, type);
+        	relationships.add(newRel);
+        	System.out.println("Added new relationship between class '" + source + "' and class '" + dest + "'.");
+        } catch (Exception e) {
+        	System.out.println(e);
         	return false;
         }
-        relationships.add(newRel);
-        System.out.println("Added new relationship between class '" + source + "' and class '" + dest + "'.");
         return true;
     }
 
@@ -440,6 +451,7 @@ public class UMLDiagram {
     public Boolean deleteRelationship(String source, String dest) {
         for(UMLRelationship rel : relationships) {
             if(rel.getSource().equals(source) && rel.getDestination().equals(dest)) {
+                updateUndoRedoStacks();
                 relationships.remove(rel);
                 System.out.println("Removed relationship between class '" + source + "' and class '" + dest + "'.");
                 return true;
@@ -449,15 +461,6 @@ public class UMLDiagram {
         return false;
     }
     
-    /**
-     * Rename a relationship in the diagram
-     * The same two classes cannot have multiple relationships with the same name.
-     * @param source The source class for this relationship
-     * @param dest The destination class for this relationship
-     * @param oldName The current name of this relationship
-     * @param newName The new name for this relationship
-     */
-    
     public void setUMLDiagram(HashMap<String, UMLClass> c) {
     	umlDiagram = c; 
     }
@@ -465,8 +468,92 @@ public class UMLDiagram {
     public HashMap<String, UMLClass> getUMLDiagram() {
     	return umlDiagram; 
     }
+
+    public Boolean canUndo() {
+        if(undoStack.empty()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public Boolean canRedo() {
+        if(redoStack.empty()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    /**
+     * Undoes the last action, if any
+     * @return True if there was an action to undo, false if not
+     */
+    public Boolean undo() {
+        if(undoStack.empty()) {
+            System.out.println("There is nothing to undo.");
+            return false;
+        }
+        else {
+            redoStack.push(this.clone());
+            UMLDiagram temp = undoStack.pop();
+            umlDiagram = temp.umlDiagram;
+            relationships = temp.relationships;
+            System.out.println("Action successfully undone.");
+            return true;
+        }
+    }
+
+    /**
+     * Redoes the last action undone, if any
+     * @return True if there was an action to redo, false if not
+     */
+    public Boolean redo() {
+        if(redoStack.empty()) {
+            System.out.println("There is nothing to redo.");
+            return false;
+        }
+        else {
+            undoStack.push(this.clone());
+            UMLDiagram temp = redoStack.pop();
+            umlDiagram = temp.umlDiagram;
+            relationships = temp.relationships;
+            System.out.println("Action successfully redone.");
+            return true;
+        }
+    }
+
+    /**
+     * Helper method to update undoStack and redoStack when needed.
+     * This should ONLY be called when all checks before an action have passed
+     * and the program is about to perform the action.
+     */
+    private void updateUndoRedoStacks() {
+        redoStack.clear();
+        undoStack.push(this.clone());
+    }
     
-    
+    /**
+     * Returns a clone of this UML Diagram
+     */
+    public UMLDiagram clone() {
+    	UMLDiagram toReturn = new UMLDiagram();
+    	toReturn.relationships = (ArrayList<UMLRelationship>) relationships.clone();
+    	toReturn.umlDiagram = (HashMap<String, UMLClass>) umlDiagram.clone();
+    	return toReturn;
+    }
+
+    /**
+     * Clears undo and redo stacks. After calling this, any changes previously made
+     * cannot be undone or redone.
+     * This is currently only used when loading a file.
+     */
+    public static void clearUndoRedo() {
+        undoStack.clear();
+        redoStack.clear();
+    }
 
     /**
      * Checks to see if input is valid for a name.
@@ -552,7 +639,7 @@ public class UMLDiagram {
      * Checks to see if class name is valid.
      * @param name
      * @return
-     */
+     
     public static Boolean isValidClassName(String name) {
 		if(name.equals("")) {
 			return false;
@@ -577,8 +664,5 @@ public class UMLDiagram {
 			System.out.println("Class names must follow standard Java naming conventions.");
 			return false;
 		}
-	}
-    
-    
-
+	} */
 }

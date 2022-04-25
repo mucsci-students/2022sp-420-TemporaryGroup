@@ -1,0 +1,57 @@
+codecov:
+  require_ci_to_pass: yes
+  
+coverage:
+  precision: 2
+  round: down
+  range: "00...100"
+
+ignore:
+  - ".github/workflows"  
+  - ".gradle"
+  - ".settings"
+  - "gradle/wrapper"
+  - "lib/.settings"
+  - "lib/bin"
+  - "lib/build"
+  - "lib/src/main/java/TemporaryGroupGradle/Arrow.java"
+  - "lib/src/main/java/TemporaryGroupGradle/CLIView.java"
+  - "lib/src/main/java/TemporaryGroupGradle/Classes.java"
+  - "lib/src/main/java/TemporaryGroupGradle/CliController.java"
+  - "lib/src/main/java/TemporaryGroupGradle/ComponentMover.java"
+  - "lib/src/main/java/TemporaryGroupGradle/GUIView.java"
+  - "lib/src/main/java/TemporaryGroupGradle/ListClassesWindow.java"
+  - "lib/src/main/java/TemporaryGroupGradle/ListFieldsWindow.java"
+  - "lib/src/main/java/TemporaryGroupGradle/ListMethodsWindow.java"
+  - "lib/src/main/java/TemporaryGroupGradle/Load.java"
+  - "lib/src/main/java/TemporaryGroupGradle/Save.java"
+  - "lib/src/main/java/TemporaryGroupGradle/TabComplete.java"
+  - "lib/src/main/java/TemporaryGroupGradle/ListRelationshipsWindow.java"
+  - "lib/src/main/java/TemporaryGroupGradle/SaveTemplate.java"
+  - "lib/src/main/java/TemporaryGroupGradle/UMLCli.java"
+  - "lib/src/main/java/TemporaryGroupGradle/UMLEditor.java"
+  - "lib/src/test/java/TemporaryGroupGradle"
+  - "lib/.gitignore"
+  - "lib/.project"
+  - "lib/build.gradle"
+  - ".classpath"
+  - ".gitattributes"
+  - ".gitignore"
+  - ".project"
+  - "design_patterns.txt"
+  - "gradlew"
+  - "gradle.bat"
+  - "settings.gradle"
+  
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
+comment:
+  layout: "reach,diff,flags,files,footer"
+  behavior: default
+  require_changes: no

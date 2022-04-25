@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 public class Method {
 
-    private String methodName;
-    private String methodType;
+    private String name;
+    private String return_type;
 
-    private ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+    private ArrayList<Parameter> params = new ArrayList<Parameter>();
 
     /**
      * Creates a new method.
      * @param methodName
      */
     public Method(String methodName, String methodType){
-        this.methodName = methodName;
-        this.methodType = methodType;
+        this.name = methodName;
+        this.return_type = methodType;
     }
 
     /**
@@ -23,7 +23,7 @@ public class Method {
      * @return methodName
      */
     public String getMethodName(){
-        return this.methodName;
+        return this.name;
     }
 
     /**
@@ -31,7 +31,7 @@ public class Method {
      * @return methodType
      */
     public String getMethodType(){
-        return this.methodType;
+        return this.return_type;
     }
 
     /**
@@ -39,7 +39,7 @@ public class Method {
      * @param newName
      */
     public void renameMethod(String newName){
-        this.methodName = newName;
+        this.name = newName;
     }
 
     /**
@@ -47,7 +47,7 @@ public class Method {
      * @param newMethodType
      */
     public void renameMethodType(String newMethodType){
-        this.methodType = newMethodType;
+        this.return_type = newMethodType;
     }
 
     /**
@@ -56,7 +56,7 @@ public class Method {
      * @param paramType
      */
     public void addParameter(String paramName, String paramType){
-        parameters.add(new Parameter(paramName, paramType));
+        params.add(new Parameter(paramName, paramType));
     }
 
     /**
@@ -64,9 +64,9 @@ public class Method {
      * @param paramName
      */
     public void removeParameter(String paramName){
-        for(int i = 0; i < parameters.size(); i++){
-            if(parameters.get(i).getParamName().equals(paramName)){
-                parameters.remove(i);
+        for(int i = 0; i < params.size(); i++){
+            if(params.get(i).getParamName().equals(paramName)){
+                params.remove(i);
             }
         }
     }
@@ -75,7 +75,7 @@ public class Method {
      * Removes all parameters from the method.
      */
     public void removeAllParameters(){
-        parameters.clear();
+        params.clear();
     }
 
     /**
@@ -84,8 +84,8 @@ public class Method {
      * @param newParamName
      */
     public void renameParameter(String oldParamName, String newParamName){
-        for(int i = 0; i < parameters.size(); i++){
-            if(parameters.get(i).getParamName().equals(oldParamName)){
+        for(int i = 0; i < params.size(); i++){
+            if(params.get(i).getParamName().equals(oldParamName)){
                 getParameter(oldParamName).renameParam(newParamName);
             }
         }
@@ -107,9 +107,9 @@ public class Method {
      * @param paramName
      */
     public Parameter getParameter(String paramName){
-        for(int i = 0; i < parameters.size(); i++){
-            if(parameters.get(i).getParamName().equals(paramName)){
-                return parameters.get(i);
+        for(int i = 0; i < params.size(); i++){
+            if(params.get(i).getParamName().equals(paramName)){
+                return params.get(i);
             }
         }
         return null;
@@ -129,7 +129,7 @@ public class Method {
      * @return
      */
     public ArrayList<Parameter> getParameterList(){
-        return parameters;
+        return params;
     }
 
 }

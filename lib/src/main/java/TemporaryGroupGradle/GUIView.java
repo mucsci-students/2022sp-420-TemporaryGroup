@@ -20,7 +20,7 @@ public class GUIView implements ActionListener {
     
 	static JLabel text;
 	static JFrame main = new JFrame("UMLEditor");
-
+	
 	public static Save saver = new Save();
 	public static Load loader = new Load();
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -29,6 +29,7 @@ public class GUIView implements ActionListener {
 	static final int HEIGHT = 200;
 	//keep tracks of classes rectangles
 	static ArrayList<Classes> classRep = new ArrayList<> ();
+	static ArrayList<Arrow> relationships = new ArrayList<> ();
 	static final int CLASSESPERROW = (screenSize.height - 75) / 200;
 	static final int CLASSESPERCOL = (screenSize.width - 50) / 250;
 	//store class name -- y pos for field -- y position for method -- y position for parameter
@@ -36,12 +37,14 @@ public class GUIView implements ActionListener {
 	
 	//keep track of current index
 	static int index = 0;
-	
+	//keep track of relationship and classes associated
+	static int relationshipID = 0;
 
 	//keep track of available indexes if any
 	static int [] available = new int [CLASSESPERROW * CLASSESPERCOL];
 	//use for dragging
 	static ComponentMover cm = new ComponentMover();
+
 	
 	
     //Driver function
@@ -51,7 +54,7 @@ public class GUIView implements ActionListener {
     	main.setSize(screenSize);
     	main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	main.setLayout(null);
-    	main.getContentPane().setBackground(Color.darkGray);
+    	main.getContentPane().setBackground(Color.DARK_GRAY);
     	
     	//Create an object
     	GUIView obj = new GUIView();
@@ -64,9 +67,9 @@ public class GUIView implements ActionListener {
 		
     	//Create Menu Items for classes
     	JMenuItem[] itemC = new JMenuItem[3];
-    	itemC [0] = new JMenuItem ("Add class");
-    	itemC [1] = new JMenuItem ("Rename class");
-    	itemC [2] = new JMenuItem ("Delete class");
+    	itemC [0] = new JMenuItem ("Add Class");
+    	itemC [1] = new JMenuItem ("Rename Class");
+    	itemC [2] = new JMenuItem ("Delete Class");
     	for (int i = 0; i < itemC.length; ++i) {
     		itemC[i].addActionListener(obj);
     		classes.add(itemC[i]);
@@ -78,9 +81,9 @@ public class GUIView implements ActionListener {
     	
     	//Create Menu Items for fields
     	JMenuItem[] itemF = new JMenuItem[3];
-    	itemF [0] = new JMenuItem ("Add field");
-    	itemF [1] = new JMenuItem ("Rename field");
-    	itemF [2] = new JMenuItem ("Delete field");
+    	itemF [0] = new JMenuItem ("Add Field");
+    	itemF [1] = new JMenuItem ("Rename Field");
+    	itemF [2] = new JMenuItem ("Delete Field");
     	for (int i = 0; i < itemF.length ; ++i) {
     		itemF[i].addActionListener(obj);
     		fields.add(itemF[i]);
@@ -92,9 +95,9 @@ public class GUIView implements ActionListener {
     	
     	//Create Menu Items for methods
     	JMenuItem[] itemM = new JMenuItem[3];
-    	itemM [0] = new JMenuItem ("Add method");
-    	itemM [1] = new JMenuItem ("Rename method");
-    	itemM [2] = new JMenuItem ("Delete method");
+    	itemM [0] = new JMenuItem ("Add Method");
+    	itemM [1] = new JMenuItem ("Rename Method");
+    	itemM [2] = new JMenuItem ("Delete Method");
     	for (int i = 0; i < itemM.length; ++i) {
     		itemM[i].addActionListener(obj);
     		methods.add(itemM[i]);
@@ -106,11 +109,11 @@ public class GUIView implements ActionListener {
     	
     	//Create Menu Items for parameters
     	JMenuItem[] itemP = new JMenuItem[3];
-    	itemP [0] = new JMenuItem ("Add parameter");
+    	itemP [0] = new JMenuItem ("Add Parameter");
     	//itemP [1] = new JMenuItem ("Add parameters");
-    	itemP [1] = new JMenuItem ("Remove parameter");
+    	itemP [1] = new JMenuItem ("Remove Parameter");
     	//itemP [3] = new JMenuItem ("Remove parameters");
-    	itemP [2] = new JMenuItem ("Change parameter");
+    	itemP [2] = new JMenuItem ("Change Parameter");
     	//itemP [5] = new JMenuItem ("Change parameters");
     	for (int i = 0; i < itemP.length; ++i) { 
     		itemP[i].addActionListener(obj);
@@ -129,43 +132,40 @@ public class GUIView implements ActionListener {
     		itemFi[i].addActionListener(obj);
     		file.add(itemFi[i]);
     	}
+
+		// create menu for undo/redo
+		JMenu edit = new JMenu("Edit");
+		JMenuItem[] itemEdit = new JMenuItem[2];
+		itemEdit [0] = new JMenuItem ("Undo");
+		itemEdit [1] = new JMenuItem ("Redo");
+		for(int i = 0; i < itemEdit.length; i++) {
+			itemEdit[i].addActionListener(obj);
+			edit.add(itemEdit[i]);
+		}
     	
     	
     	//Create relationships menu
     	JMenu relationship = new JMenu("Relationships");
     	
     	//Create Menu Items for relationships
-    	JMenuItem[] itemR = new JMenuItem[3];
-    	itemR [0] = new JMenuItem ("Add relationship");
-    	itemR [1] = new JMenuItem ("Change relationship");
-    	itemR [2] = new JMenuItem ("Delete relationship");
+    	JMenuItem[] itemR = new JMenuItem[2];
+    	itemR [0] = new JMenuItem ("Add Relationship");
+    	itemR [1] = new JMenuItem ("Delete Relationship");
     	for (int i = 0; i < itemR.length; ++i) {
     		itemR[i].addActionListener(obj);
     		relationship.add(itemR[i]);
     	}
-    	
-    	
-    	//Create program menu
-    	JMenu editor = new JMenu ("Editor");
-    	
-    	//Create menu items for program menu
-    	JMenuItem[] itemE = new JMenuItem[1];
-    	itemE [0] = new JMenuItem ("Help");
-    	for (int i = 0; i < itemE.length; ++i) {
-    		itemE[i].addActionListener(obj);
-    		editor.add(itemE[i]);
-    	}
-    	
+    	    	
     	//Create a menu bar
     	JMenuBar mb=new JMenuBar();
     	main.setJMenuBar(mb);
     	mb.add(file);
+		mb.add(edit);
     	mb.add(classes);
     	mb.add(fields);
     	mb.add(methods);
     	mb.add(parameters);
     	mb.add(relationship);
-    	mb.add(editor);
     	
     	//Display the frame
     	main.setVisible(true);
@@ -177,7 +177,7 @@ public class GUIView implements ActionListener {
     public void actionPerformed(ActionEvent e)
     {    	
     	
-    	if (e.getActionCommand().equals("Add class")) {
+    	if (e.getActionCommand().equals("Add Class")) {
     		if (index == CLASSESPERROW * CLASSESPERCOL ) {
     			JOptionPane.showMessageDialog(main,"Class name not valid, try again");
     		} else {
@@ -194,7 +194,7 @@ public class GUIView implements ActionListener {
         	}
     		}
     	
-    	} else if (e.getActionCommand().equals("Rename class")) {
+    	} else if (e.getActionCommand().equals("Rename Class")) {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
@@ -213,7 +213,7 @@ public class GUIView implements ActionListener {
     		}
     		}
     		
-    	} else if (e.getActionCommand().equals("Delete class")) {
+    	} else if (e.getActionCommand().equals("Delete Class")) {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
@@ -233,7 +233,7 @@ public class GUIView implements ActionListener {
     		}
     		
     		//handling fields menu
-    	} else if (e.getActionCommand().equals("Add field")) {
+    	} else if (e.getActionCommand().equals("Add Field")) {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
@@ -251,7 +251,7 @@ public class GUIView implements ActionListener {
     		
     		} 
     		}
-    		} else if (e.getActionCommand().equals("Rename field")) { 
+    		} else if (e.getActionCommand().equals("Rename Field")) { 
     			if (umld.umlDiagram.isEmpty()) {
         			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
         		} else {
@@ -273,7 +273,7 @@ public class GUIView implements ActionListener {
     				}    	
     				}
         		}
-    		} else if (e.getActionCommand().equals("Delete field")) { 
+    		} else if (e.getActionCommand().equals("Delete Field")) { 
     			if (umld.umlDiagram.isEmpty()) {
         			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
         		} else {
@@ -293,7 +293,7 @@ public class GUIView implements ActionListener {
     			}  }  	
     				   		
     	//methods menu
-    	} else if (e.getActionCommand().equals("Add method")) {
+    	} else if (e.getActionCommand().equals("Add Method")) {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
@@ -311,7 +311,7 @@ public class GUIView implements ActionListener {
     		
     		} 
     		}
-    	} else if (e.getActionCommand().equals("Rename method")) {
+    	} else if (e.getActionCommand().equals("Rename Method")) {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
@@ -333,7 +333,7 @@ public class GUIView implements ActionListener {
 				}    	
 				}
     		}
-    	} else if (e.getActionCommand().equals("Delete method")) {
+    	} else if (e.getActionCommand().equals("Delete Method")) {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
@@ -354,7 +354,7 @@ public class GUIView implements ActionListener {
     		}
 			
     	//parameters menu
-    	} else if (e.getActionCommand().equals("Add parameter")) {
+    	} else if (e.getActionCommand().equals("Add Parameter")) {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
@@ -375,44 +375,45 @@ public class GUIView implements ActionListener {
 		    			}
 					}
     		}
-		} else if (e.getActionCommand().equals("Change parameter")) {
+		} else if (e.getActionCommand().equals("Change Parameter")) {
     			JOptionPane.showMessageDialog(main,"Error when renaming parameter, try again");
     			
     		
     		
-    	} else if (e.getActionCommand().equals("Delete parameter")) {
+    	} else if (e.getActionCommand().equals("Delete Parameter")) {
     		JOptionPane.showMessageDialog(main,"Error when deleting parameter, try again");
-    			
     		
-    		
-    	} else if (e.getActionCommand().equals("Add relationship")) {
+    	} else if (e.getActionCommand().equals("Add Relationship")) {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
     		} else {
     			String[] myInputs = getRelInput ();	
-    			int localIndex = findIndex (myInputs[0]);
     			if (myInputs[0] != null && myInputs[1] != null && myInputs[2] != null) {
     				if ( umld.addRelationship (myInputs[0], myInputs[1], myInputs[2])) {
     					int srcIndex = findIndex (myInputs[0]);
     					int destIndex = findIndex (myInputs[1]);
-    					addRel (srcIndex, destIndex);
+    					addRel (srcIndex, destIndex, myInputs[2]);
     				} else {
-    					JOptionPane.showMessageDialog (main, "Error when creating relationship, try again"); 
+    					JOptionPane.showMessageDialog (main, "Input is wrong, try again");
     				}
+    			} else {
+    				JOptionPane.showMessageDialog (main, "Error when creating relationship, try again"); 
     			}
     		}
     		
-    	} else if (e.getActionCommand().equals("Change relationship")) {
-    		//TO DO
-    		JOptionPane.showMessageDialog(main,"still working on it");
-    		
-    		
-    		
-    	} else if (e.getActionCommand().equals("Delete relationship")) {
-    			//need to complete
-    		
-    		
-    		
+    	} else if (e.getActionCommand().equals("Delete Relationship")) {
+    		if (umld.umlDiagram.isEmpty()) {
+    			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
+    		} else if (relationships.isEmpty()) {
+    			JOptionPane.showMessageDialog(main,"No relationships are present on diagram");
+    		} else {
+        		ListRelationshipsWindow relationshipsList = new ListRelationshipsWindow (main, umld.relationships);
+        		if (umld.deleteRelationship(relationshipsList.getSource(), relationshipsList.getDestination())) {
+        			removeRel (relationshipsList.getSource(),relationshipsList.getDestination());
+        		} else {
+        			JOptionPane.showMessageDialog(main,"deleting relationship failed");
+        		}
+    		} 
     		
     	} else if (e.getActionCommand().equals("Save")) {
     		saver.saveDiagram = umld;
@@ -430,13 +431,26 @@ public class GUIView implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-    	} else if (e.getActionCommand().equals("Help")) {
-    		//TO DO
-    		JOptionPane.showMessageDialog(main,"still working on it");
-    		
-    		
-    		
-    	} 
+    	} else if (e.getActionCommand().equals("Undo")) {
+			  if(!umld.canUndo()) {
+				JOptionPane.showMessageDialog(main,"There are no actions to undo.");
+			  }
+			  else {
+				  // needs implementation
+			  	  //umld.undo();
+				  JOptionPane.showMessageDialog(main,"Under construction!");
+			  }
+		  } 
+		  else if (e.getActionCommand().equals("Redo")) {
+			if(!umld.canRedo()) {
+			  JOptionPane.showMessageDialog(main,"There are no actions to redo.");
+			}
+			else {
+				// needs implementation
+				  //umld.redo();
+				JOptionPane.showMessageDialog(main,"Under construction!");
+			}
+		} 
     }
     
     //helper functions 
@@ -447,15 +461,18 @@ public class GUIView implements ActionListener {
     	classRep.add(index, new Classes(myComp[0], myComp[1], WIDTH, HEIGHT));
     	classNames[index] = className;
     	classRep.get(index).addName(className);
-    	main.add(classRep.get(index));
-    	cm.registerComponent(classRep.get(index));
+    	main.getLayeredPane().add(classRep.get(index), Integer.valueOf(1));
+    	cm.registerComponent(umld.getClass(className), classRep.get(index));
+    	umld.getClass(className).setLoc(classRep.get(index).getLocation());
+    	main.validate();
     	main.repaint();
     	++ index; 
     }
     
     public static void removeClass (int classIndex) {
     	cm.deregisterComponent(classRep.get(classIndex));
-    	main.remove(classRep.get(classIndex));
+    	main.getLayeredPane().remove(classRep.get(classIndex));
+    	main.validate();
     	main.repaint();
     }
     
@@ -469,13 +486,28 @@ public class GUIView implements ActionListener {
     	return xAndY;
     }
     
-    public static void addRel (int src, int dest) {
-    	Arrow rel = new Arrow ( classRep.get(src).getX(),
-				classRep.get(src).getY(),
-				classRep.get(dest).getX(),
-				classRep.get(dest).getY());
-    	main.getContentPane().add(rel);
-    	
+    public static void addRel (int src, int dest, String type) {
+    	relationships.add( new Arrow (classRep.get(src).getX(),
+    						   classRep.get(src).getY(),
+    						   classRep.get(dest).getX(),
+    						   classRep.get(dest).getY(), type));
+    	main.getLayeredPane().add(relationships.get(relationshipID), Integer.valueOf(0));
+    	classRep.get(src).setRelID (relationshipID);
+    	classRep.get(dest).setRelID(relationshipID);
+    	++relationshipID;
+    	main.validate();
+    	main.repaint();	
+    }
+    
+    public static void removeRel (String src, String dest) {
+    	int id = classRep.get(findIndex(src)).getRelID();
+    	main.getLayeredPane().remove(relationships.get(id));
+    	relationships.remove(id);
+    	classRep.get(findIndex(src)).setRelID(-1);
+    	classRep.get(findIndex(dest)).setRelID(-1);
+    	--relationshipID;
+    	main.validate();
+    	main.repaint();
     }
     
     //get type and name for user 

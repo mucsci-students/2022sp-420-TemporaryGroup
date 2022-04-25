@@ -31,7 +31,7 @@ public class UMLCli {
 	// "What would you like to add?""
 	// > class
 	// Then prompt for names and call the associated method on our UMLDiagram object
-	public static String[] commands = new String [] {"add", "rename", "delete", "change", "help", "save", "load", "list", "exit", ""};
+	public static String[] commands = new String [] {"add", "rename", "delete", "change", "help", "save", "load", "list", "undo", "redo", "exit", ""};
 	public static Scanner input = new Scanner (System.in);
 	public static UMLDiagram umld = new UMLDiagram();
 	public static boolean hasUnsavedWork = false;
@@ -146,6 +146,8 @@ public class UMLCli {
 		System.out.println("\trename: Rename an existing [class], [field], [method], or [parameter].");
 		System.out.println("\tdelete: Delete an existing [class], [relationship], [field], [method], or [parameter].");
 		System.out.println("\tlist: List all [classes] in the diagram, all [relationships], or one specific [class].");
+		System.out.println("\tundo: Undo the previous action.");
+		System.out.println("\tredo: Redo the last undone action, as long as no new actions have been done since then.");
 		System.out.println("\tsave: Save the current UML diagram to a JSON or YAML file.");
 		System.out.println("\tload: Load an existing UML diagram from a JSON or YAML file.");
 		System.out.println("\thelp: View all editor commands.");
@@ -175,6 +177,12 @@ public class UMLCli {
 		}
 		else if(command.equals("list")) {
 			listCommand();
+		}
+		else if(command.equals("undo")) {
+			undoCommand();
+		}
+		else if(command.equals("redo")) {
+			redoCommand();
 		}
 		else if(command.equals("save")) {
 			saveDiagram();
@@ -626,16 +634,14 @@ public class UMLCli {
 
 	public static void listClass (String name) {
 		System.out.println();
-		System.out.println("Class: ");
-		System.out.println("- " + name);
+		System.out.println("Class: " + name);
 		System.out.println("Fields:");
 		for(int i = 0; i < umld.getClass(name).fields.size(); i++) {
 			System.out.println("- " + umld.getClass(name).fields.get(i).getFieldName() + ": " + umld.getClass(name).fields.get(i).getFieldType());
 		}
-		System.out.println();
 		System.out.println("Methods:");
 		for(int i = 0; i < umld.getClass(name).methods.size(); i++) {
-			System.out.print("- " + umld.getClass(name).methods.get(i).getMethodName() + ": " + umld.getClass(name).methods.get(i).getMethodType() + " ");
+			System.out.print("+ " + umld.getClass(name).methods.get(i).getMethodType() + " " + umld.getClass(name).methods.get(i).getMethodName());
 			System.out.print("(");
 			for(int j = 0; j < umld.getClass(name).methods.get(i).getParameterList().size(); j++){
 				if(j > 0){
@@ -646,6 +652,7 @@ public class UMLCli {
 			System.out.print(")");
 			System.out.println();
 		}
+
 	}
 	
 	public static void listClassCommand () {
@@ -676,6 +683,15 @@ public class UMLCli {
 			}
 		} 
 	}
+
+	public static void undoCommand() {
+		umld.undo();
+	}
+
+	public static void redoCommand() {
+		umld.redo();
+	}
+
 	public static void saveDiagram() throws Exception {
 		saver.saveDiagram = umld;
 		if(saver.saveFile()) {
