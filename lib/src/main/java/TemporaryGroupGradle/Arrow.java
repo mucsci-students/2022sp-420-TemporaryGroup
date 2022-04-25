@@ -23,12 +23,13 @@ public class Arrow extends JPanel {
 			} else {
 				this.setBounds(x1, y1, x2 - x1 + 5, y2 - y1 + 25);
 			}
-			this.setOpaque(true);
+			this.setOpaque(false);
 	}
 		
 	@Override
 	public void paintComponent (Graphics g) { 
 		super.paintComponent(g);
+		g.setColor(Color.RED);
 		int xEP = Math.abs(x2 - x1);
 		int yEP = Math.abs(y2 - y1);
 		//draw line with filled diamond at the end 
