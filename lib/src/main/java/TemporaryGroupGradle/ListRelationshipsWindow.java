@@ -43,23 +43,21 @@ public class ListRelationshipsWindow extends JDialog implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == listOfRelationships) {
-			String selected = listOfRelationships.getItemAt(listOfRelationships.getSelectedIndex());
-			m_source = selected.split(" ")[2];
-			m_destination = selected.split(" ")[5];
+			selected = (String) listOfRelationships.getSelectedItem();
+			//selected = listOfRelationships.getItemAt(listOfRelationships.getSelectedIndex());
 			listRelationships.dispose();
 		}
 	}
 	
 	//return index of select
 	public String getSource () {
-		return m_source;
+		return selected.split(" ")[2];
 	}
 	
 	public String getDestination () {
-		return m_destination;
+		return selected.split(" ")[6];
 	}
 	
+	private String selected = "";
 	private String [] m_relationships;
-	private String m_source;
-	private String m_destination;
 }

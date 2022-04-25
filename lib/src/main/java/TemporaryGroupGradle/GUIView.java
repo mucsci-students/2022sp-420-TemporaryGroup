@@ -148,27 +148,14 @@ public class GUIView implements ActionListener {
     	JMenu relationship = new JMenu("Relationships");
     	
     	//Create Menu Items for relationships
-    	JMenuItem[] itemR = new JMenuItem[3];
+    	JMenuItem[] itemR = new JMenuItem[2];
     	itemR [0] = new JMenuItem ("Add Relationship");
-    	itemR [1] = new JMenuItem ("Change Relationship");
-    	itemR [2] = new JMenuItem ("Delete Relationship");
+    	itemR [1] = new JMenuItem ("Delete Relationship");
     	for (int i = 0; i < itemR.length; ++i) {
     		itemR[i].addActionListener(obj);
     		relationship.add(itemR[i]);
     	}
-
-    	
-    	//Create program menu
-    	JMenu help = new JMenu ("Help");
-    	
-    	//Create menu items for program menu
-    	JMenuItem[] itemE = new JMenuItem[1];
-    	itemE [0] = new JMenuItem ("Help");
-    	for (int i = 0; i < itemE.length; ++i) {
-    		itemE[i].addActionListener(obj);
-    		help.add(itemE[i]);
-    	}
-    	
+    	    	
     	//Create a menu bar
     	JMenuBar mb=new JMenuBar();
     	main.setJMenuBar(mb);
@@ -179,7 +166,6 @@ public class GUIView implements ActionListener {
     	mb.add(methods);
     	mb.add(parameters);
     	mb.add(relationship);
-    	mb.add(help);
     	
     	//Display the frame
     	main.setVisible(true);
@@ -396,8 +382,6 @@ public class GUIView implements ActionListener {
     		
     	} else if (e.getActionCommand().equals("Delete Parameter")) {
     		JOptionPane.showMessageDialog(main,"Error when deleting parameter, try again");
-    			
-    		
     		
     	} else if (e.getActionCommand().equals("Add Relationship")) {
     		if (umld.umlDiagram.isEmpty()) {
@@ -410,16 +394,12 @@ public class GUIView implements ActionListener {
     					int destIndex = findIndex (myInputs[1]);
     					addRel (srcIndex, destIndex, myInputs[2]);
     				} else {
-    					JOptionPane.showMessageDialog (main, "Error when creating relationship, try again"); 
+    					JOptionPane.showMessageDialog (main, "Input is wrong, try again");
     				}
+    			} else {
+    				JOptionPane.showMessageDialog (main, "Error when creating relationship, try again"); 
     			}
     		}
-    		
-    	} else if (e.getActionCommand().equals("Change Relationship")) {
-    		//TO DO
-    		JOptionPane.showMessageDialog(main,"still working on it");
-    		
-    		
     		
     	} else if (e.getActionCommand().equals("Delete Relationship")) {
     		if (umld.umlDiagram.isEmpty()) {
@@ -428,7 +408,7 @@ public class GUIView implements ActionListener {
     			JOptionPane.showMessageDialog(main,"No relationships are present on diagram");
     		} else {
         		ListRelationshipsWindow relationshipsList = new ListRelationshipsWindow (main, umld.relationships);
-        		if (umld.deleteRelationship(relationshipsList.getSource(), relationshipsList.getSource())) {
+        		if (umld.deleteRelationship(relationshipsList.getSource(), relationshipsList.getDestination())) {
         			removeRel (classRep.get(findIndex(relationshipsList.getSource())).getRelID());
         		} else {
         			JOptionPane.showMessageDialog(main,"deleting relationship failed");
@@ -451,11 +431,7 @@ public class GUIView implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-    	} else if (e.getActionCommand().equals("Help")) {
-    		//TO DO
-    		JOptionPane.showMessageDialog(main,"still working on it");
-    		}
-		  else if (e.getActionCommand().equals("Undo")) {
+    	} else if (e.getActionCommand().equals("Undo")) {
 			  if(!umld.canUndo()) {
 				JOptionPane.showMessageDialog(main,"There are no actions to undo.");
 			  }
@@ -495,7 +471,7 @@ public class GUIView implements ActionListener {
     
     public static void removeClass (int classIndex) {
     	cm.deregisterComponent(classRep.get(classIndex));
-    	main.remove(classRep.get(classIndex));
+    	main.getLayeredPane().remove(classRep.get(classIndex));
     	main.validate();
     	main.repaint();
     }
@@ -520,12 +496,13 @@ public class GUIView implements ActionListener {
     	classRep.get(dest).setRelID(relationshipID);
     	++relationshipID;
     	main.validate();
-    	main.repaint();
-    	
+    	main.repaint();	
     }
     
     public static void removeRel (int id) {
-    	main.remove(relationships.get(id));
+    	System.out.println("id to removed is " + id);
+    	main.getLayeredPane().remove(relationships.get(id));
+    	--relationshipID;
     	main.validate();
     	main.repaint();
     }

@@ -431,9 +431,14 @@ public class UMLDiagram implements Cloneable {
         // Add the relationship
 
         updateUndoRedoStacks();
-        UMLRelationship newRel = new UMLRelationship(source, dest, type);
-        relationships.add(newRel);
-        System.out.println("Added new relationship between class '" + source + "' and class '" + dest + "'.");
+        try {
+        	UMLRelationship newRel = new UMLRelationship(source, dest, type);
+        	relationships.add(newRel);
+        	System.out.println("Added new relationship between class '" + source + "' and class '" + dest + "'.");
+        } catch (Exception e) {
+        	System.out.println(e);
+        	return false;
+        }
         return true;
     }
 
