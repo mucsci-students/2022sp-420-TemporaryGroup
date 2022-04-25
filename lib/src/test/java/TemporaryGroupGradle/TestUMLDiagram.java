@@ -55,6 +55,22 @@ public class TestUMLDiagram {
     }
     
     @Test
+    void removeClassWithRelationship() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Tire");
+    	umld.addRelationship("Car", "Tire", "aggregation");
+    	assertTrue(umld.removeClass("Car"));
+    }
+    
+    @Test
+    void removeFakeClass() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	assertFalse(umld.removeClass("FakeClass"));
+    }
+    
+    @Test
     void renameClass() {
     	UMLDiagram umld = new UMLDiagram();
     	umld.addClass("Car");
@@ -84,6 +100,23 @@ public class TestUMLDiagram {
     	umld.addRelationship("Car", "Road", "aggregation");
     	assertTrue(umld.deleteRelationship("Car", "Road"));
     }
+    
+    @Test
+    void addRelationshipFakeClassSrc() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	assertFalse(umld.addRelationship("FakeClass", "Road", "aggregation"));
+    }
+    
+    @Test
+    void addRelationshipFakeClassDest() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	assertFalse(umld.addRelationship("Car", "FakeClass", "aggregation"));
+    }
+    
     @Test
     void addParameter() {
     	UMLDiagram umld = new UMLDiagram();
@@ -93,12 +126,23 @@ public class TestUMLDiagram {
     	assertTrue(umld.addParameter("Car", "CarMethod", "CarParam", "string"));
     }
     
+    @Test
     void addNonExistantParamClass() {
     	UMLDiagram umld = new UMLDiagram();
     	umld.addClass("Car");
     	umld.addClass("Road");
     	umld.addMethod("Car", "CarMethod", "void");
     	assertFalse(umld.addParameter("Car", "FakeMethod", "CarParam", "string"));
+    }
+    
+    @Test
+    void addDuplicateParamter() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	umld.addParameter("Car", "CarMethod", "CarParam", "string");
+    	assertFalse(umld.addParameter("Car", "CarMethod", "CarParam", "string"));
     }
     
     @Test
@@ -220,6 +264,15 @@ public class TestUMLDiagram {
     	umld.addClass("Road");
     	umld.addMethod("Car", "CarMethod", "void");
     	assertTrue(umld.removeMethod("Car", "CarMethod"));
+    }
+    
+    @Test
+    void removeFakeMethod() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	assertFalse(umld.removeMethod("Car", "CarFakeMethod"));
     }
     
     @Test
@@ -355,6 +408,25 @@ public class TestUMLDiagram {
     	umld.addField("Car", "CarField", "string");
     	assertFalse(umld.renameFieldType("Car", "CarFieldFake", "int"));
     }
+    
+    @Test
+    void isValidTypeTrue() {
+    	UMLDiagram umld = new UMLDiagram();
+    	assertTrue(umld.isValidType("aggregation"));
+    }
+    
+    @Test
+    void isValidTypeFalse() {
+    	UMLDiagram umld = new UMLDiagram();
+    	assertFalse(umld.isValidType("FakeType"));
+    }
+    
+    @Test
+    void setUMLDiagram() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.setUMLDiagram(umld.umlDiagram);
+    }
+   
    
 
 }
