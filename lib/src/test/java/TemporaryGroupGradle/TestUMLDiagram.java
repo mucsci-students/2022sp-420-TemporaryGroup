@@ -42,6 +42,12 @@ public class TestUMLDiagram {
     }
     
     @Test
+    void addClass() {
+    	UMLDiagram umld = new UMLDiagram();
+    	assertTrue(umld.addClass("Car"));
+    }
+    
+    @Test
     void removeClass() {
     	UMLDiagram umld = new UMLDiagram();
     	umld.addClass("Car");
@@ -56,12 +62,43 @@ public class TestUMLDiagram {
     }
     
     @Test
+    void renameRepeatClass() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Tire");
+    	assertFalse(umld.renameClass("Car", "Tire"));
+    }
+    
+    @Test
+    void repeatClass() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	assertFalse(umld.addClass("Car"));
+    }
+    
+    @Test
     void Relationships() {
     	UMLDiagram umld = new UMLDiagram();
     	umld.addClass("Car");
     	umld.addClass("Road");
     	umld.addRelationship("Car", "Road", "aggregation");
     	assertTrue(umld.deleteRelationship("Car", "Road"));
+    }
+    @Test
+    void addParameter() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	assertTrue(umld.addParameter("Car", "CarMethod", "CarParam", "string"));
+    }
+    
+    void addNonExistantParamClass() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	assertFalse(umld.addParameter("Car", "FakeMethod", "CarParam", "string"));
     }
     
     @Test
@@ -83,6 +120,15 @@ public class TestUMLDiagram {
     }
     
     @Test
+    void removeNullMethodParam() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	assertFalse(umld.removeParameter("Car", "FakeMethod", "void"));
+    }
+    
+    @Test
     void removeAllParam() {
     	UMLDiagram umld = new UMLDiagram();
     	umld.addClass("Car");
@@ -94,6 +140,15 @@ public class TestUMLDiagram {
     }
     
     @Test
+    void removeAllFakeMethodParams() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	assertFalse(umld.removeAllParameters("Car", "FakeMethod"));
+    	
+    }
+    
+    @Test
     void renameParameter() {
     	UMLDiagram umld = new UMLDiagram();
     	umld.addClass("Car");
@@ -101,6 +156,61 @@ public class TestUMLDiagram {
     	umld.addMethod("Car", "CarMethod", "void");
     	umld.addParameter("Car", "CarMethod", "CarParam", "string");
     	assertTrue(umld.renameParameter("Car", "CarMethod", "CarParam", "CarNewParam"));
+    }
+    
+    @Test
+    void renameDuplicateParameter() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	umld.addParameter("Car", "CarMethod", "CarParam", "string");
+    	umld.addParameter("Car", "CarMethod", "DupParam", "string");
+    	assertFalse(umld.renameParameter("Car", "CarMethod", "CarParam", "DupParam"));
+    }
+    
+    @Test
+    void renameNonExistantParameter() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	umld.addParameter("Car", "CarMethod", "CarParam", "string");
+    	assertFalse(umld.renameParameter("Car", "CarMethod", "FakeParam", "string"));
+    }
+    
+    @Test
+    void renameNonExistantMethodParameter() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	umld.addParameter("Car", "CarMethod", "CarParam", "string");
+    	assertFalse(umld.renameParameter("Car", "FakeMethod", "CarParam", "string"));
+    }
+    
+    @Test
+    void renameParameterType() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	umld.addParameter("Car", "CarMethod", "CarParam", "string");
+    	assertTrue(umld.renameParameterType("Car", "CarMethod", "CarParam", "int"));
+    }
+    
+    @Test
+    void renameFakeMethodParameterType() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	umld.addParameter("Car", "CarMethod", "CarParam", "string");
+    	assertFalse(umld.renameParameterType("Car", "FakeMethod", "CarParam", "int"));
+    }
+    
+    @Test
+    void renameFakeParameterType() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	umld.addParameter("Car", "CarMethod", "CarParam", "string");
+    	assertFalse(umld.renameParameterType("Car", "CarMethod", "FakeParam", "int"));
     }
     
     @Test
@@ -122,12 +232,48 @@ public class TestUMLDiagram {
     }
     
     @Test
+    void renameNonExistantMethod() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addMethod("Car", "CarMethod","void");
+    	assertFalse(umld.renameMethod("Car", "FakeMethod", "CarNewMethod"));
+    }
+    
+    @Test
+    void addDuplicateMethod() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	assertFalse(umld.addMethod("Car", "CarMethod", "void"));
+    }
+    
+    @Test
+    void renameDuplicateMethod() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	umld.addMethod("Car", "CarMethod2", "void");
+    	assertFalse(umld.renameMethod("Car", "CarMethod", "CarMethod2"));
+    }
+    
+    @Test
     void renameMethodType() {
     	UMLDiagram umld = new UMLDiagram();
     	umld.addClass("Car");
     	umld.addClass("Road");
     	umld.addMethod("Car", "CarMethod", "void");
     	assertTrue(umld.renameMethodType("Car", "CarMethod", "void"));
+    }
+    
+    @Test
+    void renameNonExistantMethodType() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addClass("Road");
+    	umld.addMethod("Car", "CarMethod", "void");
+    	assertFalse(umld.renameMethodType("Car", "FakeMethod", "void"));
     }
     
     @Test
@@ -138,11 +284,35 @@ public class TestUMLDiagram {
     }
     
     @Test
+    void addRepeatField() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addField("Car", "CarField", "string");
+    	assertFalse(umld.addField("Car", "CarField", "string"));
+    }
+    
+    @Test
+    void addRandomLettersField() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	assertFalse(umld.addField("Car", "%sÍs", "string"));
+    }
+    
+    
+   
+    @Test
     void removeFields() {
     	UMLDiagram umld = new UMLDiagram();
     	umld.addClass("Car");
     	umld.addField("Car", "CarField", "string");
     	assertTrue(umld.removeField("Car","CarField"));
+    }
+    
+    @Test
+    void removeNonExistantField() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	assertFalse(umld.removeField("Car", "FakeField"));
     }
    
     @Test 
@@ -154,6 +324,23 @@ public class TestUMLDiagram {
     }
     
     @Test
+    void renameSameField() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addField("Car", "CarField", "string");	
+    	umld.addField("Car", "CarField2", "string");
+    	assertFalse(umld.renameField("Car", "CarField", "CarField2"));
+    }
+    
+    @Test
+    void renameNonExistantField() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addField("Car", "CarField", "string");
+    	assertFalse(umld.renameField("Car", "CarFieldFake", "CarField2"));
+    }	
+    
+    @Test
     void renameFieldType() {
     	UMLDiagram umld = new UMLDiagram();
     	umld.addClass("Car");
@@ -161,6 +348,13 @@ public class TestUMLDiagram {
     	assertTrue(umld.renameFieldType("Car", "CarField", "int"));
     }
     
+    @Test
+    void renameNonExistantFieldType() {
+    	UMLDiagram umld = new UMLDiagram();
+    	umld.addClass("Car");
+    	umld.addField("Car", "CarField", "string");
+    	assertFalse(umld.renameFieldType("Car", "CarFieldFake", "int"));
+    }
    
 
 }
