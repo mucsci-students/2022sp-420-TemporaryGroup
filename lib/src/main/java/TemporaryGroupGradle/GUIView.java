@@ -54,7 +54,7 @@ public class GUIView implements ActionListener {
     	main.setSize(screenSize);
     	main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	main.setLayout(null);
-    	main.getContentPane().setBackground(Color.WHITE);
+    	main.getContentPane().setBackground(Color.DARK_GRAY);
     	
     	//Create an object
     	GUIView obj = new GUIView();
@@ -404,12 +404,12 @@ public class GUIView implements ActionListener {
     	} else if (e.getActionCommand().equals("Delete Relationship")) {
     		if (umld.umlDiagram.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"Diagram is empty, add a class first");
-    		} else if (relationshipID == 0) {
+    		} else if (relationships.isEmpty()) {
     			JOptionPane.showMessageDialog(main,"No relationships are present on diagram");
     		} else {
         		ListRelationshipsWindow relationshipsList = new ListRelationshipsWindow (main, umld.relationships);
         		if (umld.deleteRelationship(relationshipsList.getSource(), relationshipsList.getDestination())) {
-        			removeRel (classRep.get(findIndex(relationshipsList.getSource())).getRelID());
+        			removeRel (relationshipsList.getSource(),relationshipsList.getDestination());
         		} else {
         			JOptionPane.showMessageDialog(main,"deleting relationship failed");
         		}
@@ -499,9 +499,12 @@ public class GUIView implements ActionListener {
     	main.repaint();	
     }
     
-    public static void removeRel (int id) {
-    	System.out.println("id to removed is " + id);
+    public static void removeRel (String src, String dest) {
+    	int id = classRep.get(findIndex(src)).getRelID();
     	main.getLayeredPane().remove(relationships.get(id));
+    	relationships.remove(id);
+    	classRep.get(findIndex(src)).setRelID(-1);
+    	classRep.get(findIndex(dest)).setRelID(-1);
     	--relationshipID;
     	main.validate();
     	main.repaint();

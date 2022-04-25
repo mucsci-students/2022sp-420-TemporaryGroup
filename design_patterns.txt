@@ -10,3 +10,9 @@ notifies the tab completer.
 4. Chain of Resposibility  - When a user types exit in the CLI, the input handler passes the request further
 and then prompts the user for a yes (y) or no (n). If the input is something other than that then the controller 
 has to handle it. 
+
+5. Memento - The undo and redo stacks in UMLDiagram.java function as a memento pattern. The diagram itself acts as
+an originator with an internal state and the stacks keep track of memento objects, or snapshots of the diagram.
+
+6. Prototype - The prototype design pattern is used in UMLDiagram.java in undo and redo. The clone method is
+used to make a deep copy based off the current state of the diagram for use in the stacks.
