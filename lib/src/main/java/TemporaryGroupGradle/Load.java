@@ -6,6 +6,7 @@ package TemporaryGroupGradle;
 
 import java.lang.reflect.Type;
 
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -15,7 +16,6 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.NoSuchFileException;
-
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
@@ -130,7 +130,6 @@ public class Load {
 	         System.err.println(f.getPath());
 	         return f.getPath();
 	      }
-	      System.out.println("lol");
 	      return "failed";
 	      
 	   }
