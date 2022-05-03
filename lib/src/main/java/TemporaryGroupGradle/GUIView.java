@@ -587,19 +587,18 @@ public class GUIView implements ActionListener {
 				classRep.get(i).addField(FieldType, FieldName);
 			}
 			ArrayList<Method> methods = new ArrayList<>(classNames.get(i).getMethods());
+			System.out.println(methods.size());
 			for(int methodLength = 0; methodLength < methods.size(); methodLength++) {
 				String MethodName = methods.get(methodLength).getMethodName();
 				String MethodType = methods.get(methodLength).getMethodType();
 				classRep.get(i).addMethod(MethodType, MethodName);
-				System.out.println(methods.get(methodLength).getParameterList());
 				ArrayList<Parameter> params = new ArrayList<>(methods.get(methodLength).getParameterList());
-				if(params.size() > 0) {
-					for(int m = 0; m < params.size(); m++) {
-						String ParamName = params.get(m).getParamName();
-						String ParamType = params.get(m).getParamType();
-						classRep.get(i).addParameter(ParamType, ParamName, i);
-					}
+				for(int m = 0; m < params.size(); m++) {
+					String ParamName = params.get(m).getParamName();
+					String ParamType = params.get(m).getParamType();
+					classRep.get(i).addParameter(ParamType, ParamName, i);
 				}
+				
 				
 				
 			}

@@ -102,9 +102,11 @@ public class Classes extends JPanel {
 	public void addParameter (String parameterName, String parameterType, int indexOfMethod ) {
 		String toAdd = methodsDrop.getItemAt(indexOfMethod);
 		String insideMethod = parameterType + " " + parameterName + " )";
-		toAdd = toAdd.replace( ")", insideMethod);
-		methodsDrop.removeItemAt(indexOfMethod);
-		methodsDrop.addItem(toAdd);
+		if (toAdd != null) {
+			toAdd = toAdd.replace( ")", insideMethod);
+			methodsDrop.removeItemAt(indexOfMethod);
+			methodsDrop.addItem(toAdd);
+		}
 	}
 	
 	public void changeParameterType (String parameterName, String oldType, String newType, int methodIndex) {
