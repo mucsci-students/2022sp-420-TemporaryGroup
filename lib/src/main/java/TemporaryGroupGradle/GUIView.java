@@ -427,6 +427,7 @@ public class GUIView implements ActionListener {
     		try {
 				loader.loadFileGUI();
 				umld = loader.loadDiagram;
+				loadAllFiles();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -572,4 +573,13 @@ public class GUIView implements ActionListener {
     	Arrays.sort(available);
     	return available[0];
     }    
+    
+    public static void loadAllFiles() {
+    	ArrayList<UMLClass> classNames = new ArrayList<>(umld.umlDiagram.values());
+    	for (int i = 0; i < classNames.size(); i++) {
+    		addClass(classNames.get(i).getClassName(), index / CLASSESPERROW, index % CLASSESPERROW, index);
+			available [0] = CLASSESPERROW * CLASSESPERCOL;
+			index = valIndex();
+    	}
+    }
 }

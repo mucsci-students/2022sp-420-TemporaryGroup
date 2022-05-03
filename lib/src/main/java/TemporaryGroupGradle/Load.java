@@ -90,15 +90,15 @@ public class Load {
 			String json = readFileAsString(fileLocation);
 			Gson gson = new Gson();
 			
-			Type typeOfUMLDiagram = new TypeToken<UMLDiagram>() { }.getType();
-			UMLDiagram savedDiagram = gson.fromJson(json, typeOfUMLDiagram);
+			Type typeOfUMLDiagram = new TypeToken<SaveTemplate>() { }.getType();
+			SaveTemplate savedDiagram = gson.fromJson(json, typeOfUMLDiagram);
 
-			loadDiagram = savedDiagram; 
-			UMLDiagram.clearUndoRedo();
-			
-			System.out.println("Successfully loaded!");
+			saveTemplate = savedDiagram;
+			for (int i = 0; i < saveTemplate.classes.size(); i++) { 		      
+				loadDiagram.umlDiagram.put(saveTemplate.classes.get(i).getClassName(), saveTemplate.classes.get(i));
+		    }   
+			loadDiagram.relationships = saveTemplate.relationships;
 			//Print out for proof of it working TO BE DELETED
-			String Json = new Gson().toJson(loadDiagram);
 			System.out.println("Successfully loaded!");
 			return true;
 		} catch (AccessDeniedException|IllegalStateException|JsonSyntaxException | NoSuchFileException e){
