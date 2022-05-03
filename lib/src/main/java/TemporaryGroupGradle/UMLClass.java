@@ -233,5 +233,13 @@ public class UMLClass {
     public void setLoc (Point loc) {
     	location.setLocation(loc);
     }
+    
+    public double getX() {
+    	return location.getX();
+    }
+    
+    public double getY() {
+    	return location.getY();
+    }
 
 }

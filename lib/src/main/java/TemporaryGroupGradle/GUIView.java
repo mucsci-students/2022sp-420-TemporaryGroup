@@ -577,9 +577,56 @@ public class GUIView implements ActionListener {
     public static void loadAllFiles() {
     	ArrayList<UMLClass> classNames = new ArrayList<>(umld.umlDiagram.values());
     	for (int i = 0; i < classNames.size(); i++) {
-    		addClass(classNames.get(i).getClassName(), index / CLASSESPERROW, index % CLASSESPERROW, index);
+    		addLoadClass(classNames.get(i).getClassName(), (int)classNames.get(i).getX(),(int)classNames.get(i).getY(), index);
 			available [0] = CLASSESPERROW * CLASSESPERCOL;
 			index = valIndex();
+			ArrayList<Field> fields = new ArrayList<>(classNames.get(i).getFields());
+			for(int k = 0; k < fields.size(); k++) {
+				String FieldName = fields.get(k).getFieldName();
+				String FieldType = fields.get(k).getFieldType();
+				classRep.get(i).addField(FieldType, FieldName);
+			}
+			ArrayList<Method> methods = new ArrayList<>(classNames.get(i).getMethods());
+			for(int methodLength = 0; methodLength < methods.size(); methodLength++) {
+				String MethodName = methods.get(methodLength).getMethodName();
+				String MethodType = methods.get(methodLength).getMethodType();
+				classRep.get(i).addMethod(MethodType, MethodName);
+				System.out.println(methods.get(methodLength).getParameterList());
+				ArrayList<Parameter> params = new ArrayList<>(methods.get(methodLength).getParameterList());
+				if(params.size() > 0) {
+					for(int m = 0; m < params.size(); m++) {
+						String ParamName = params.get(m).getParamName();
+						String ParamType = params.get(m).getParamType();
+						classRep.get(i).addParameter(ParamType, ParamName, i);
+					}
+				}
+				
+				
+			}
+			
+			
+			
+    	}
+    	ArrayList<UMLRelationship> relationships = new ArrayList<>(umld.relationships);
+    	for (int j = 0; j < relationships.size(); j++) {
+    		int srcIndex = findIndex (relationships.get(j).getSource());
+			int destIndex = findIndex (relationships.get(j).getDestination());
+			addRel (srcIndex, destIndex, relationships.get(j).getType());
     	}
     }
+    
+    public static void addLoadClass (String className, int x, int y, int index) {
+    	classRep.add(index, new Classes(x, y, WIDTH, HEIGHT));
+    	classNames[index] = className;
+    	classRep.get(index).addName(className);
+    	main.getLayeredPane().add(classRep.get(index), Integer.valueOf(1));
+    	cm.registerComponent(umld.getClass(className), classRep.get(index));
+    	umld.getClass(className).setLoc(classRep.get(index).getLocation());
+    	main.validate();
+    	main.repaint();
+    	++ index; 
+    }
+    
+    
+    
 }
