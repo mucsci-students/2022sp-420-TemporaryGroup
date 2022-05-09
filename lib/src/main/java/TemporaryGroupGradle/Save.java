@@ -145,7 +145,10 @@ public Boolean saveFileGUI() throws IOException {
 		
 		
 		
-		String Json = new Gson().toJson(saveDiagram);	
+		classes = new ArrayList<>(saveDiagram.umlDiagram.values());
+		saveTemplate.classes = classes;
+		saveTemplate.relationships = saveDiagram.relationships;
+		String Json = new Gson().toJson(saveTemplate);		
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
